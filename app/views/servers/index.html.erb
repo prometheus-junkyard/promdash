@@ -1,0 +1,30 @@
+<h1>Listing servers</h1>
+
+<%= form_tag(new_server_path, method: 'get') do %>
+  <button type="submit" class="btn btn-primary">New Server</button>
+<% end %>
+
+<br/>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @servers.each do |server| %>
+      <tr>
+        <td><%= server.name %></td>
+        <td><a href="<%= server.url %>"><%= server.url %></a></td>
+        <td><%= link_to 'Edit', edit_server_path(server) %></td>
+        <td><%= link_to 'Delete', server, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

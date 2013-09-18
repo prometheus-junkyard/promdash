@@ -1,0 +1,25 @@
+<h2>Dashboards</h2>
+
+<%= form_tag(new_dashboard_path, method: 'get') do %>
+  <button type="submit" class="btn btn-primary">New Dashboard</button>
+<% end %>
+
+<br/>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dashboards.each do |dashboard| %>
+      <tr>
+        <td><%= link_to dashboard.name, dashboard %></td>
+        <td><%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
