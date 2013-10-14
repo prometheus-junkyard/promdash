@@ -70,19 +70,19 @@ Prometheus.Graph = {
 
   getGraphDefaults: function() {
     return {
-      'title': 'Title',
-      'stacked': false,
-      'range': '1h',
-      'endTime': '',
-      'expressions': []
+      title: 'Title',
+      stacked: false,
+      range: '1h',
+      endTime: 0,
+      expressions: []
     };
   },
 
   getAxisDefaults: function() {
     return {
-      'orientation': 'left',
-      'scale': 'linear',
-      'format': 'kmbt'
+      orientation: 'left',
+      scale: 'linear',
+      format: 'kmbt'
     };
   }
 };
@@ -91,9 +91,11 @@ Prometheus.Angular = Prometheus.Angular || {};
 Prometheus.Angular.Dashboard = angular.module('dashboard', []);
 
 Prometheus.Angular.Dashboard.controller('DashboardCtrl', function($scope, $http, $timeout, $document) {
-  $scope.globalConfig = dashboardData.globalConfig || {};
+  $scope.globalConfig = dashboardData.globalConfig || {
+    numColumns: 2,
+    endTime: null
+  };
   $scope.graphs = dashboardData.graphs || [];
-  $scope.globalConfig.numColumns = $scope.globalConfig.numColumns || 2;
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;

@@ -19,7 +19,9 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: mysql2
+  encoding: utf8
+  host: <%= ENV['PROMDASH_MYSQL_HOST'] %>
+  database: <%= ENV['PROMDASH_MYSQL_DATABASE'] %>
+  username: <%= ENV['PROMDASH_MYSQL_USERNAME'] %>
+  password: <%= ENV['PROMDASH_MYSQL_PASSWORD'] %>

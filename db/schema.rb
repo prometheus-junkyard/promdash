@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20130918142738) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
-    t.text     "graphs_json", default: "{}"
+    t.text     "graphs_json"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

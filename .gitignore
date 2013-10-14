@@ -17,4 +17,10 @@
 
 # RVM files.
 .ruby-gemset
-.ruby-version
+#.ruby-version
+
+/bin
+/build
+/vendor/bundle
+/system
+/public/assets
