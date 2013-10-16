@@ -11,8 +11,7 @@
     <tr>
       <th>Name</th>
       <th>Url</th>
-      <th></th>
-      <th></th>
+      <th>Actions</th>
       <th></th>
     </tr>
   </thead>
@@ -22,8 +21,11 @@
       <tr>
         <td><%= server.name %></td>
         <td><a href="<%= server.url %>"><%= server.url %></a></td>
-        <td><%= link_to 'Edit', edit_server_path(server) %></td>
-        <td><%= link_to 'Delete', server, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to 'Edit', edit_server_path(server) %>
+          &nbsp;&nbsp;
+          <%= link_to 'Delete', server, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </td>
       </tr>
     <% end %>
   </tbody>

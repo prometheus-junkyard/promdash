@@ -1,3 +1,4 @@
+<h2>Server '<%= @server.name %>'</h2>
 <p>
   <strong>Name:</strong>
   <%= @server.name %>
@@ -8,5 +9,7 @@
   <%= @server.url %>
 </p>
 
-<%= link_to 'Edit', edit_server_path(@server) %> |
-<%= link_to 'Back', servers_path %>
+<div class="actions">
+  <%= link_to 'Edit', edit_server_path(@server), class: "btn btn-primary" %>
+  <%= link_to 'Back', servers_path, class: "btn btn-default" %>
+</div>

@@ -18,7 +18,11 @@
     <% @dashboards.each do |dashboard| %>
       <tr>
         <td><%= link_to dashboard.name, dashboard %></td>
-        <td><%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to 'Rename', edit_dashboard_path(dashboard) %>
+          &nbsp;&nbsp;
+          <%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
