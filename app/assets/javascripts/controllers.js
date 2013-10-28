@@ -328,7 +328,7 @@ Prometheus.Angular.Dashboard.controller('GraphCtrl', function($scope, $http) {
       $scope.data = allData;
     };
 
-    function loadGraphData(expression, server, axisId) {
+    function loadGraphData(idx, expression, server, axisId) {
       $scope.requestsInFlight++;
       var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
       $http.get(server.url + 'api/query_range', {
@@ -345,10 +345,10 @@ Prometheus.Angular.Dashboard.controller('GraphCtrl', function($scope, $http) {
           console.log('Error evaluating expression "' + expression + '" on server ' + server.url + ': ' + data.Value);
           break;
         case 'matrix':
-          allData.push({
+          allData[idx] = {
             'axis_id': axisId,
             'data': data
-          });
+          };
           break;
         default:
           console.log('Result for expression "' + expression + '" is not of matrix type! Skipping.');
@@ -371,7 +371,7 @@ Prometheus.Angular.Dashboard.controller('GraphCtrl', function($scope, $http) {
 
       var expression = $scope.graph.expressions[i].expression;
 
-      loadGraphData(expression, server, axisId);
+      loadGraphData(i, expression, server, axisId);
     }
   };
 
@@ -415,6 +415,10 @@ Prometheus.Angular.Dashboard.directive('graphChart', function() {
         var palette = new Rickshaw.Color.Palette();
         var series = [];
         for (var i = 0; i < data.length; i++) {
+          if (!data[i]) {
+            continue;
+          }
+
           series = series.concat(data[i]['data'].Value.map(function(ts) {
             return {
               name: metricToTsName(ts.Metric),
