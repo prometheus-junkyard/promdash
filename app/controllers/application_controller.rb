@@ -9,8 +9,11 @@ class ApplicationController < ActionController::Base
     cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
   end
 
-protected
+  def record_not_found
+    raise ActionController::RoutingError.new('This record was not found')
+  end
 
+  protected
   def verified_request?
     super || form_authenticity_token == request.headers['X-XSRF-TOKEN']
   end
