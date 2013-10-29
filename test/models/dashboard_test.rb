@@ -23,4 +23,9 @@ class DashboardTest < ActiveSupport::TestCase
     d = Dashboard.new_with_slug(name: "dashboard")
     assert_equal false, d.valid?
   end
+
+  test "adding a bad slug" do
+    d = Dashboard.new(name: "dashboard", slug: "bad!_ slug())")
+    assert_equal false, d.valid?
+  end
 end

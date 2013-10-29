@@ -2,6 +2,11 @@ class Dashboard < ActiveRecord::Base
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
   validate :acceptable_slug
+  validates :slug,
+    format: {
+    with: /\A[a-z0-9\-]+\z/,
+    message: "Only alphanumeric characters connected by hyphens allowed"
+  }
 
   def self.new_with_slug(params)
     dashboard = new(params)
