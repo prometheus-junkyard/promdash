@@ -17,15 +17,16 @@ class DashboardsControllerTest < ActionController::TestCase
   end
 
   test "should create dashboard" do
+    d = Dashboard.new_with_slug(name: 'new dashboard')
     assert_difference('Dashboard.count') do
-      post :create, dashboard: { name: @dashboard.name }
+      post :create, dashboard: { name: d.name }
     end
 
-    assert_redirected_to dashboard_path(assigns(:dashboard))
+    assert_redirected_to dashboard_slug_path(d.slug)
   end
 
   test "should show dashboard" do
-    get :show, id: @dashboard
+    get :show, slug: @dashboard.slug
     assert_response :success
   end
 
@@ -35,8 +36,8 @@ class DashboardsControllerTest < ActionController::TestCase
   end
 
   test "should update dashboard" do
-    patch :update, id: @dashboard, dashboard: { name: @dashboard.name }
-    assert_redirected_to dashboard_path(assigns(:dashboard))
+    patch :update, slug: @dashboard.slug, dashboard: { name: @dashboard.name }
+    assert_redirected_to dashboard_slug_path(@dashboard.slug)
   end
 
   test "should destroy dashboard" do

@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130918142738) do
+ActiveRecord::Schema.define(version: 20131028223745) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
     t.text     "graphs_json"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   create_table "servers", force: true do |t|

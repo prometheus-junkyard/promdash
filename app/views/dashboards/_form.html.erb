@@ -15,6 +15,13 @@
     <%= f.label :name %><br>
     <%= f.text_field :name, class: "form-control input-small" %>
   </div>
+
+  <% unless @dashboard.new_record? %>
+    <div class="field form-group">
+      <%= f.label :slug %><br>
+      <%= f.text_field :slug, class: "form-control input-small" %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
     <%= link_to 'Back', dashboards_path, class: "btn btn-default" %>

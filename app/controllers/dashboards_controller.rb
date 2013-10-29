@@ -1,5 +1,6 @@
 class DashboardsController < ApplicationController
-  before_action :set_dashboard, only: [:show, :edit, :update, :destroy]
+  before_action :set_dashboard, only: [:edit, :destroy]
+  before_action :set_dashboard_via_slug, only: [:show, :update]
 
   # GET /dashboards
   # GET /dashboards.json
@@ -24,11 +25,11 @@ class DashboardsController < ApplicationController
   # POST /dashboards
   # POST /dashboards.json
   def create
-    @dashboard = Dashboard.new(dashboard_params)
+    @dashboard = Dashboard.new_with_slug(dashboard_params)
 
     respond_to do |format|
       if @dashboard.save
-        format.html { redirect_to @dashboard, notice: 'Dashboard was successfully created.' }
+        format.html { redirect_to dashboard_slug_path(@dashboard.slug), notice: 'Dashboard was successfully created.' }
         format.json { render action: 'show', status: :created, location: @dashboard }
       else
         format.html { render action: 'new' }
@@ -42,7 +43,7 @@ class DashboardsController < ApplicationController
   def update
     respond_to do |format|
       if @dashboard.update(dashboard_params)
-        format.html { redirect_to @dashboard, notice: 'Dashboard was successfully updated.' }
+        format.html { redirect_to dashboard_slug_path(@dashboard.slug), notice: 'Dashboard was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -62,15 +63,20 @@ class DashboardsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_dashboard
-      @dashboard = Dashboard.find(params[:id])
-      @servers = Server.all
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_dashboard
+    @dashboard = Dashboard.find(params[:id])
+    @servers = Server.all
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def dashboard_params
-      puts params
-      params.require(:dashboard).permit(:name, :graphs_json)
+  def set_dashboard_via_slug
+    unless @dashboard = Dashboard.find_by_slug(params[:slug]) || Dashboard.find_by_id(params[:id])
+      record_not_found
     end
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def dashboard_params
+    params.require(:dashboard).permit(:name, :graphs_json, :slug)
+  end
 end
