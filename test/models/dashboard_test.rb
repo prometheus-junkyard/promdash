@@ -18,4 +18,9 @@ class DashboardTest < ActiveSupport::TestCase
     d = Dashboard.new_with_slug(name: "U_ser's Awes(()ome Dashboard!!")
     assert_equal "users-awesome-dashboard", d.slug
   end
+
+  test "slug blacklist" do
+    d = Dashboard.new_with_slug(name: "dashboard")
+    assert_equal false, d.valid?
+  end
 end
