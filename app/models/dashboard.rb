@@ -9,6 +9,6 @@ class Dashboard < ActiveRecord::Base
   end
 
   def create_slug
-    self.slug = name.downcase.gsub(' ','-')
+    self.slug = name.downcase.gsub(' ','-').gsub(/[^a-zA-Z0-9-]/, '')
   end
 end

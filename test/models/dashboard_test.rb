@@ -13,4 +13,9 @@ class DashboardTest < ActiveSupport::TestCase
     d = Dashboard.new_with_slug(name: "Super Awesome Dashboard")
     assert_equal "super-awesome-dashboard", d.slug
   end
+
+  test "cleaning a slug's name" do
+    d = Dashboard.new_with_slug(name: "U_ser's Awes(()ome Dashboard!!")
+    assert_equal "users-awesome-dashboard", d.slug
+  end
 end
