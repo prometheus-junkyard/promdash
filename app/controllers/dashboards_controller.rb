@@ -70,7 +70,7 @@ class DashboardsController < ApplicationController
   end
 
   def set_dashboard_via_slug
-    unless @dashboard = Dashboard.find_by_slug(params[:slug])
+    unless @dashboard = Dashboard.find_by_slug(params[:slug]) || Dashboard.find_by_id(params[:id])
       record_not_found
     end
   end
