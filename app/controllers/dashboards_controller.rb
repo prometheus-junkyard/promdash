@@ -11,6 +11,7 @@ class DashboardsController < ApplicationController
   # GET /dashboards/1
   # GET /dashboards/1.json
   def show
+    @servers = Server.all
   end
 
   # GET /dashboards/new
@@ -66,7 +67,6 @@ class DashboardsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_dashboard
     @dashboard = Dashboard.find(params[:id])
-    @servers = Server.all
   end
 
   def set_dashboard_via_slug
