@@ -36,8 +36,8 @@ class DashboardsControllerTest < ActionController::TestCase
   end
 
   test "should update dashboard" do
-    patch :update, id: @dashboard, dashboard: { name: @dashboard.name }
-    assert_redirected_to @dashboard
+    patch :update, slug: @dashboard.slug, dashboard: { name: @dashboard.name }
+    assert_redirected_to dashboard_slug_path(@dashboard.slug)
   end
 
   test "should destroy dashboard" do

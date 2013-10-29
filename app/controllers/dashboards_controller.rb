@@ -1,5 +1,6 @@
 class DashboardsController < ApplicationController
-  before_action :set_dashboard, only: [:edit, :update, :destroy]
+  before_action :set_dashboard, only: [:edit, :destroy]
+  before_action :set_dashboard_via_slug, only: [:show, :update]
 
   # GET /dashboards
   # GET /dashboards.json
@@ -10,9 +11,6 @@ class DashboardsController < ApplicationController
   # GET /dashboards/1
   # GET /dashboards/1.json
   def show
-    unless @dashboard = Dashboard.find_by_slug(params[:slug])
-      record_not_found
-    end
   end
 
   # GET /dashboards/new
@@ -45,7 +43,7 @@ class DashboardsController < ApplicationController
   def update
     respond_to do |format|
       if @dashboard.update(dashboard_params)
-        format.html { redirect_to @dashboard, notice: 'Dashboard was successfully updated.' }
+        format.html { redirect_to dashboard_slug_path(@dashboard.slug), notice: 'Dashboard was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -69,6 +67,12 @@ class DashboardsController < ApplicationController
   def set_dashboard
     @dashboard = Dashboard.find(params[:id])
     @servers = Server.all
+  end
+
+  def set_dashboard_via_slug
+    unless @dashboard = Dashboard.find_by_slug(params[:slug])
+      record_not_found
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
