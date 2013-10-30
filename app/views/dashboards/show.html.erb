@@ -86,7 +86,8 @@
     <span class="clearfix"></span>
   </div>
 
-  <div ng-class="{fullscreen: fullscreen}">
+  <div class="{{fullscreen}}">
+    <button type="button" ng-click="exitFullscreen()">Close</button>
     <div ng-repeat="graph in graphs" ng-controller="GraphCtrl" ng-class="[columnClass(), 'graph_column']">
       <div class="graph_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
         <div class="graph_title panel-heading">
