@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-# Wrapper script to support expansion of variables in ENV vars
-# as Bazooka doesn't do this automatically (any more)
-
-PATH=vendor/bundle/bin:system/bin:$PATH
-exec $@

@@ -1,4 +1,8 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', function($scope, $http) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", function($scope, $http, $window) {
+  $window.onresize = function() {
+    $scope.$broadcast('redrawGraphs');
+  }
+
   $scope.graph.axes = [];
   $scope.requestsInFlight = 0;
   $scope.data = null;
@@ -87,6 +91,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', function($scope
     $scope.refreshGraph();
   });
 
+  // TODO: Put this into a separate service.
   $scope.refreshGraph = function() {
     // Collect data for all expressions in this array.
     var allData = [];
@@ -148,6 +153,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', function($scope
   }
 
   $scope.refreshGraph();
-});
+}]);
 
 

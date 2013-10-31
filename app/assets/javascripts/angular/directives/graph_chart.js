@@ -56,8 +56,6 @@ angular.module("Prometheus.directives").directive('graphChart', function() {
       }
 
       function redrawGraph() {
-        // not popping, so scoping issue with calling the method
-        console.log('derp')
         if (scope.graphData == null) {
           return;
         }

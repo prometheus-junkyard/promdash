@@ -5,7 +5,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   };
   $scope.graphs = dashboardData.graphs || [];
   $scope.servers = servers;
-  $scope.fullscreen = '';
+  $scope.fullscreen = false;
   $scope.saving = false;
   $scope.showGridSettings = false;
 
@@ -67,20 +67,20 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   };
 
   $scope.enableFullscreen = function() {
-    $scope.fullscreen = 'fullscreen';
+    $scope.fullscreen = true;
+    $timeout(function() { $scope.redrawGraphs(); }, 0);
   };
 
   $scope.exitFullscreen = function() {
-    $scope.fullscreen = '';
+    $scope.$apply(function() {
+      $scope.fullscreen = false;
+    });
   };
 
-  $scope.$watch('fullscreen', function(newVal, oldVal) {
-    $scope.redrawGraphs();
-  });
-
   $document.keydown(function(ev) {
-    if (ev.keyCode == 27) { // Escape keycode.
-      $scope.fullscreen = '';
+    if (ev.keyCode === 27) { // Escape keycode
+      $scope.exitFullscreen();
+      $scope.redrawGraphs();
     }
   });
 
@@ -137,5 +137,4 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     $scope.addGraph();
   }
 });
-
 
