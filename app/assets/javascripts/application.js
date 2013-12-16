@@ -18,5 +18,6 @@
 //= require bootstrap-datetimepicker
 //= require d3.v2.js
 //= require rickshaw.min
+//= require sortable.js
 //= require angular/app.js
 //= require_tree .
