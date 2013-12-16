@@ -8,6 +8,11 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.showGridSettings = false;
+  $scope.sortableOptions = {
+    stop: function(e, ui) {
+      $scope.saveDashboard();
+    }
+  };
 
   $http.get('/servers.json')
     .success(function(data, status) {
