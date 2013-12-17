@@ -1,9 +1,17 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $http, $timeout, $document) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document) {
+  $window.onbeforeunload = function() {
+    var message = 'You have some unsaved changes!';
+    var unsavedChanges = angular.toJson(angular.copy($scope.graphs)) !== angular.toJson(originalGraphs);
+    if (unsavedChanges) {
+      return message;
+    }
+  }
   $scope.globalConfig = dashboardData.globalConfig || {
     numColumns: 2,
     endTime: null
   };
   $scope.graphs = dashboardData.graphs || [];
+  var originalGraphs = angular.copy($scope.graphs);
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;
@@ -35,6 +43,8 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
       }
     }).error(function(data, status) {
       alert("Error saving dashboard.");
+    }).success(function() {
+      originalGraphs = angular.copy($scope.graphs);
     }).always(function() {
       $scope.saving = false;
     });
