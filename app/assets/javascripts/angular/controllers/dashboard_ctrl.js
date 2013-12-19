@@ -16,6 +16,9 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.showGridSettings = false;
+  $scope.sortableOptions = {
+    handle: ".graph_title",
+  };
 
   $http.get('/servers.json')
     .success(function(data, status) {

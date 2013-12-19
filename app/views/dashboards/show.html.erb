@@ -87,7 +87,7 @@
   </div>
 
   <div ng-class="{fullscreen: fullscreen}">
-    <ul ui-sortable ng-model="graphs" class="sortable-graphs">
+    <ul ui-sortable="sortableOptions" ng-model="graphs" class="sortable-graphs">
       <li ng-repeat="graph in graphs" ng-controller="GraphCtrl" ng-class="[columnClass(), 'graph_column']">
         <div class="graph_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
           <div class="graph_title panel-heading">
