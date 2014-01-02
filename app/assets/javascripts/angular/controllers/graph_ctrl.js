@@ -77,9 +77,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   });
 
-  // TODO: Remove this parent dependency by making a graph a directive instead.
-  $scope.$watch('globalConfig.endTime', function() {
-    $scope.graph.endTime = $scope.globalConfig.endTime;
+  $scope.$watch('globalEndTime', function() {
+    $scope.graph.endTime = $scope.globalEndTime;
     $scope.refreshGraph();
   });
 
@@ -150,5 +149,3 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
   $scope.refreshGraph();
 }]);
-
-
