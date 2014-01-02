@@ -8,15 +8,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.data = null;
 
   $scope.removeGraph = function(idx) {
-    $scope.graphs.splice(idx, 1);
+    $scope.widgets.splice(idx, 1);
   };
 
   $scope.toggleTab = function(tab) {
-    if ($scope.showTab == tab) {
-      $scope.showTab = null;
-    } else {
-      $scope.showTab = tab;
-    }
+    $scope.showTab = $scope.showTab == tab ? null : tab;
   };
 
   $scope.addExpression = function() {
@@ -81,13 +77,12 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   });
 
-  // TODO: Remove this parent dependency by making a graph a directive instead.
-  $scope.$watch('globalConfig.endTime', function() {
-    $scope.graph.endTime = $scope.globalConfig.endTime;
+  $scope.$watch('globalEndTime', function() {
+    $scope.graph.endTime = $scope.globalEndTime;
     $scope.refreshGraph();
   });
 
-  $scope.$on('refreshGraphs', function(ev) {
+  $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();
   });
 
@@ -154,5 +149,3 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
   $scope.refreshGraph();
 }]);
-
-

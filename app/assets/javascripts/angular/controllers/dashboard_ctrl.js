@@ -1,7 +1,7 @@
 angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document) {
   $window.onbeforeunload = function() {
     var message = 'You have some unsaved changes!';
-    var unsavedChanges = angular.toJson(angular.copy($scope.graphs)) !== angular.toJson(originalGraphs);
+    var unsavedChanges = angular.toJson(angular.copy($scope.widgets)) !== angular.toJson(originalWidgets);
     if (unsavedChanges) {
       return message;
     }
@@ -10,14 +10,14 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     numColumns: 2,
     endTime: null
   };
-  $scope.graphs = dashboardData.graphs || [];
-  var originalGraphs = angular.copy($scope.graphs);
+  $scope.widgets = dashboardData.widgets || [];
+  var originalWidgets = angular.copy($scope.widgets);
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.showGridSettings = false;
   $scope.sortableOptions = {
-    handle: ".graph_title",
+    handle: ".widget_title",
   };
 
   $http.get('/servers.json')
@@ -39,15 +39,15 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
       'dashboard': {
-        'graphs_json': angular.toJson({
+        'dashboard_json': angular.toJson({
           'globalConfig': $scope.globalConfig,
-          'graphs': $scope.graphs
+          'widgets': $scope.widgets
         })
       }
     }).error(function(data, status) {
       alert("Error saving dashboard.");
     }).success(function() {
-      originalGraphs = angular.copy($scope.graphs);
+      originalWidgets = angular.copy($scope.widgets);
     }).always(function() {
       $scope.saving = false;
     });
@@ -71,8 +71,8 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     $scope.globalConfig.endTime = Prometheus.Graph.earlierEndTime($scope.globalConfig.endTime, $scope.globalConfig.range);
   };
 
-  $scope.refreshGraphs = function() {
-    $scope.$broadcast('refreshGraphs');
+  $scope.refreshDashboard = function() {
+    $scope.$broadcast('refreshDashboard');
   };
 
   $scope.redrawGraphs = function() {
@@ -110,7 +110,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     $scope.$broadcast('redrawGraphs');
   });
 
-  $scope.$watch('globalConfig.graphHeight', function() {
+  $scope.$watch('globalConfig.widgetHeight', function() {
     $scope.$broadcast('redrawGraphs');
   });
 
@@ -127,12 +127,21 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   };
 
   $scope.addGraph = function() {
-    $scope.graphs.push(Prometheus.Graph.getGraphDefaults());
+    $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
+  };
+
+  $scope.addFrame = function() {
+    var url = prompt("Please enter the URL for the frame to display", "http://");
+    $scope.widgets.push({
+      type: "frame",
+      title: '',
+      url: url
+    });
   };
 
   function setupRefreshTimer(delay) {
     $scope.refreshTimer = $timeout(function() {
-      $scope.$broadcast('refreshGraphs');
+      $scope.$broadcast('refreshDashboard');
       setupRefreshTimer(delay);
     }, delay * 1000);
   }
@@ -146,7 +155,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }
   });
 
-  if ($scope.graphs.length == 0) {
+  if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }
 });
