@@ -119,6 +119,10 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     return 'col-lg-' + colMap[$scope.globalConfig.numColumns];
   };
 
+  $scope.$on('removeWidget', function(ev, index) {
+    $scope.widgets.splice(index, 1);
+  });
+
   $scope.addGraph = function() {
     $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
   };

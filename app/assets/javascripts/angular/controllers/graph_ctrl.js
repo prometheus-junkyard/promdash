@@ -12,8 +12,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.requestsInFlight = 0;
   $scope.data = null;
 
-  $scope.removeGraph = function(idx) {
-    $scope.widgets.splice(idx, 1);
+  $scope.removeGraph = function() {
+    $scope.$emit('removeWidget', $scope.index);
   };
 
   $scope.toggleTab = function(tab) {

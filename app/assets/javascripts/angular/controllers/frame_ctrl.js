@@ -2,8 +2,8 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", func
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
-  $scope.removeFrame = function(idx) {
-    $scope.widgets.splice(idx, 1);
+  $scope.removeFrame = function() {
+    $scope.$emit('removeWidget', $scope.index);
   };
 
   $scope.toggleTab = function(tab) {

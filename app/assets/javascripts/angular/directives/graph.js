@@ -3,7 +3,8 @@ angular.module("Prometheus.directives").directive('graph', function() {
     scope: {
       graph: "=graphSettings",
       servers: "=servers",
-      globalEndTime: "=globalEndTime"
+      globalEndTime: "=globalEndTime",
+      index: "="
     },
     restrict: "AE",
     templateUrl: "/graph_template.html"
