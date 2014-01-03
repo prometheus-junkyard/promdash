@@ -2,7 +2,7 @@ angular.module("Prometheus.directives").directive('graph', function() {
   return {
     scope: {
       graph: "=graphSettings",
-      serversById: "=servers",
+      servers: "=servers",
       globalEndTime: "=globalEndTime"
     },
     restrict: "AE",
