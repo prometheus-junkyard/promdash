@@ -28,13 +28,6 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
       alert('Error fetching list of configured servers.');
     });
 
-  $scope.$watch('servers', function() {
-    $scope.serversById = {};
-    for (var i = 0; i < $scope.servers.length; i++) {
-      $scope.serversById[$scope.servers[i].id] = $scope.servers[i];
-    }
-  });
-
   $scope.saveDashboard = function() {
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
@@ -125,6 +118,10 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     };
     return 'col-lg-' + colMap[$scope.globalConfig.numColumns];
   };
+
+  $scope.$on('removeWidget', function(ev, index) {
+    $scope.widgets.splice(index, 1);
+  });
 
   $scope.addGraph = function() {
     $scope.widgets.push(Prometheus.Graph.getGraphDefaults());

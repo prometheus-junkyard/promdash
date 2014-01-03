@@ -1,4 +1,9 @@
 angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", function($scope, $http, $window) {
+  $scope.serversById = {};
+  for (var i = 0; i < $scope.servers.length; i++) {
+    $scope.serversById[$scope.servers[i].id] = $scope.servers[i];
+  }
+
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -7,8 +12,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.requestsInFlight = 0;
   $scope.data = null;
 
-  $scope.removeGraph = function(idx) {
-    $scope.widgets.splice(idx, 1);
+  $scope.removeGraph = function() {
+    $scope.$emit('removeWidget', $scope.index);
   };
 
   $scope.toggleTab = function(tab) {
