@@ -1,17 +1,43 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator) {
+  $window.onresize = function() {
+    $scope.$broadcast('redrawGraphs');
+  }
+
   $window.onbeforeunload = function() {
     var message = 'You have some unsaved changes!';
-    var unsavedChanges = angular.toJson(angular.copy($scope.widgets)) !== angular.toJson(originalWidgets);
-    if (unsavedChanges) {
+    if (unsavedChangesCheck($scope.widgets, originalWidgets) ||
+          unsavedChangesCheck($scope.globalConfig, originalConfig)) {
       return message;
     }
   }
+
+  function unsavedChangesCheck(currentObj, originalObj) {
+    return angular.toJson(angular.copy(currentObj)) !== angular.toJson(originalObj);
+  }
+
   $scope.globalConfig = dashboardData.globalConfig || {
     numColumns: 2,
+    aspectRatio: 0.75,
     endTime: null
   };
+
+  $scope.aspectRatios = [
+    {value: 0.75,    fraction: "4:3"},
+    {value: 0.5625,  fraction: "16:9"},
+    {value: 0.625,   fraction: "16:10"},
+    {value: (1/2.4), fraction: "2.40:1"},
+  ];
+
+  $scope.frameHeight = function() {
+    return {
+      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.globalConfig.aspectRatio)
+    }
+  }
+
   $scope.widgets = dashboardData.widgets || [];
   var originalWidgets = angular.copy($scope.widgets);
+  var originalConfig = angular.copy($scope.globalConfig);
+
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;
@@ -40,6 +66,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }).error(function(data, status) {
       alert("Error saving dashboard.");
     }).success(function() {
+      originalConfig = angular.copy($scope.globalConfig);
       originalWidgets = angular.copy($scope.widgets);
     }).always(function() {
       $scope.saving = false;
@@ -74,7 +101,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
 
   $scope.enableFullscreen = function() {
     $scope.fullscreen = true;
-    $timeout(function() { $scope.redrawGraphs(); }, 0);
+    $scope.nextCycleRedraw();
   };
 
   $scope.exitFullscreen = function() {
@@ -99,13 +126,9 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }
   };
 
-  $scope.$watch('globalConfig.numColumns', function() {
-    $scope.$broadcast('redrawGraphs');
-  });
-
-  $scope.$watch('globalConfig.widgetHeight', function() {
-    $scope.$broadcast('redrawGraphs');
-  });
+  $scope.nextCycleRedraw = function() {
+    $timeout(function() { $scope.redrawGraphs(); }, 0);
+  }
 
   $scope.columnClass = function() {
     var colMap = {

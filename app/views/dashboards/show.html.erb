@@ -71,10 +71,17 @@
         <div class="panel-heading">Grid Settings</div>
         <div class="panel-body">
           <label>Columns:
-            <input class="form-control" type="number" min="1" max="6" ng-model="globalConfig.numColumns">
+            <input class="form-control" type="number"
+              min="1" max="6"
+              ng-change="nextCycleRedraw()"
+              ng-model="globalConfig.numColumns">
           </label>
-          <label>Height:
-            <input class="form-control" type="text" ng-model="globalConfig.graphHeight">
+          <label>Aspect Ratio:
+            <select class="form-control" type="text"
+              ng-model="globalConfig.aspectRatio"
+              ng-change="redrawGraphs()"
+              ng-options="r.value as r.fraction for r in aspectRatios">
+            </select>
           </label>
         </div>
       </div>
@@ -91,10 +98,16 @@
       <li ng-repeat="widget in widgets" ng-class="[columnClass(), 'widget_column']">
         <span ng-switch="widget.type">
           <span ng-switch-when="graph">
-            <graph graph-settings="widget" servers="servers" global-end-time="globalConfig.endTime" index="$index">
+            <graph
+              graph-settings="widget"
+              servers="servers"
+              global-end-time="globalConfig.endTime"
+              global-config="globalConfig"
+              index="$index"
+              frame-height="frameHeight()">
           </span>
           <span ng-switch-when="frame">
-            <inline-frame frame-settings="widget" index="$index">
+            <inline-frame frame-settings="widget" frame-height="frameHeight()" index="$index">
           </span>
         </span>
       </li>
