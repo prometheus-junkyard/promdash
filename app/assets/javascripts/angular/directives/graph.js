@@ -4,6 +4,8 @@ angular.module("Prometheus.directives").directive('graph', function() {
       graph: "=graphSettings",
       servers: "=servers",
       globalEndTime: "=globalEndTime",
+      globalConfig: "=globalConfig",
+      frameHeight: "&",
       index: "="
     },
     restrict: "AE",

@@ -1,5 +1,5 @@
 <span ng-controller="FrameCtrl">
-  <div class="widget_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
+  <div class="js_widget_wrapper widget_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
     <div class="widget_title panel-heading">
       {{getTitle()}}
       <div class="btn btn-danger btn-xs remove_graph_btn pull-right" ng-click="removeFrame()" ng-show="showControls">
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="frame_wrapper">
+    <div ng-style="frameHeight()">
       <iframe ng-src="{{frame.url}}?decache={{refreshCounter}}" class="frame_iframe"></iframe>
     </div>
   </div>

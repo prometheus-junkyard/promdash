@@ -1,12 +1,12 @@
-angular.module("Prometheus.directives").directive('graphChart', function() {
+angular.module("Prometheus.directives").directive('graphChart', function(WidgetHeightCalculator) {
   return {
     scope: {
       graphSettings: '=',
+      globalConfig: '=',
       graphData: '='
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
-
       function metricToTsName(labels) {
         var tsName = labels["name"] + "{";
         var labelStrings = [];
@@ -64,10 +64,12 @@ angular.module("Prometheus.directives").directive('graphChart', function() {
         }
 
         var series = transformData(scope.graphData);
+
         rsGraph = new Rickshaw.Graph({
           element: element[0],
           renderer: (scope.graphSettings.stacked ? 'stack' : 'line'),
-          series: series
+          series: series,
+          height: WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio)
         });
 
         rsGraph.render();
