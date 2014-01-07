@@ -1,6 +1,6 @@
 <script type="text/javascript">
-  var dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
-  var servers = <%= @servers.to_json.html_safe %>;
+  dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
+  servers = <%= @servers.to_json.html_safe %>;
 </script>
 
 <h1 class="col-lg-12"><%= @dashboard.name %></h1>
@@ -81,6 +81,13 @@
               ng-model="globalConfig.aspectRatio"
               ng-change="redrawGraphs()"
               ng-options="r.value as r.fraction for r in aspectRatios">
+            </select>
+          </label>
+          <label>Theme
+            <select class="form-control" type="text"
+              ng-model="globalConfig.theme"
+              ng-change="themeChange()"
+              ng-options="t.css as t.name for t in themes">
             </select>
           </label>
         </div>

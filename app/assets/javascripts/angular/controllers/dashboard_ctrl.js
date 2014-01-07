@@ -18,6 +18,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   $scope.globalConfig = dashboardData.globalConfig || {
     numColumns: 2,
     aspectRatio: 0.75,
+    theme: "light_theme",
     endTime: null
   };
 
@@ -27,6 +28,15 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     {value: 0.625,   fraction: "16:10"},
     {value: (1/2.4), fraction: "2.40:1"},
   ];
+
+  $scope.themes = [
+    {css: "light_theme", name: "Light"},
+    {css: "dark_theme", name: "Dark"}
+  ];
+
+  $scope.themeChange = function() {
+    $scope.$emit("themeChange", $scope.globalConfig.theme);
+  };
 
   $scope.frameHeight = function() {
     return {
