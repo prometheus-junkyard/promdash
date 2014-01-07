@@ -27,7 +27,7 @@
   left: 0;
   width: 100%;
   z-index: 1050; // Bootstrap's navbar is at 1030.
-  background-color: white;
+  background-color: #FFFFFF;
   padding: 3px;
 }
 
@@ -91,4 +91,55 @@
   border-style: none;
   width: 100%;
   height: 100%;
+}
+
+.dark_theme {
+  $dark-background: #000000;
+  $dark-border: #404040;
+  $dark-line: rgba(255,255,255,.2);
+  $dark-text: #FFFFFF;
+
+  .fullscreen {
+    background-color: $dark-background;
+    height: 100%;
+
+    .panel-default {
+      border-color: $dark-border;
+    }
+
+    .panel-heading {
+      background-color: #202020;
+      border-color: $dark-border;
+      color: $dark-text;
+    }
+
+    .rickshaw_graph {
+      svg {
+        background-color: $dark-background;
+      }
+
+      .detail {
+        background: $dark-line;
+      }
+
+      .title {
+        color: $dark-text;
+      }
+
+      .y_grid .tick {
+        stroke: $dark-line;
+      }
+
+      .y_ticks text {
+        fill: $dark-text;
+      }
+
+      .x_tick  {
+        border-left: 1px dotted $dark-line;
+      }
+
+    }
+
+  }
+
 }
