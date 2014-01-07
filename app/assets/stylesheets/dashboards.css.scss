@@ -93,15 +93,41 @@
   height: 100%;
 }
 
+.rickshaw_graph .y_ticks path {
+  stroke: none;
+}
+
 .dark_theme {
-  $dark-background: #000000;
+  $dark-background: #0A0A0A;
   $dark-border: #404040;
   $dark-line: rgba(255,255,255,.2);
   $dark-text: #FFFFFF;
 
-  .fullscreen {
+  body, .fullscreen {
+    color: $dark-text;
     background-color: $dark-background;
-    height: 100%;
+
+    #global_controls {
+      .form-control, .btn-default {
+        background-color: $dark-background;
+        border-color: $dark-border;
+        color: $dark-text;
+      }
+    }
+
+    .dropdown-menu {
+      background-color: #252525;
+    }
+
+    .bootstrap-datetimepicker-widget {
+      thead tr:first-child th:hover,
+      td.day:hover,
+      td.hour:hover,
+      td.minute:hover,
+      td.second:hover {
+        background-color: $dark-border;
+      }
+    }
 
     .panel-default {
       border-color: $dark-border;
@@ -113,13 +139,22 @@
       color: $dark-text;
     }
 
+    .panel-body {
+      color: $dark-background;
+    }
+
     .rickshaw_graph {
+      background-color: $dark-background;
+
       svg {
         background-color: $dark-background;
       }
 
       .detail {
         background: $dark-line;
+        .x_label {
+          color: $dark-border;
+        }
       }
 
       .title {
@@ -130,16 +165,15 @@
         stroke: $dark-line;
       }
 
-      .y_ticks text {
-        fill: $dark-text;
+      .y_ticks {
+        text {
+          fill: $dark-text;
+        }
       }
 
       .x_tick  {
         border-left: 1px dotted $dark-line;
       }
-
     }
-
   }
-
 }
