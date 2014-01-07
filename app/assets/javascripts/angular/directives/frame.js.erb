@@ -6,6 +6,6 @@ angular.module("Prometheus.directives").directive('inlineFrame', function() {
       index: "="
     },
     restrict: "AE",
-    templateUrl: "/frame_template.html"
+    templateUrl: "<%= asset_path('frame_template.html') %>"
   };
 });

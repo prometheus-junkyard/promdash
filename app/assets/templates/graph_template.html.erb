@@ -3,7 +3,7 @@
     <div class="js_widget_wrapper widget_title panel-heading">
       {{graph.title}}
       <span class="graph_ajax_status pull-right" ng-show="requestsInFlight">
-        <img src="/assets/spinner.gif" alt="AJAX indicator">
+        <img src="<%= asset_path 'spinner.gif' %>" alt="AJAX indicator">
         {{requestsInFlight}} pending
       </span>
       <div class="btn btn-danger btn-xs remove_graph_btn pull-right" ng-click="removeGraph()" ng-show="showControls">
