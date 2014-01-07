@@ -102,6 +102,7 @@
   $dark-border: #404040;
   $dark-line: rgba(255,255,255,.2);
   $dark-text: #FFFFFF;
+  $dark-secondary-background: #252525;
 
   body, .fullscreen {
     color: $dark-text;
@@ -115,8 +116,8 @@
       }
     }
 
-    .dropdown-menu {
-      background-color: #252525;
+    .dropdown-menu, .empty_graph {
+      background-color: $dark-secondary-background;
     }
 
     .bootstrap-datetimepicker-widget {
