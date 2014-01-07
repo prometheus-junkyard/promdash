@@ -1,4 +1,6 @@
-var Prometheus = Prometheus || {};
+var Prometheus = Prometheus || {},
+    dashboardData = dashboardData || {},
+    servers;
 
 Prometheus.Graph = {
   rangeSteps: [
