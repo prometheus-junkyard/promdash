@@ -103,10 +103,20 @@
   $dark-line: rgba(255,255,255,.2);
   $dark-text: #FFFFFF;
   $dark-secondary-background: #252525;
+  $dark-accent: #96557e;
 
   body, .fullscreen {
     color: $dark-text;
     background-color: $dark-background;
+
+    .form-control:focus {
+      border-color: #96557e;
+      outline: 0;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+                          0 0 8px rgba(150, 85, 126, 0.6);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+                  0 0 8px rgba(150, 85, 126, 0.6);
+    }
 
     #global_controls {
       .form-control, .btn-default {
@@ -114,6 +124,11 @@
         border-color: $dark-border;
         color: $dark-text;
       }
+    }
+
+    .btn-primary {
+      background-color: $dark-accent;
+      border-color: #89486d;
     }
 
     .dropdown-menu, .empty_graph {
@@ -127,6 +142,16 @@
       td.minute:hover,
       td.second:hover {
         background-color: $dark-border;
+      }
+      td.active.active {
+        background-color: $dark-accent;
+        background-image: linear-gradient(rgb(150, 85, 126), rgb(124, 70, 112));
+      }
+      .btn {
+        color: $dark-accent;
+      }
+      .btn:hover, .btn:focus {
+        color: $dark-text;
       }
     }
 
