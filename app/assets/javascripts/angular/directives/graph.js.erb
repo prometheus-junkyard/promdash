@@ -9,6 +9,6 @@ angular.module("Prometheus.directives").directive('graph', function() {
       index: "="
     },
     restrict: "AE",
-    templateUrl: "/graph_template.html"
+    templateUrl: "<%= asset_path('graph_template.html') %>"
   };
 });
