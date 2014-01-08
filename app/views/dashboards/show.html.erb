@@ -60,15 +60,15 @@
 
     <div class="col-lg-3">
       <div class="btn-group">
-        <button class="btn btn-default" ng-click="showGridSettings = !showGridSettings" title="Grid settings">
-          <span class="glyphicon glyphicon-th"></span>
+        <button class="btn btn-default" ng-click="showDashboardSettings = !showDashboardSettings" title="Dashboard Settings">
+          <span class="glyphicon glyphicon-cog"></span>
         </button>
         <button class="btn btn-default" ng-click="enableFullscreen()" title="Fullscreen mode">
           <span class="glyphicon glyphicon-fullscreen"></span>
         </button>
       </div>
-      <div id="grid_settings" class="panel panel-default" ng-show="showGridSettings">
-        <div class="panel-heading">Grid Settings</div>
+      <div id="dashboard_settings" class="panel panel-default" ng-show="showDashboardSettings">
+        <div class="panel-heading">Dashboard Settings</div>
         <div class="panel-body">
           <label>Columns:
             <input class="form-control" type="number"
