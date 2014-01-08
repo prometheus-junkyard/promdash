@@ -110,11 +110,31 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   };
 
   $scope.enableFullscreen = function() {
-    $scope.fullscreen = true;
-    $scope.nextCycleRedraw();
+    var elem = $(".fullerscreen")[0];
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else {
+      $scope.fullscreen = true;
+    }
+    $timeout(function() { $scope.redrawGraphs(); }, 2000);
   };
 
   $scope.exitFullscreen = function() {
+    if (exitFullscreen) {
+      exitFullscreen()
+    } else if (mozCancelFullScreen) {
+      mozCancelFullScreen()
+    } else if (webkitExitFullscreen) {
+      webkitExitFullscreen()
+    } else if (msExitFullscreen) {
+      msExitFullscreen()
+    }
     $scope.$apply(function() {
       $scope.fullscreen = false;
     });
