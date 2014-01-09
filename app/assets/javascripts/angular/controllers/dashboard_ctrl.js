@@ -110,20 +110,42 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   };
 
   $scope.enableFullscreen = function() {
-    $scope.fullscreen = true;
-    $scope.nextCycleRedraw();
+    var elem = $(".fullerscreen")[0];
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullScreen();
+    } else {
+      $scope.fullscreen = true;
+    }
+    fullscreenRedraw()
   };
 
   $scope.exitFullscreen = function() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen()
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen()
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen()
+    }
+    fullscreenRedraw()
     $scope.$apply(function() {
       $scope.fullscreen = false;
     });
   };
 
+  function fullscreenRedraw() {
+    $timeout(function() { $scope.redrawGraphs(); }, 500);
+  }
+
   $document.keydown(function(ev) {
-    if (ev.keyCode === 27) { // Escape keycode
+    if (ev.keyCode === 32) { // Space keycode
       $scope.exitFullscreen();
-      $scope.redrawGraphs();
     }
   });
 

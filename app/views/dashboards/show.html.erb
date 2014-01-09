@@ -100,7 +100,7 @@
     <span class="clearfix"></span>
   </div>
 
-  <div ng-class="{fullscreen: fullscreen}">
+  <div class="fullerscreen" ng-class="{fullscreen: fullscreen}">
     <ul ui-sortable="sortableOptions" ng-model="widgets" class="sortable-widgets">
       <li ng-repeat="widget in widgets" ng-class="[columnClass(), 'widget_column']">
         <span ng-switch="widget.type">
