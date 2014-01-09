@@ -56,20 +56,25 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
       }
 
       function redrawGraph() {
+        $(element[0]).css('height', WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio));
+
         if (scope.graphData == null) {
           return;
         }
+
+        var series = transformData(scope.graphData);
+        if (series.length === 0) {
+          return;
+        }
+
         if (rsGraph != null) {
           element[0].innerHTML = '';
         }
 
-        var series = transformData(scope.graphData);
-
         rsGraph = new Rickshaw.Graph({
           element: element[0],
           renderer: (scope.graphSettings.stacked ? 'stack' : 'line'),
-          series: series,
-          height: WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio)
+          series: series
         });
 
         rsGraph.render();
