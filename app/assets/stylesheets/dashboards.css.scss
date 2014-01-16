@@ -126,6 +126,13 @@
       }
     }
 
+    .dropdown-menu li a {
+      color: $dark-text;
+      &:hover {
+        background-color: $dark-accent;
+      }
+    }
+
     .btn-primary {
       background-color: $dark-accent;
       border-color: #89486d;
