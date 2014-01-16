@@ -128,7 +128,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
         }
       }).error(function(data, status, b) {
         console.log('Error querying server ' + server.url + ' for expression "' + expression + '"');
-      }).always(function() {
+      }).finally(function() {
         requestFinished();
       });
     }

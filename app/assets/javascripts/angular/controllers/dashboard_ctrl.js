@@ -78,18 +78,22 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }).success(function() {
       originalConfig = angular.copy($scope.globalConfig);
       originalWidgets = angular.copy($scope.widgets);
-    }).always(function() {
+    }).finally(function() {
       $scope.saving = false;
     });
   }
 
   $scope.increaseRange = function() {
     $scope.globalConfig.range = Prometheus.Graph.nextLongerRange($scope.globalConfig.range);
-    $scope.$broadcast('setRange', $scope.globalConfig.range);
+    $scope.setRange();
   };
 
   $scope.decreaseRange = function() {
     $scope.globalConfig.range = Prometheus.Graph.nextShorterRange($scope.globalConfig.range);
+    $scope.setRange();
+  };
+
+  $scope.setRange = function() {
     $scope.$broadcast('setRange', $scope.globalConfig.range);
   };
 

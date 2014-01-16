@@ -14,7 +14,7 @@
             <i class="icon-minus"></i>
           </button>
         </span>
-        <input type="text" class="form-control" ng-model="globalConfig.range" placeholder="Range">
+        <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range">
         <span class="input-group-btn">
           <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
             <i class="icon-plus"></i>
