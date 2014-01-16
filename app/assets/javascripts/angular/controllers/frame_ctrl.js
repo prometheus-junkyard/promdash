@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", function($scope) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", function($scope, $sce) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
@@ -9,6 +9,8 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", func
   $scope.toggleTab = function(tab) {
     $scope.showTab = $scope.showTab == tab ? null : tab;
   };
+
+  $scope.frameURL = $sce.trustAsResourceUrl($scope.frame.url + "?decache=" + $scope.refreshCounter);
 
   $scope.getTitle = function() {
     if ($scope.frame.title) {
