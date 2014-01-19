@@ -18,6 +18,7 @@
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')"><i title="Time options" class="icon-clock"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('graph')"><i title="Graph and axis settings" class="icon-line-graph"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('palette')"><i title="Palette" class="icon-palette"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('legend')"><i title="Legend Settings" class="icon-list"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshGraph()"><i title="Refresh" class="icon-cycle"></i></div>
       </div>
 
@@ -92,7 +93,6 @@
         <div class="panel-body">
           <label>Graph Title:</label>
           <input class="form-control" ng-model="graph.title">
-
           <br/>
           <label>Chart Type:</label>
           <div class="radio">
@@ -152,10 +152,39 @@
         <div class="panel-heading">Palette Settings</div>
         <div class="panel-body">Palette settings are not yet implemented.</div>
       </div>
+
+      <!-- 5) Legend Settings -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'legend'">
+        <div class="panel-heading">Legend Settings</div>
+        <div class="panel-body">
+          <label>Show legend</label>
+          <br />
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="sometimes"> if 5 or fewer elements</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="always"> always</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="never"> never</label>
+          </div>
+          <label>Legend format:</label>
+          <br />
+          <input class="form-control" ng-model="graph.legendFormatString">
+          <br/>
+        </div>
+      </div>
     </div>
 
     <div ng-click="showTab = null">
       <div class="graph_chart" graph-chart graph-settings="graph" graph-data="data" global-config="globalConfig">
+        <div class="legend"></div>
       </div>
     </div>
   </div>
