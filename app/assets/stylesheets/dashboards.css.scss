@@ -97,6 +97,23 @@
   stroke: none;
 }
 
+.rickshaw_legend {
+  color: #555555;
+  padding: 0;
+  border-radius: 0;
+  width: 100%;
+  border-color: #DDDDDD;
+  background: none;
+  .action, .action:hover {
+    color: #428BCA;
+    opacity: 1;
+  }
+  .line {
+    display: inline-block;
+    white-space: normal;
+  }
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;
@@ -108,6 +125,14 @@
   body, .fullscreen {
     color: $dark-text;
     background-color: $dark-background;
+
+    .rickshaw_legend {
+      color: $dark-text;
+      border-color: $dark-border;
+      .action, .action:hover {
+        color: $dark-accent;
+      }
+    }
 
     .form-control:focus {
       border-color: #96557e;

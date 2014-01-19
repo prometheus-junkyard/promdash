@@ -55,8 +55,26 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
         return series;
       }
 
+      function formatTimeSeries(series) {
+        var re = /{{\w+}}/g;
+        series.forEach(function(s) {
+          if (!scope.graphSettings.legendFormatString) return;
+          var labels = scope.graphSettings.legendFormatString.match(re);
+          if (!labels) return s.name = scope.graphSettings.legendFormatString;
+
+          var desiredName = scope.graphSettings.legendFormatString;
+          for (var i = 0; i < labels.length; i++) {
+            desiredName = desiredName.replace(labels[i], s.labels[labels[i].replace(/{|}/g, '')]);
+          }
+
+          s.name = desiredName;
+        });
+      }
+
       function redrawGraph() {
-        $(element[0]).css('height', WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio));
+        // graph height is being set irrespective of legend
+        var graphHeight = WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio);
+        $(element[0]).css('height', graphHeight);
 
         if (scope.graphData == null) {
           return;
@@ -68,14 +86,50 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
         }
 
         if (rsGraph != null) {
-          element[0].innerHTML = '';
+          element[0].innerHTML = '<div class="legend"></div>';
         }
+        var $legend = $(element[0]).find(".legend");
+
+        formatTimeSeries(series);
 
         rsGraph = new Rickshaw.Graph({
           element: element[0],
           renderer: (scope.graphSettings.stacked ? 'stack' : 'line'),
           series: series
         });
+
+        if (scope.graphSettings.legendSetting === "always" ||
+            (scope.graphSettings.legendSetting === "sometimes" && series.length < 6)) {
+          var legend = new Rickshaw.Graph.Legend({
+            graph: rsGraph,
+            element: $legend[0]
+          });
+
+          new Rickshaw.Graph.Behavior.Series.Toggle({
+            graph: rsGraph,
+            legend: legend
+          });
+
+          // set legend elements to maximum element width so they line up
+          var $legendElements = $legend.find(".line");
+          var widths = $legendElements.map(function(i, el) {
+            return el.clientWidth
+          });
+
+          var maxWidth = Math.max.apply(Math, widths);
+          $legendElements.css("width", maxWidth);
+
+        // TODO: Figure out why mouseleave changes graph elements to same color
+        // On legend element mouseleave, all graph elements change to same fill color
+        // var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+        //   graph: rsGraph,
+        //   legend: legend
+        // });
+
+          var height = graphHeight - elementHeight($legend);
+          if (height < 1) height = 1;
+          rsGraph.configure({height: height});
+        }
 
         rsGraph.render();
 
@@ -97,8 +151,13 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
             return content + renderLabels(series.labels);
           },
           onRender: function() {
+            var dot = this.graph.element.querySelector('.dot');
+            var hoverContent = this.graph.element.querySelector('.item');
             var width = this.graph.width;
             var element = $(this.element);
+
+            dot.style.top = parseFloat(dot.style.top) + elementHeight($legend) + "px";
+            hoverContent.style.top = parseFloat(hoverContent.style.top) + elementHeight($legend) + "px";
 
             $(".x_label", element).each(function() {
               if ($(this).outerWidth() + element.offset().left > width) {
@@ -119,6 +178,10 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
         });
       }
 
+      function elementHeight($element) {
+        return $element.get(0).clientHeight;
+      }
+
       function renderLabels(labels) {
         var labelStrings = [];
         for (label in labels) {
@@ -130,6 +193,8 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
       }
 
       scope.$watch('graphSettings.stacked', redrawGraph);
+      scope.$watch('graphSettings.legendSetting', redrawGraph);
+      scope.$watch('graphSettings.legendFormatString', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
       scope.$on('redrawGraphs', function() {
