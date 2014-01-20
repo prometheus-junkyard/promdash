@@ -19,7 +19,8 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     numColumns: 2,
     aspectRatio: 0.75,
     theme: "light_theme",
-    endTime: null
+    endTime: null,
+    vars: {}
   };
 
   $scope.aspectRatios = [
@@ -48,6 +49,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   var originalWidgets = angular.copy($scope.widgets);
   var originalConfig = angular.copy($scope.globalConfig);
 
+  $scope.vars = [];
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;
@@ -156,6 +158,14 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     return 'col-lg-' + colMap[$scope.globalConfig.numColumns];
   };
 
+  $scope.addVariable = function(name, value) {
+    $scope.vars.push({name: name, value: value});
+  };
+
+  $scope.removeVariable = function(idx) {
+    $scope.vars.splice(idx, 1);
+  };
+
   $scope.$on('removeWidget', function(ev, index) {
     $scope.widgets.splice(index, 1);
   });
@@ -189,8 +199,22 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }
   });
 
+  $scope.$watch('vars', function() {
+    var vars = {};
+    for (var i = 0; i < $scope.vars.length; i++) {
+      var name = $scope.vars[i].name || '';
+      var value = $scope.vars[i].value || '';
+
+      vars[name] = value;
+    }
+    $scope.globalConfig.vars = vars;
+  }, true);
+
+  for (var o in $scope.globalConfig.vars) {
+    $scope.addVariable(o, $scope.globalConfig.vars[o]);
+  }
+
   if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }
 });
-

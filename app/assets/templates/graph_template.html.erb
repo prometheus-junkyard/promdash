@@ -1,7 +1,7 @@
 <span ng-controller="GraphCtrl">
   <div class="widget_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
     <div class="js_widget_wrapper widget_title panel-heading">
-      {{graph.title}}
+      {{title()}}
       <span class="graph_ajax_status pull-right" ng-show="requestsInFlight">
         <img src="<%= asset_path 'spinner.gif' %>" alt="AJAX indicator">
         {{requestsInFlight}} pending
@@ -183,7 +183,7 @@
     </div>
 
     <div ng-click="showTab = null">
-      <div class="graph_chart" graph-chart graph-settings="graph" graph-data="data" aspect-ratio="aspectRatio">
+      <div class="graph_chart" graph-chart graph-settings="graph" graph-data="data" aspect-ratio="aspectRatio" vars="vars">
         <div class="legend"></div>
       </div>
     </div>

@@ -19,7 +19,7 @@
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_source'">
         <div class="panel-heading">Frame Source</div>
         <div class="panel-body">
-          <input type="text" class="form-control" ng-model="frame.url" placeholder="Enter URL" required>
+          <input type="text" class="form-control" ng-model="frame.url" ng-changed="refreshFrame()" placeholder="Enter URL" required>
           <input type="text" class="form-control" ng-model="frame.title" placeholder="Enter Title" required>
         </div>
       </div>

@@ -3,7 +3,8 @@ angular.module("Prometheus.directives").directive('inlineFrame', function() {
     scope: {
       frame: "=frameSettings",
       frameHeight: "&",
-      index: "="
+      index: "=",
+      vars: "="
     },
     restrict: "AE",
     templateUrl: "<%= asset_path('frame_template.html') %>"

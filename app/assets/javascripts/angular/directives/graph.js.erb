@@ -6,7 +6,8 @@ angular.module("Prometheus.directives").directive('graph', function() {
       globalEndTime: "=",
       aspectRatio: "=",
       frameHeight: "&",
-      index: "="
+      index: "=",
+      vars: "="
     },
     restrict: "AE",
     templateUrl: "<%= asset_path('graph_template.html') %>"
