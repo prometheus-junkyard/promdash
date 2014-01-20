@@ -79,7 +79,7 @@
           <label>Aspect Ratio:
             <select class="form-control" type="text"
               ng-model="globalConfig.aspectRatio"
-              ng-change="redrawGraphs()"
+              ng-change="nextCycleRedraw()"
               ng-options="r.value as r.fraction for r in aspectRatios">
             </select>
           </label>
@@ -109,7 +109,7 @@
               graph-settings="widget"
               servers="servers"
               global-end-time="globalConfig.endTime"
-              global-config="globalConfig"
+              aspect-ratio="globalConfig.aspectRatio"
               index="$index"
               frame-height="frameHeight()">
           </span>
