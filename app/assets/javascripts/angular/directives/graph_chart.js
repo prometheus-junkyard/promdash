@@ -2,7 +2,7 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
   return {
     scope: {
       graphSettings: '=',
-      globalConfig: '=',
+      aspectRatio: '=',
       graphData: '='
     },
     link: function(scope, element, attrs) {
@@ -73,7 +73,7 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
 
       function redrawGraph() {
         // graph height is being set irrespective of legend
-        var graphHeight = WidgetHeightCalculator(element[0], scope.globalConfig.aspectRatio);
+        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $(element[0]).css('height', graphHeight);
 
         if (scope.graphData == null) {
@@ -203,5 +203,3 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
     },
   };
 });
-
-
