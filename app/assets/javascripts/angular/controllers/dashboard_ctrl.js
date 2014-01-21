@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigDecoder, UrlConfigEncoder, UrlVariablesDecoder) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -22,6 +22,21 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     endTime: null,
     vars: {}
   };
+
+  // If settings were passed in via the URL hash, merge them into globalConfig.
+  var urlConfig = UrlConfigDecoder();
+  if (urlConfig.globalConfig) {
+    for (var o in urlConfig.globalConfig) {
+      $scope.globalConfig[o] = urlConfig.globalConfig[o];
+    }
+  }
+  // If we have manual variable overrides in the hashbang search part of the
+  // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
+  // merge them into the globalConfig's template vars.
+  var urlVars = UrlVariablesDecoder();
+  for (var o in urlVars) {
+    $scope.globalConfig.vars[o] = urlVars[o];
+  }
 
   $scope.aspectRatios = [
     {value: 0.75,    fraction: "4:3"},
@@ -208,6 +223,12 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
       vars[name] = value;
     }
     $scope.globalConfig.vars = vars;
+  }, true);
+
+  $scope.$watch('globalConfig', function() {
+    if ($scope.globalConfig.keepUrlUpdated) {
+      UrlConfigEncoder({globalConfig: $scope.globalConfig});
+    }
   }, true);
 
   for (var o in $scope.globalConfig.vars) {
