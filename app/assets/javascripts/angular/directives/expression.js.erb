@@ -1,0 +1,38 @@
+angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", function($timeout, MetricNamesQuerier) {
+  return {
+    restrict: "E",
+    scope: {
+      axes: "=",
+      servers: "=",
+      serversById: "=",
+      expr: "="
+    },
+    link: function(scope, element, attrs) {
+      var el = element[0].querySelector("[ng-model='expr.expression']");
+      var server = scope.serversById[scope.expr.server_id];
+      scope.MetricNamesQuerier = MetricNamesQuerier;
+      MetricNamesQuerier(scope.expr.server_id, server.url, scope);
+
+      scope.appendToExpression = function(expr, metricName) {
+        var lastCursorPosition = el.selectionStart;
+        expr.expression = insertSelection(metricName, el);
+
+        $timeout(function() {
+          el.focus();
+          el.setSelectionRange(lastCursorPosition, lastCursorPosition + metricName.length)
+        }, 0);
+      };
+
+      scope.setExpression = function(expr, metricName) {
+        expr.expression = metricName;
+      };
+
+      function insertSelection(metricName, el) {
+        var val = el.value;
+        return val.slice(0, el.selectionStart) + metricName + val.slice(el.selectionEnd, val.length);
+      }
+
+    },
+    templateUrl: "<%= asset_path('expression_template.html') %>"
+  };
+}]);

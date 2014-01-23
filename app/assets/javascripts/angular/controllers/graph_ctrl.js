@@ -29,11 +29,13 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
       axisId = $scope.graph.axes[0]['id'];
     }
 
-    $scope.graph.expressions.push({
+    var exp = {
       'server_id': serverId,
       'axis_id': axisId,
       'expression': ''
-    });
+    };
+    $scope.graph.expressions.push(exp);
+    var url = $scope.serversById[serverId]['url'];
   };
 
   $scope.removeExpression = function(idx) {
@@ -133,6 +135,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     for (var i = 0; i < $scope.graph.expressions.length; i++) {
       var exp = $scope.graph.expressions[i];
       var server = $scope.serversById[exp['server_id']];
+
       if (server == undefined) {
         console.log('No server selected for expression, skipping.');
         continue;
