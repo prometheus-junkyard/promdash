@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigDecoder, UrlConfigEncoder, UrlVariablesDecoder) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -19,8 +19,24 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     numColumns: 2,
     aspectRatio: 0.75,
     theme: "light_theme",
-    endTime: null
+    endTime: null,
+    vars: {}
   };
+
+  // If settings were passed in via the URL hash, merge them into globalConfig.
+  var urlConfig = UrlConfigDecoder();
+  if (urlConfig.globalConfig) {
+    for (var o in urlConfig.globalConfig) {
+      $scope.globalConfig[o] = urlConfig.globalConfig[o];
+    }
+  }
+  // If we have manual variable overrides in the hashbang search part of the
+  // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
+  // merge them into the globalConfig's template vars.
+  var urlVars = UrlVariablesDecoder();
+  for (var o in urlVars) {
+    $scope.globalConfig.vars[o] = urlVars[o];
+  }
 
   $scope.aspectRatios = [
     {value: 0.75,    fraction: "4:3"},
@@ -48,6 +64,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   var originalWidgets = angular.copy($scope.widgets);
   var originalConfig = angular.copy($scope.globalConfig);
 
+  $scope.vars = [];
   $scope.servers = servers;
   $scope.fullscreen = false;
   $scope.saving = false;
@@ -156,6 +173,14 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     return 'col-lg-' + colMap[$scope.globalConfig.numColumns];
   };
 
+  $scope.addVariable = function(name, value) {
+    $scope.vars.push({name: name, value: value});
+  };
+
+  $scope.removeVariable = function(idx) {
+    $scope.vars.splice(idx, 1);
+  };
+
   $scope.$on('removeWidget', function(ev, index) {
     $scope.widgets.splice(index, 1);
   });
@@ -189,8 +214,28 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
     }
   });
 
+  $scope.$watch('vars', function() {
+    var vars = {};
+    for (var i = 0; i < $scope.vars.length; i++) {
+      var name = $scope.vars[i].name || '';
+      var value = $scope.vars[i].value || '';
+
+      vars[name] = value;
+    }
+    $scope.globalConfig.vars = vars;
+  }, true);
+
+  $scope.$watch('globalConfig', function() {
+    if ($scope.globalConfig.keepUrlUpdated) {
+      UrlConfigEncoder({globalConfig: $scope.globalConfig});
+    }
+  }, true);
+
+  for (var o in $scope.globalConfig.vars) {
+    $scope.addVariable(o, $scope.globalConfig.vars[o]);
+  }
+
   if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }
 });
-

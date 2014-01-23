@@ -1,9 +1,10 @@
-angular.module("Prometheus.directives").directive('graphChart', function(WidgetHeightCalculator) {
+angular.module("Prometheus.directives").directive('graphChart', function(WidgetHeightCalculator, VariableInterpolator) {
   return {
     scope: {
       graphSettings: '=',
       aspectRatio: '=',
-      graphData: '='
+      graphData: '=',
+      vars: '='
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
@@ -58,16 +59,10 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
       function formatTimeSeries(series) {
         var re = /{{\w+}}/g;
         series.forEach(function(s) {
-          if (!scope.graphSettings.legendFormatString) return;
-          var labels = scope.graphSettings.legendFormatString.match(re);
-          if (!labels) return s.name = scope.graphSettings.legendFormatString;
-
-          var desiredName = scope.graphSettings.legendFormatString;
-          for (var i = 0; i < labels.length; i++) {
-            desiredName = desiredName.replace(labels[i], s.labels[labels[i].replace(/{|}/g, '')]);
+          if (!scope.graphSettings.legendFormatString) {
+            return;
           }
-
-          s.name = desiredName;
+          s.name = VariableInterpolator(scope.graphSettings.legendFormatString, s.labels);
         });
       }
 

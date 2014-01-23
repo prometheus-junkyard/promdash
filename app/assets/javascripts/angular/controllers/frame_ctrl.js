@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", function($scope, $sce) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", function($scope, $sce, VariableInterpolator) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
@@ -10,11 +10,9 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
     $scope.showTab = $scope.showTab == tab ? null : tab;
   };
 
-  $scope.frameURL = $sce.trustAsResourceUrl($scope.frame.url + "?decache=" + $scope.refreshCounter);
-
   $scope.getTitle = function() {
     if ($scope.frame.title) {
-      return $scope.frame.title;
+      return VariableInterpolator($scope.frame.title, $scope.vars);
     } else if ($scope.frame.url) {
       if ($scope.frame.url.length > 60) {
         return $scope.frame.url.substr(0, 57) + '...';
@@ -27,9 +25,12 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
 
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;
+    $scope.frameURL = $sce.trustAsResourceUrl(VariableInterpolator($scope.frame.url, $scope.vars) + "?decache=" + $scope.refreshCounter);
   };
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshFrame();
   });
+
+  $scope.refreshFrame();
 }]);

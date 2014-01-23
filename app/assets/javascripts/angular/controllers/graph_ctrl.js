@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", function($scope, $http, $window) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", function($scope, $http, $window, VariableInterpolator) {
   $scope.serversById = {};
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
   for (var i = 0; i < $scope.servers.length; i++) {
@@ -88,6 +88,10 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   });
 
+  $scope.title = function() {
+    return VariableInterpolator($scope.graph.title, $scope.vars);
+  };
+
   // TODO: Put this into a separate service.
   $scope.refreshGraph = function() {
     // Collect data for all expressions in this array.
@@ -141,7 +145,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
       var expression = $scope.graph.expressions[i].expression;
 
-      loadGraphData(i, expression, server, axisId);
+      loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, axisId);
     }
   };
 
