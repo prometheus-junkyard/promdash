@@ -11,6 +11,7 @@
       <!-- Frame control tab buttons -->
       <div class="btn-group">
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')"><i title="Frame Source" class="icon-add-to-list"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')"><i title="Frame Source" class="icon-cog"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshFrame()"><i title="Refresh" class="icon-cycle"></i></div>
       </div>
 
@@ -23,10 +24,19 @@
           <input type="text" class="form-control" ng-model="frame.title" placeholder="Enter Title" required>
         </div>
       </div>
+      <!-- 2) Frame Settings -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_settings'">
+        <div class="panel-heading">Frame Settings</div>
+        <div class="panel-body">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="frame.graphite" /> this is a graphite graph</label>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div ng-style="frameHeight()">
-      <iframe ng-src="{{frameURL}}" class="frame_iframe"></iframe>
+      <iframe ng-src="{{frameURL()}}" class="frame_iframe" scrolling="no"></iframe>
     </div>
   </div>
 </span>
