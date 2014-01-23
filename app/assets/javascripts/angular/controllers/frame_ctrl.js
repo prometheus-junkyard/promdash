@@ -10,6 +10,31 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
     $scope.showTab = $scope.showTab == tab ? null : tab;
   };
 
+  function buildFrameURL(url) {
+    var parser = document.createElement('a');
+    parser.href = url;
+    var queryStringComponents = parser.search.substring(1).split('&');
+    if ($scope.frame.graphite) {
+      queryStringComponents = queryStringComponents.map(function(e) {
+        if (e.indexOf('height=') === 0 ) {
+          return setDimension(e, $scope.frameHeight().height);
+        } else if (e.indexOf('width=') === 0) {
+          var width = $scope.frameHeight().height / $scope.aspectRatio;
+          return setDimension(e, width);
+        }
+        return e;
+      });
+    }
+    parser.search = '?' + queryStringComponents.join('&') + '&decache=' + $scope.refreshCounter;
+    return parser.href;
+  }
+
+  function setDimension(dimensionKeyValue, dimensionValue) {
+    var split = dimensionKeyValue.split("=");
+    split[1] = dimensionValue;
+    return split.join("=");
+  }
+
   $scope.getTitle = function() {
     if ($scope.frame.title) {
       return VariableInterpolator($scope.frame.title, $scope.vars);
@@ -23,14 +48,22 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
     }
   };
 
+  $scope.frameURL = function() {
+    var url = VariableInterpolator($scope.frame.url, $scope.vars);
+    return $sce.trustAsResourceUrl(buildFrameURL(url));
+  };
+
+  $scope.updateUrl = function() {
+    $scope.frame.url = $scope.urlInput;
+  };
+
+  $scope.urlInput = $scope.frame.url;
+
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;
-    $scope.frameURL = $sce.trustAsResourceUrl(VariableInterpolator($scope.frame.url, $scope.vars) + "?decache=" + $scope.refreshCounter);
   };
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshFrame();
   });
-
-  $scope.refreshFrame();
 }]);
