@@ -1,0 +1,30 @@
+<b>Expression {{$index + 1}}</b>
+<select
+  class="form-control"
+  ng-model="expr.server_id"
+  ng-options="s.id as s.name for s in servers"
+  ng-change="MetricNamesQuerier(expr.server_id, serversById[expr.server_id]['url'], this)">
+  <option value="">- Select Server -</option>
+</select>
+<select class="form-control" ng-model="expr.axis_id" ng-options="a.id as ('Axis ' + a.id) for a in axes">
+  <option value="">- Select Axis -</option>
+</select>
+<div class="input-group">
+  <input type="text" class="form-control"
+    ng-model="expr.expression"
+    typeahead="m for m in metricNames | filter:expr.expression"
+    placeholder="Enter expression" required>
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
+    <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="icon-minus"></i></button>
+    <button class="btn btn-default" type="button" ng-click="removeExpression($index)"><i class="icon-cross"></i></button>
+  </span>
+</div>
+<select class="form-control" type="text"
+  ng-show="showMetrics"
+  ng-model="chosenMetric"
+  ng-change="appendToExpression(expr, this.chosenMetric)"
+  ng-options="m for m in metricNames">
+  <option value="">- Insert Metric at Cursor -</option>
+</select>
+<br/>

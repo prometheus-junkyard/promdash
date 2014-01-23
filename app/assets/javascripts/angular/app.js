@@ -4,7 +4,7 @@ angular.module("Prometheus.resources", []);
 angular.module("Prometheus.services", []);
 
 angular.module("Prometheus",
-  ["ui.sortable", "Prometheus.controllers", "Prometheus.directives", "Prometheus.resources", "Prometheus.services"])
+  ["ui.sortable", "ui.bootstrap", "Prometheus.controllers", "Prometheus.directives", "Prometheus.resources", "Prometheus.services"])
 .run(['$rootScope', function($rootScope) {
   // adds some basic utilities to the $rootScope for debugging purposes
   $rootScope.log = function(thing) {

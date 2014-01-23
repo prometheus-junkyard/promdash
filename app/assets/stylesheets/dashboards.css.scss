@@ -151,6 +151,9 @@
       }
     }
 
+    .dropdown-menu > .active > a {
+      background-color: $dark-accent;
+    }
     .dropdown-menu li a {
       color: $dark-text;
       &:hover {
