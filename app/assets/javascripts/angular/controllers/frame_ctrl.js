@@ -10,19 +10,21 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
     $scope.showTab = $scope.showTab == tab ? null : tab;
   };
 
-  function createGraphiteURL() {
+  function buildFrameURL(url) {
     var parser = document.createElement('a');
-    parser.href = $scope.frame.url;
+    parser.href = url;
     var queryStringComponents = parser.search.substring(1).split('&');
-    queryStringComponents = queryStringComponents.map(function(e) {
-      if (e.indexOf('height=') === 0 ) {
-        return setDimension(e, $scope.frameHeight().height);
-      } else if (e.indexOf('width=') === 0) {
-        var width = $scope.frameHeight().height / $scope.aspectRatio;
-        return setDimension(e, width);
-      }
-      return e;
-    });
+    if ($scope.frame.graphite) {
+      queryStringComponents = queryStringComponents.map(function(e) {
+        if (e.indexOf('height=') === 0 ) {
+          return setDimension(e, $scope.frameHeight().height);
+        } else if (e.indexOf('width=') === 0) {
+          var width = $scope.frameHeight().height / $scope.aspectRatio;
+          return setDimension(e, width);
+        }
+        return e;
+      });
+    }
     parser.search = '?' + queryStringComponents.join('&') + '&decache=' + $scope.refreshCounter;
     return parser.href;
   }
@@ -47,21 +49,21 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
   };
 
   $scope.frameURL = function() {
-    if ($scope.frame.graphite) {
-      return $sce.trustAsResourceUrl(createGraphiteURL());
-    } else {
-      return $sce.trustAsResourceUrl(VariableInterpolator($scope.frame.url, $scope.vars) + "?decache=" + $scope.refreshCounter);
-    }
+    var url = VariableInterpolator($scope.frame.url, $scope.vars);
+    return $sce.trustAsResourceUrl(buildFrameURL(url));
   };
+
+  $scope.updateUrl = function() {
+    $scope.frame.url = $scope.urlInput;
+  };
+
+  $scope.urlInput = $scope.frame.url;
 
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;
-    $scope.frameURL();
   };
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshFrame();
   });
-
-  $scope.refreshFrame();
 }]);
