@@ -41,9 +41,11 @@
 }
 
 .widget_title {
+  cursor: move;
+  overflow: hidden;
   position: relative;
   text-align: center;
-  cursor: move;
+  white-space: nowrap;
 }
 
 .graph_ajax_status {
