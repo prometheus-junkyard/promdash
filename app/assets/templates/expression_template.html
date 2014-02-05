@@ -1,4 +1,4 @@
-<b>Expression {{$index + 1}}</b>
+<b>Expression {{index + 1}}</b>
 <select
   class="form-control"
   ng-model="expr.server_id"
@@ -17,7 +17,7 @@
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
     <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="icon-minus"></i></button>
-    <button class="btn btn-default" type="button" ng-click="removeExpression($index)"><i class="icon-cross"></i></button>
+    <button class="btn btn-default" type="button" ng-click="removeExpression(index)"><i class="icon-cross"></i></button>
   </span>
 </div>
 <select class="form-control" type="text"

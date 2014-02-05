@@ -29,7 +29,7 @@
         <div class="panel-heading">Datasources</div>
         <div class="panel-body">
           <div ng-repeat="expr in graph.expressions">
-            <expression expr="expr" servers="servers" axes="graph.axes" servers-by-id="serversById"></expression>
+            <expression expr="expr" servers="servers" axes="graph.axes" servers-by-id="serversById" index="$index"></expression>
           </div>
           <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
         </div>
