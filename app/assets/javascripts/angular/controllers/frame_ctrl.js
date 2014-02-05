@@ -1,6 +1,19 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", function($scope, $sce, VariableInterpolator) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
+
+  $scope.generateWidgetLink = function(event) {
+    var graphBlob = {};
+    graphBlob.widget = $scope.frame;
+    graphBlob.globalConfig = dashboardData.globalConfig;
+    $scope.widgetLink = location.origin + "/widget##" + UrlHashEncoder(graphBlob);
+
+    if (event) {
+      // TODO: find more robust means of accessing the corresponding input field.
+      var input = event.currentTarget.parentElement.parentElement.querySelector("[ng-model=widgetLink]")
+      InputHighlighter(input);
+    }
+  };
 
   $scope.removeFrame = function() {
     $scope.$emit('removeWidget', $scope.index);

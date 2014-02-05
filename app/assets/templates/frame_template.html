@@ -12,6 +12,7 @@
       <div class="btn-group">
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')"><i title="Frame Source" class="icon-add-to-list"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')"><i title="Frame Source" class="icon-cog"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshFrame()"><i title="Refresh" class="icon-cycle"></i></div>
       </div>
 
@@ -30,6 +31,23 @@
         <div class="panel-body">
           <div class="checkbox">
             <label><input type="checkbox" ng-model="frame.graphite" /> this is a graphite graph</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3) Static link to graph -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
+        <div class="panel-heading">Link to this graph</div>
+        <div class="panel-body">
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="widgetLink">
+            <span class="input-group-btn">
+              <button class="btn btn-default" title="Open graph in new tab" ng-click="toggleTab('staticlink')">
+                <a href="{{widgetLink}}" target="_blank">
+                  <span class="glyphicon glyphicon-new-window"></span>
+                </a>
+              </button>
+            </span>
           </div>
         </div>
       </div>

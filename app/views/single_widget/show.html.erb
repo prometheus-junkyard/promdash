@@ -1,0 +1,27 @@
+<script type="text/javascript">
+  servers = <%= @servers.to_json.html_safe %>;
+</script>
+
+<div class="fullscreen">
+  <div class="single_widget" ng-controller="SingleWidgetCtrl">
+    <span ng-switch="widget.type">
+      <span ng-switch-when="graph">
+        <graph
+          graph-settings="widget"
+          servers="servers"
+          global-end-time="globalConfig.endTime"
+          aspect-ratio="globalConfig.aspectRatio"
+          index="$index"
+          vars="globalConfig.vars">
+      </span>
+      <span ng-switch-when="frame">
+        <inline-frame
+          frame-settings="widget"
+          frame-height="frameHeight()"
+          aspect-ratio="globalConfig.aspectRatio"
+          index="$index"
+          vars="globalConfig.vars">
+      </span>
+    </span>
+  </div>
+</div>
