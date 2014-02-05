@@ -1,4 +1,4 @@
-angular.module("Prometheus.directives").directive('graphChart', function(WidgetHeightCalculator, VariableInterpolator) {
+angular.module("Prometheus.directives").directive('graphChart', ["$location", "WidgetHeightCalculator", "VariableInterpolator", "RickshawDataTransformer", function($location, WidgetHeightCalculator, VariableInterpolator, RickshawDataTransformer) {
   return {
     scope: {
       graphSettings: '=',
@@ -8,56 +8,7 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
-      function metricToTsName(labels) {
-        var tsName = labels["name"] + "{";
-        var labelStrings = [];
-         for (label in labels) {
-           if (label != "name") {
-            labelStrings.push(label + "=\"" + labels[label] + "\"");
-           }
-         }
-        tsName += labelStrings.join(",") + "}";
-        return tsName;
-      }
-
-      function parseValue(value) {
-        if (value == "NaN" || value == "Inf" || value == "-Inf") {
-          return 0; // TODO: what should we really do here?
-        } else {
-          return parseFloat(value);
-        }
-      }
-
-      function transformData(data) {
-        var palette = new Rickshaw.Color.Palette();
-        var series = [];
-        for (var i = 0; i < data.length; i++) {
-          if (!data[i]) {
-            continue;
-          }
-
-          series = series.concat(data[i]['data'].Value.map(function(ts) {
-            return {
-              name: metricToTsName(ts.Metric),
-              labels: ts.Metric,
-              data: ts.Values.map(function(value) {
-                return {
-                  x: value.Timestamp,
-                  y: parseValue(value.Value)
-                }
-              }),
-              color: palette.color()
-            };
-          }));
-        }
-        if (scope.graphSettings.stacked) {
-          Rickshaw.Series.zeroFill(series);
-        }
-        return series;
-      }
-
       function formatTimeSeries(series) {
-        var re = /{{\w+}}/g;
         series.forEach(function(s) {
           if (!scope.graphSettings.legendFormatString) {
             return;
@@ -67,7 +18,7 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
       }
 
       function redrawGraph() {
-        // graph height is being set irrespective of legend
+        // Graph height is being set irrespective of legend.
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $(element[0]).css('height', graphHeight);
 
@@ -75,7 +26,7 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
           return;
         }
 
-        var series = transformData(scope.graphData);
+        var series = RickshawDataTransformer(scope.graphData, scope.graphSettings.stacked);
         if (series.length === 0) {
           return;
         }
@@ -197,4 +148,4 @@ angular.module("Prometheus.directives").directive('graphChart', function(WidgetH
       });
     },
   };
-});
+}]);

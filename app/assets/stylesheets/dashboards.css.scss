@@ -96,6 +96,10 @@
   width: 100%;
 }
 
+.single_widget .panel {
+  margin-bottom: 0;
+}
+
 .rickshaw_graph .y_ticks path {
   stroke: none;
 }
@@ -124,6 +128,10 @@
   $dark-text: #FFFFFF;
   $dark-secondary-background: #252525;
   $dark-accent: #96557e;
+
+  a {
+    color: $dark-accent;
+  }
 
   body, .fullscreen {
     color: $dark-text;

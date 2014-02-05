@@ -10,16 +10,22 @@ angular.module("Prometheus.services").factory('UrlConfigDecoder', function($loca
   };
 });
 
-angular.module("Prometheus.services").factory('UrlConfigEncoder', function($location, UrlConfigDecoder) {
+angular.module("Prometheus.services").factory('UrlHashEncoder', ["$location", "UrlConfigDecoder", function($location, UrlConfigDecoder) {
   return function(config) {
     var urlConfig = UrlConfigDecoder();
     for (var o in config) {
       urlConfig[o] = config[o];
     }
     var configJSON = JSON.stringify(urlConfig);
-    $location.hash(btoa(configJSON));
+    return btoa(configJSON);
   };
-});
+}]);
+
+angular.module("Prometheus.services").factory('UrlConfigEncoder', ["$location", "UrlHashEncoder", function($location, UrlHashEncoder) {
+  return function(config) {
+    $location.hash(UrlHashEncoder(config));
+  };
+}]);
 
 angular.module("Prometheus.services").factory('UrlVariablesDecoder', function($location) {
   return function() {

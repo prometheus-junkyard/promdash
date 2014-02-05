@@ -1,10 +1,20 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", function($scope, $http, $window, VariableInterpolator) {
-  $scope.serversById = {};
-  $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
-  for (var i = 0; i < $scope.servers.length; i++) {
-    $scope.serversById[$scope.servers[i].id] = $scope.servers[i];
-  }
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "InputHighlighter", "ServersByIdObject", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, InputHighlighter, ServersByIdObject) {
+  $scope.generateWidgetLink = function(event) {
+    var graphBlob = {};
+    graphBlob.widget = $scope.graph;
+    graphBlob.globalConfig = dashboardData.globalConfig;
+    $scope.widgetLink = location.origin + "/widget##" + UrlHashEncoder(graphBlob);
 
+    if (event) {
+      // TODO: find more robust means of accessing the corresponding input field.
+      var input = event.currentTarget.parentElement.parentElement.querySelector("[ng-model=widgetLink]")
+      InputHighlighter(input);
+    }
+  };
+
+  $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
+
+  $scope.serversById = ServersByIdObject($scope.servers);
   $scope.graph.axes = [];
   $scope.requestsInFlight = 0;
   $scope.data = null;
@@ -94,63 +104,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     return VariableInterpolator($scope.graph.title, $scope.vars);
   };
 
-  // TODO: Put this into a separate service.
-  $scope.refreshGraph = function() {
-    // Collect data for all expressions in this array.
-    var allData = [];
-
-    function requestFinished() {
-      $scope.requestsInFlight--;
-      $scope.data = allData;
-    };
-
-    function loadGraphData(idx, expression, server, axisId) {
-      $scope.requestsInFlight++;
-      var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
-      $http.get(server.url + 'api/query_range', {
-        params: {
-          expr: expression,
-          range: rangeSeconds,
-          end: Math.floor($scope.graph.endTime / 1000),
-          step: Math.max(Math.floor(rangeSeconds / 250))
-        },
-        cache: false
-      }).success(function(data, status) {
-        switch(data.Type) {
-        case 'error':
-          console.log('Error evaluating expression "' + expression + '" on server ' + server.url + ': ' + data.Value);
-          break;
-        case 'matrix':
-          allData[idx] = {
-            'axis_id': axisId,
-            'data': data
-          };
-          break;
-        default:
-          console.log('Result for expression "' + expression + '" is not of matrix type! Skipping.');
-        }
-      }).error(function(data, status, b) {
-        console.log('Error querying server ' + server.url + ' for expression "' + expression + '"');
-      }).finally(function() {
-        requestFinished();
-      });
-    }
-
-    for (var i = 0; i < $scope.graph.expressions.length; i++) {
-      var exp = $scope.graph.expressions[i];
-      var server = $scope.serversById[exp['server_id']];
-
-      if (server == undefined) {
-        console.log('No server selected for expression, skipping.');
-        continue;
-      }
-      var axisId = exp['axis_id'];
-
-      var expression = $scope.graph.expressions[i].expression;
-
-      loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, axisId);
-    }
-  };
+  $scope.refreshGraph = GraphRefresher($scope);
 
   if ($scope.graph.axes.length == 0) {
     $scope.addAxis();

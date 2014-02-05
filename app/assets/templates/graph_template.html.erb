@@ -19,6 +19,7 @@
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('graph')"><i title="Graph and axis settings" class="icon-line-graph"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('palette')"><i title="Palette" class="icon-palette"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('legend')"><i title="Legend Settings" class="icon-list"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshGraph()"><i title="Refresh" class="icon-cycle"></i></div>
       </div>
 
@@ -165,6 +166,23 @@
           <br />
           <input class="form-control" ng-model="graph.legendFormatString">
           <br/>
+        </div>
+      </div>
+
+      <!-- 6) Static link to graph -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
+        <div class="panel-heading">Link to this graph</div>
+        <div class="panel-body">
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="widgetLink">
+            <span class="input-group-btn">
+              <button class="btn btn-default" title="Open graph in new tab" ng-click="toggleTab('staticlink')">
+                <a href="{{widgetLink}}" target="_blank">
+                  <span class="glyphicon glyphicon-new-window"></span>
+                </a>
+              </button>
+            </span>
+          </div>
         </div>
       </div>
     </div>

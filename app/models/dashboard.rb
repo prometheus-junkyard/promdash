@@ -21,7 +21,7 @@ class Dashboard < ActiveRecord::Base
   end
 
   def black_listed_slug_names
-    %w(dashboard servers about help signin signout home contact assets)
+    %w(dashboard servers about help signin signout home contact assets widget)
   end
 
   def create_slug
