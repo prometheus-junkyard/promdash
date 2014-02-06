@@ -1,11 +1,11 @@
-angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "UrlConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIdObject", "FullScreenAspectRatio", function($window, $timeout, $scope, $http, UrlConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIdObject, FullScreenAspectRatio) {
+angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "UrlConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIdObject", "FullScreenAspectRatio", "ThemeService", function($window, $timeout, $scope, $http, UrlConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIdObject, FullScreenAspectRatio, ThemeService) {
   var graphBlob = UrlConfigDecoder();
   $scope.widget = graphBlob.widget;
   $scope.servers = servers;
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.globalConfig = graphBlob.globalConfig;
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
-  $scope.$emit("themeChange", $scope.globalConfig.theme);
+  ThemeService.theme = $scope.globalConfig.theme;
 
   // Widget should always fill screen, whether graph or frame.
   $scope.frameHeight = function() {

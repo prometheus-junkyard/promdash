@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigDecoder, UrlConfigEncoder, UrlVariablesDecoder) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigDecoder", "UrlConfigEncoder", "UrlVariablesDecoder", "ThemeService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigDecoder, UrlConfigEncoder, UrlVariablesDecoder, ThemeService) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -51,7 +51,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   ];
 
   $scope.themeChange = function() {
-    $scope.$emit("themeChange", $scope.globalConfig.theme);
+    ThemeService.theme = $scope.globalConfig.theme;
   };
 
   $scope.frameHeight = function() {
@@ -238,4 +238,4 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', function($s
   if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }
-});
+}]);
