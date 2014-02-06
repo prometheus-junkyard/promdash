@@ -48,9 +48,9 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     var url = $scope.serversById[serverId]['url'];
   };
 
-  $scope.removeExpression = function(idx) {
-    $scope.graph.expressions.splice(idx, 1);
-  };
+  $scope.$on('removeExpression', function(ev, index) {
+    $scope.graph.expressions.splice(index, 1);
+  });
 
   $scope.increaseRange = function() {
     $scope.graph.range = Prometheus.Graph.nextLongerRange($scope.graph.range);

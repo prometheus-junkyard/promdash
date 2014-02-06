@@ -5,7 +5,8 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       axes: "=",
       servers: "=",
       serversById: "=",
-      expr: "="
+      expr: "=",
+      index: "="
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
@@ -32,6 +33,9 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
         return val.slice(0, el.selectionStart) + metricName + val.slice(el.selectionEnd, val.length);
       }
 
+      scope.removeExpression = function() {
+        scope.$emit('removeExpression', scope.index);
+      };
     },
     templateUrl: "<%= asset_path('expression_template.html') %>"
   };
