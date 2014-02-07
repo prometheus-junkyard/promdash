@@ -1,6 +1,5 @@
-angular.module("Prometheus.controllers").controller('ThemeCtrl', ["$scope", "ThemeService", function($scope, ThemeService) {
-  ThemeService.theme = (dashboardData.globalConfig || {}).theme;
+angular.module("Prometheus.controllers").controller('ThemeCtrl', ["$scope", "ThemeManager", function($scope, ThemeManager) {
   $scope.theme = function() {
-    return ThemeService.theme;
+    return ThemeManager.theme;
   };
 }]);
