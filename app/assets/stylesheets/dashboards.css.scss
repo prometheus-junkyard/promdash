@@ -121,6 +121,11 @@
   }
 }
 
+.inactive_widget {
+  position: absolute;
+  visibility: hidden;
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;
@@ -248,4 +253,8 @@
       }
     }
   }
+}
+
+.no_padding {
+  padding: 0;
 }

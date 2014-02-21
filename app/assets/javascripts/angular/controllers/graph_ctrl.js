@@ -109,4 +109,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   if ($scope.graph.axes.length == 0) {
     $scope.addAxis();
   }
+
+  $scope.refreshGraph();
 }]);

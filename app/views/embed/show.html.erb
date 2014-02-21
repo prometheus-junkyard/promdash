@@ -1,0 +1,40 @@
+<script type="text/javascript">
+  dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
+  servers = <%= @servers.to_json.html_safe %>;
+</script>
+
+<div id="dashboard" ng-controller="EmbedCtrl">
+
+  <div class="fullscreen single_widget">
+    <div class="btn pull-left no_padding" ng-click="incrementActive(-1)">
+      <i class="icon-chevron-left"></i>
+    </div>
+    <div class="btn pull-right no_padding" ng-click="incrementActive(1)">
+      <i class="icon-chevron-right"></i>
+    </div>
+    <ul ui-sortable="sortableOptions" ng-model="widgets" class="sortable-widgets">
+      <li ng-repeat="widget in widgets" ng-class="['widget_column', widgetClass($index)]">
+        <span ng-switch="widget.type">
+          <span ng-switch-when="graph">
+            <graph
+              graph-settings="widget"
+              servers="servers"
+              global-end-time="globalConfig.endTime"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
+              frame-height="frameHeight()"
+              vars="globalConfig.vars">
+          </span>
+          <span ng-switch-when="frame">
+            <inline-frame
+              frame-settings="widget"
+              frame-height="frameHeight()"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
+              vars="globalConfig.vars">
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
