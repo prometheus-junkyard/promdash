@@ -13,6 +13,22 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('This record was not found')
   end
 
+
+  private
+  # By default, Rails 4 sets the X-Frame-Options header to 'SAMEORIGIN'. Using
+  # this method as an after_action allows external iframes to access those
+  # routes.
+  # http://stackoverflow.com/questions/18445782/how-to-override-x-frame-options-for-a-controller-or-action-in-rails-4
+  def allow_iframe
+    response.headers.except! 'X-Frame-Options'
+  end
+
+  def set_dashboard_via_slug
+    unless @dashboard = Dashboard.find_by_slug(params[:slug]) || Dashboard.find_by_id(params[:id])
+      record_not_found
+    end
+  end
+
   protected
   def verified_request?
     super || form_authenticity_token == request.headers['X-XSRF-TOKEN']

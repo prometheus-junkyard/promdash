@@ -69,12 +69,6 @@ class DashboardsController < ApplicationController
     @dashboard = Dashboard.find(params[:id])
   end
 
-  def set_dashboard_via_slug
-    unless @dashboard = Dashboard.find_by_slug(params[:slug]) || Dashboard.find_by_id(params[:id])
-      record_not_found
-    end
-  end
-
   # Never trust parameters from the scary internet, only allow the white list through.
   def dashboard_params
     params.require(:dashboard).permit(:name, :dashboard_json, :slug)
