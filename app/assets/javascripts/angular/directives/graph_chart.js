@@ -80,12 +80,13 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         rsGraph.render();
 
         var xAxis = new Rickshaw.Graph.Axis.Time({
-            graph: rsGraph
+          graph: rsGraph
         });
         xAxis.render();
 
         var yAxis = new Rickshaw.Graph.Axis.Y({
-            graph: rsGraph
+          tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+          graph: rsGraph
         });
         yAxis.render();
 
