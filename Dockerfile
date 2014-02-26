@@ -12,7 +12,7 @@ CMD        [ "thin", "start" ]
 ADD        . /promdash
 RUN        bundle install --without="development test migration" && \
            bundle exec rake assets:precompile
-RUN        printf '#!/bin/sh \
+RUN        printf '#!/bin/sh\n \
            [ -z "$DATABASE_URL" ] && \
            export DATABASE_URL=$(echo $DB_PORT_3306_TCP|sed 's/^tcp/mysql2/')/$PROMDASH_MYSQL_DATABASE\nexec $@' > \
            run && chmod a+x run
