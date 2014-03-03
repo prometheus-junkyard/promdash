@@ -25,6 +25,7 @@ $(RUBY_BIN): $(RUBY_SRC)/Makefile
 build: Gemfile.lock $(RUBY_BIN)
 	bin/env gem install bundler --bindir bin/ --no-document
 	bin/env bin/bundle install --deployment --binstubs --without="development test migration"
+	rm -rf public/assets/*
 	bin/env bin/bundle exec rake assets:precompile
 
 clean:
