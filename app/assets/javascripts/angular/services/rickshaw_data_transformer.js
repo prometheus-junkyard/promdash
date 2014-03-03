@@ -20,7 +20,6 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
   }
 
   return function(data, stacked) {
-    var palette = new Rickshaw.Color.Palette();
     var series = [];
     for (var i = 0; i < data.length; i++) {
       if (!data[i]) {
@@ -36,11 +35,12 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
               x: value.Timestamp,
               y: parseValue(value.Value)
             }
-          }),
-          color: palette.color()
+          })
         };
       }));
     }
+
+    series = new Rickshaw.Series(series);
     if (stacked) {
       Rickshaw.Series.zeroFill(series);
     }

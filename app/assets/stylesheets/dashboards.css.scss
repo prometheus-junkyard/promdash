@@ -111,6 +111,9 @@
   width: 100%;
   border-color: #DDDDDD;
   background: none;
+  ul {
+    margin: 0;
+  }
   .action, .action:hover {
     color: #428BCA;
     opacity: 1;
