@@ -1,7 +1,9 @@
 //= require spec_helper
-var myService = getService('FullScreenAspectRatio');
+var fullscreenAspectRatio = getService('FullScreenAspectRatio');
 describe('FullScreenAspectRatio', function() {
   it("correctly calculates the aspect ratio", function() {
-    expect(myService()).toEqual(0.525);
+    var height = window.innerHeight - 46;
+    var width = window.innerWidth;
+    expect(fullscreenAspectRatio()).toEqual(height/width);
   });
 });
