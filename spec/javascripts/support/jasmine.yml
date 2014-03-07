@@ -14,18 +14,17 @@ src_files:
 # path to parent directory of spec_files
 # relative path from Rails.root
 # defaults to spec/javascripts
-spec_dir: spec/javascripts
+spec_dir: "spec/javascripts"
 
 # list of file expressions to include as helpers into spec runner
 # relative path from spec_dir
 helpers:
   - "helpers/**/*.{js.coffee,js,coffee}"
-  - "support/jquery.min.js"
 
 # list of file expressions to include as specs into spec runner
 # relative path from spec_dir
 spec_files:
-  - "**/*[Ss]pec.{js.coffee,js,coffee}"
+  - "**/*_spec.js"
 
 # path to directory of temporary files
 # (spec runner and asset cache)
