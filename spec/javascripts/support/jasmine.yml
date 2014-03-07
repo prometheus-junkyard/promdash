@@ -9,6 +9,7 @@ src_files:
  - "jquery.min.js"
  - "angular.min.js"
  - "application.{js.coffee,js,coffee}"
+ - "/angular/**/*.js"
 
 # path to parent directory of spec_files
 # relative path from Rails.root
