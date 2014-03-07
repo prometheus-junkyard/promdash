@@ -6,8 +6,6 @@ src_dir: "app/assets/javascripts/"
 # list of file expressions to include as source files
 # relative path from src_dir
 src_files:
- - "jquery.min.js"
- - "angular.min.js"
  - "application.{js.coffee,js,coffee}"
 
 # path to parent directory of spec_files
