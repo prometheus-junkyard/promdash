@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  name: dash 1
-  slug: dash-1
-
-two:
-  name: dash 2
-  slug: dash-2
