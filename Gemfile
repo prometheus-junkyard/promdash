@@ -14,7 +14,11 @@ group :development do
 end
 
 group :test, :development do
+  gem 'pry'
   gem 'jasmine-rails'
+  gem 'rspec-rails', "~> 3.0.0.beta2"
+  gem 'capybara'
+  gem 'capybara-webkit'
 end
 
 # Use SCSS for stylesheets
