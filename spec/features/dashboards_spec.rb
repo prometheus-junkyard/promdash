@@ -65,5 +65,14 @@ feature "Dashboard" do
         expect(page).to have_content(/editing dashboard/i)
       end
     end
+
+    scenario "destroy" do
+      Dashboard.destroy_all
+      visit new_dashboard_path
+      fill_in('Name', with: 'New Dashboard')
+      find('.actions input').click
+      visit root_path
+      expect { click_link('Delete') }.to change { Dashboard.count }.by(-1)
+    end
   end
 end
