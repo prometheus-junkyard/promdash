@@ -129,6 +129,17 @@
   visibility: hidden;
 }
 
+// Hover-detail styling.
+.rickshaw_graph .detail {
+  .date {
+    color: #a0a0a0;
+  }
+
+  .labels {
+    font-size: 11px;
+  }
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;

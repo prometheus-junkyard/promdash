@@ -131,34 +131,17 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
           graph: rsGraph,
           formatter: function(series, x, y) {
+            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.labels["name"] + ": <strong>" + y + '</strong><br>';
-            return content + renderLabels(series.labels);
+            var content = swatch + series.labels["name"] + ": <strong>" + y + '</strong>';
+            return date + '<br>' + content + '<br>' + renderLabels(series.labels);
           },
           onRender: function() {
             var dot = this.graph.element.querySelector('.dot');
             var hoverContent = this.graph.element.querySelector('.item');
-            var width = this.graph.width;
-            var element = $(this.element);
 
             dot.style.top = parseFloat(dot.style.top) + elementHeight($legend) + "px";
             hoverContent.style.top = parseFloat(hoverContent.style.top) + elementHeight($legend) + "px";
-
-            $(".x_label", element).each(function() {
-              if ($(this).outerWidth() + element.offset().left > width) {
-                $(this).addClass("flipped");
-              } else {
-                $(this).removeClass("flipped");
-              }
-            })
-
-            $(".item", element).each(function() {
-              if ($(this).outerWidth() + element.offset().left > width) {
-                $(this).addClass("flipped");
-              } else {
-                $(this).removeClass("flipped");
-              }
-            })
           },
         });
       }
