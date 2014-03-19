@@ -76,6 +76,21 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.addVariable(o, $scope.globalConfig.vars[o]);
     }
 
+    function setupRefreshTimer(delay) {
+      $scope.refreshTimer = $timeout(function() {
+        $scope.$broadcast('refreshDashboard');
+        setupRefreshTimer(delay);
+      }, delay * 1000);
+    }
+
+    $scope.$watch('globalConfig.refresh', function() {
+      if ($scope.refreshTimer) {
+        $timeout.cancel($scope.refreshTimer);
+      }
+      if ($scope.globalConfig.refresh) {
+        setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
+      }
+    });
   }
 
   var sharedGraphBehavior = function($scope) {
