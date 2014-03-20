@@ -39,20 +39,4 @@ angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$win
   $scope.$on('removeWidget', function(ev, index) {
     $scope.widgets.splice(index, 1);
   });
-
-  function setupRefreshTimer(delay) {
-    $scope.refreshTimer = $timeout(function() {
-      $scope.$broadcast('refreshDashboard');
-      setupRefreshTimer(delay);
-    }, delay * 1000);
-  }
-
-  $scope.$watch('globalConfig.refresh', function() {
-    if ($scope.refreshTimer) {
-      $timeout.cancel($scope.refreshTimer);
-    }
-    if ($scope.globalConfig.refresh) {
-      setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
-    }
-  });
 }]);

@@ -117,15 +117,6 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     });
   };
 
-  $scope.$watch('globalConfig.refresh', function() {
-    if ($scope.refreshTimer) {
-      $timeout.cancel($scope.refreshTimer);
-    }
-    if ($scope.globalConfig.refresh) {
-      setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
-    }
-  });
-
   $scope.addGraph = function() {
     $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
   };
