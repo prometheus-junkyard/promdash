@@ -152,8 +152,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
       function setLegendPresence(series) {
         $(element[0]).find(".legend").show();
-        if (scope.graphSettings.legendSetting !== "always" ||
-            (scope.graphSettings.legendSetting === "sometimes" && series.length > 6)) {
+        if (scope.graphSettings.legendSetting === "never" ||
+            (scope.graphSettings.legendSetting === "sometimes" && series.length > 5)) {
           $(element[0]).find(".legend").hide();
           series.forEach(function(s) {
             s.noLegend = true;
