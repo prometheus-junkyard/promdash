@@ -5,11 +5,6 @@
     <title><%= content_for?(:title) ? yield(:title) : "Prometheus Dashboard" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Prometheus, yo." %>">
 
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
-
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
