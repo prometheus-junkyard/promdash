@@ -82,12 +82,26 @@
           <label>Graph Title:</label>
           <input class="form-control" ng-model="graph.title">
           <br/>
-          <label>Chart Type:</label>
-          <div class="radio">
-            <label><input type="radio" ng-model="graph.stacked" ng-value="false"><i class="icon-line-graph"></i> lines</label>
+          <div class="col-xs-4">
+            <label>Chart Type:</label>
+            <div class="radio">
+              <label class="graph_settings_image lines"><input type="radio" ng-model="graph.stacked" ng-value="false"> lines</label>
+            </div>
+            <div class="radio">
+              <label class="graph_settings_image stacked"><input type="radio" ng-model="graph.stacked" ng-value="true"> stacked</label>
+            </div>
           </div>
-          <div class="radio">
-            <label><input type="radio" ng-model="graph.stacked" ng-value="true"><i class="icon-area-graph"></i> stacked</label>
+          <div class="col-xs-4">
+            <label>Interpolation:</label>
+            <div class="radio">
+              <label class="graph_settings_image cardinal"><input type="radio" ng-model="graph.interpolationMethod" value="cardinal"> cardinal</label>
+            </div>
+            <div class="radio">
+              <label class="graph_settings_image linear"><input type="radio" ng-model="graph.interpolationMethod" value="linear"> linear</label>
+            </div>
+            <div class="radio">
+              <label class="graph_settings_image step"><input type="radio" ng-model="graph.interpolationMethod" value="step-after"> step</label>
+            </div>
           </div>
 
           <!-- UNCOMMENT WHEN AXES ARE FULLY IMPLEMENTED

@@ -272,3 +272,25 @@
 .no_padding {
   padding: 0;
 }
+
+.graph_settings_image {
+  background-repeat: no-repeat;
+  background-size: 30px 13px;
+  padding-left: 35px;
+}
+
+.stacked {
+  background-image: asset_url("om_stack.png");
+}
+.lines {
+  background-image: asset_url("om_lines.png");
+}
+.cardinal {
+  background-image: asset_url("interp_cardinal.png");
+}
+.linear {
+  background-image: asset_url("interp_linear.png");
+}
+.step {
+  background-image: asset_url("interp_step.png");
+}
