@@ -89,6 +89,16 @@
           <div class="radio">
             <label><input type="radio" ng-model="graph.stacked" ng-value="true"><i class="icon-area-graph"></i> stacked</label>
           </div>
+          <label>Interpolation method:</label>
+          <div class="radio">
+            <label class="interpolation_label" for="cardinal"><input type="radio" ng-model="graph.interpolationMethod" value="cardinal"> cardinal</label>
+          </div>
+          <div class="radio">
+            <label class="interpolation_label" for="linear"><input type="radio" ng-model="graph.interpolationMethod" value="linear"> linear</label>
+          </div>
+          <div class="radio">
+            <label class="interpolation_label" for="step"><input type="radio" ng-model="graph.interpolationMethod" value="step"> step</label>
+          </div>
 
           <!-- UNCOMMENT WHEN AXES ARE FULLY IMPLEMENTED
           <hr>

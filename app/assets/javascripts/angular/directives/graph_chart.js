@@ -55,6 +55,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
         graph.configure({
           renderer: scope.graphSettings.stacked ? 'stack' : 'line',
+          interpolation: scope.graphSettings.interpolationMethod,
           height: calculateGraphHeight($el.find(".legend"))
         });
 
@@ -85,6 +86,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
         rsGraph = new Rickshaw.Graph({
           element: element[0],
+          interpolation: scope.graphSettings.interpolationMethod,
           renderer: (scope.graphSettings.stacked ? 'stack' : 'line'),
           series: series
         });
@@ -186,6 +188,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       }
 
       scope.$watch('graphSettings.stacked', redrawGraph);
+      scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.legendFormatString', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);

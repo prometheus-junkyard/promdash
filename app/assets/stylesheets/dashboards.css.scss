@@ -272,3 +272,18 @@
 .no_padding {
   padding: 0;
 }
+
+.interpolation_label {
+  background-repeat: no-repeat;
+  padding-left: 35px;
+}
+
+label[for=cardinal] {
+  background-image: asset_url("interp_cardinal.png");
+}
+label[for=linear] {
+  background-image: asset_url("interp_linear.png");
+}
+label[for=step] {
+  background-image: asset_url("interp_step.png");
+}

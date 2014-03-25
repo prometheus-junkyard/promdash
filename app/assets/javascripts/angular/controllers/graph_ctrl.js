@@ -13,6 +13,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   };
 
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
+  $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "cardinal";
 
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.graph.axes = [];

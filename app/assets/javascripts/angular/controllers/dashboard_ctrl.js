@@ -28,7 +28,6 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     {css: "dark_theme", name: "Dark"}
   ];
 
-
   SharedGraphBehavior($scope);
 
   $scope.frameHeight = function() {
