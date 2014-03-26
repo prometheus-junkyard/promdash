@@ -1,5 +1,5 @@
 angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "UrlConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIdObject", "FullScreenAspectRatio", "ThemeManager", function($window, $timeout, $scope, $http, UrlConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIdObject, FullScreenAspectRatio, ThemeManager) {
-  var graphBlob = UrlConfigDecoder();
+  var graphBlob = UrlConfigDecoder(blob);
   $scope.widget = graphBlob.widget;
   $scope.servers = servers;
   $scope.serversById = ServersByIdObject($scope.servers);

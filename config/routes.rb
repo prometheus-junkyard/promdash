@@ -3,7 +3,8 @@ PrometheusDashboard::Application.routes.draw do
   resources :dashboards
   resources :servers
 
-  get '/widget', to: 'single_widget#show'
+  get '/w/:slug', to: 'single_widget#show'
+  post '/w', to: 'single_widget#create'
   get '/embed/:slug', to: 'embed#show'
   get '/:slug', to: 'dashboards#show', as: 'dashboard_slug'
   match '/:slug', to: 'dashboards#update', as: 'dashboard_slug_put', via: [:put, :patch]

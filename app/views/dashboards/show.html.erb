@@ -1,5 +1,6 @@
 <script type="text/javascript">
   dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
+  dashboardName = "<%= @dashboard.name %>";
   servers = <%= @servers.to_json.html_safe %>;
 </script>
 

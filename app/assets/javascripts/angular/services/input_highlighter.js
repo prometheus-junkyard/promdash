@@ -3,6 +3,6 @@ angular.module("Prometheus.services").factory('InputHighlighter', ["$timeout", f
     $timeout(function() {
       input.focus();
       input.setSelectionRange(0, input.value.length);
-    }, 0);
+    }, 50);
   };
 }]);
