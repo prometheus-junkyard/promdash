@@ -1,3 +1,5 @@
+require 'slug_maker'
+
 class Dashboard < ActiveRecord::Base
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
@@ -21,10 +23,10 @@ class Dashboard < ActiveRecord::Base
   end
 
   def black_listed_slug_names
-    %w(dashboard servers about help signin signout home contact assets widget)
+    %w(dashboard servers about help signin signout home contact assets w)
   end
 
   def create_slug
-    self.slug = name.downcase.gsub(' ','-').gsub(/[^a-zA-Z0-9-]/, '')
+    self.slug = SlugMaker.slug(name)
   end
 end

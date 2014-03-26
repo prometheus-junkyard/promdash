@@ -1,6 +1,6 @@
 angular.module("Prometheus.services").factory('UrlConfigDecoder', function($location) {
-  return function() {
-    var hash = $location.hash();
+  return function(defaultHash) {
+    var hash = $location.hash() || defaultHash;
     if (!hash) {
       return {};
     }

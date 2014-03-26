@@ -1,15 +1,19 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "InputHighlighter", "ServersByIdObject", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, InputHighlighter, ServersByIdObject) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "InputHighlighter", "ServersByIdObject", "WidgetLinkHelper", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, InputHighlighter, ServersByIdObject, WidgetLinkHelper) {
   $scope.generateWidgetLink = function(event) {
+    if ($scope.showTab !== 'staticlink') {
+      return;
+    }
     var graphBlob = {};
     graphBlob.widget = $scope.graph;
     graphBlob.globalConfig = dashboardData.globalConfig;
-    $scope.widgetLink = location.origin + "/widget##" + UrlHashEncoder(graphBlob);
-
-    if (event) {
-      // TODO: find more robust means of accessing the corresponding input field.
-      var input = event.currentTarget.parentElement.parentElement.querySelector("[ng-model=widgetLink]")
-      InputHighlighter(input);
-    }
+    WidgetLinkHelper
+      .createLink({
+         encoded_url: UrlHashEncoder(graphBlob),
+         graph_title: $scope.graph.title,
+         dashboard_name: dashboardName
+       }, event)
+      .setLink($scope)
+      .highlightInput(event);
   };
 
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
