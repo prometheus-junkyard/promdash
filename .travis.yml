@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
-bundler_args: config --global jobs 4
 script:
+  - bundle config --global jobs 4
   - bundle exec rake
   - bundle exec rake spec:javascript
 rvm:
