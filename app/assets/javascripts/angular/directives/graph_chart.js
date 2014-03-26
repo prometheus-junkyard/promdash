@@ -10,6 +10,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       var rsGraph = null;
       var legend = null;
       var seriesToggle = null;
+
       function formatTimeSeries(series) {
         series.forEach(function(s) {
           if (!scope.graphSettings.legendFormatString) {
@@ -135,7 +136,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           formatter: function(series, x, y) {
             var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.labels["name"] + ": <strong>" + y + '</strong>';
+            var content = swatch + series.labels["__name__"] + ": <strong>" + y + '</strong>';
             return date + '<br>' + content + '<br>' + renderLabels(series.labels);
           },
           onRender: function() {
@@ -180,7 +181,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       function renderLabels(labels) {
         var labelStrings = [];
         for (label in labels) {
-          if (label != "name") {
+          if (label != "__name__") {
             labelStrings.push("<strong>" + label + "</strong>: " + labels[label]);
           }
         }
