@@ -1,4 +1,4 @@
-[![Build Status](https://drone.io/github.com/prometheus/promdash/status.png)](https://drone.io/github.com/prometheus/promdash/latest)
+[![Build Status](https://travis-ci.org/prometheus/promdash.svg?branch=add-travis-ci)](https://travis-ci.org/prometheus/promdash)
 PromDash
 =============
 
