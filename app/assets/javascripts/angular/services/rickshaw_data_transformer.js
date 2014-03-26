@@ -8,10 +8,10 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
   }
 
   function metricToTsName(labels) {
-    var tsName = labels["name"] + "{";
+    var tsName = labels["__name__"] + "{";
     var labelStrings = [];
     for (label in labels) {
-      if (label != "name") {
+      if (label != "__name__") {
         labelStrings.push(label + "=\"" + labels[label] + "\"");
       }
     }
