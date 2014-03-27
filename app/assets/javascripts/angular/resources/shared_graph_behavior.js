@@ -3,7 +3,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.globalConfig = dashboardData.globalConfig || {
       numColumns: 2,
       aspectRatio: 0.75,
-      theme: "light_theme",
+      theme: "dark_theme",
       endTime: null,
       vars: {}
     };
