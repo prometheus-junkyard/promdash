@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325231352) do
+ActiveRecord::Schema.define(version: 20140327001343) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20140325231352) do
     t.datetime "updated_at"
     t.string   "encoded_url"
     t.datetime "last_accessed"
-    t.string   "slug"
   end
 
 end
