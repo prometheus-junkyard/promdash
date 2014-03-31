@@ -12,5 +12,11 @@ describe ShortenedUrl do
         ShortenedUrl.create_with_last_accessed({encoded_url: "some_encoded_url"})
       }.to change { ShortenedUrl.count }.by 1
     end
+
+    it "does not create duplicates" do
+      expect {
+        3.times { ShortenedUrl.create_with_last_accessed(encoded_url: "url") }
+      }.to change { ShortenedUrl.count }.by 1
+    end
   end
 end

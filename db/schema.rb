@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140331155558) do
+ActiveRecord::Schema.define(version: 20140331215234) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20140331155558) do
     t.datetime "updated_at"
     t.text     "encoded_url",   limit: 255
     t.datetime "last_accessed"
+    t.string   "checksum",      limit: 32,  default: "", null: false
   end
+
+  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true
 
 end
