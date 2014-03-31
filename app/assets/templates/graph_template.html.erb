@@ -1,6 +1,7 @@
 <span ng-controller="GraphCtrl">
   <div class="widget_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
     <div class="js_widget_wrapper widget_title panel-heading">
+      <error-message error-messages="errorMessages"></error-message>
       {{title()}}
       <span class="graph_ajax_status pull-right" ng-show="requestsInFlight">
         <img src="<%= asset_path 'spinner.gif' %>" alt="AJAX indicator">
