@@ -1,0 +1,9 @@
+angular.module("Prometheus.directives").directive('errorMessage', [function() {
+  return {
+    restrict: "E",
+    scope: {
+      errorMessages: '='
+    },
+    templateUrl: "<%= asset_path('error_message.html') %>"
+  };
+}]);

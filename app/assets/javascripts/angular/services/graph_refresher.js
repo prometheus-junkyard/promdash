@@ -22,25 +22,29 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
       }).success(function(data, status) {
         switch(data.Type) {
           case 'error':
-            console.log('Error evaluating expression "' + expression + '" on server ' + server.url + ': ' + data.Value);
-          break;
+            var errMsg = "Expression " + (idx + 1) + ": " + data.Value;
+            $scope.errorMessages.push(errMsg);
+            break;
           case 'matrix':
             allData[idx] = {
-            'axis_id': axisId,
-            'data': data
-          };
-          break;
+              'axis_id': axisId,
+              'data': data
+            };
+            break;
           default:
-            console.log('Result for expression "' + expression + '" is not of matrix type! Skipping.');
+            var errMsg = 'Expression ' + (idx + 1) + ': Result type "' + data.Type + '" cannot be graphed."';
+            $scope.errorMessages.push(errMsg);
         }
       }).error(function(data, status, b) {
-        console.log('Error querying server ' + server.url + ' for expression "' + expression + '"');
+        var errMsg = "Expression " + (idx + 1) + ": Server returned status " + status + ".";
+        $scope.errorMessages.push(errMsg);
       }).finally(function() {
         requestFinished();
       });
     }
 
     return function() {
+      $scope.errorMessages = [];
       for (var i = 0; i < $scope.graph.expressions.length; i++) {
         var exp = $scope.graph.expressions[i];
         var server = $scope.serversById[exp['server_id']];
