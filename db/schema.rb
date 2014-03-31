@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140327001343) do
+ActiveRecord::Schema.define(version: 20140331155558) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20140327001343) do
   create_table "shortened_urls", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "encoded_url"
+    t.text     "encoded_url",   limit: 255
     t.datetime "last_accessed"
   end
 
