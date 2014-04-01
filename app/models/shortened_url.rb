@@ -1,10 +1,9 @@
 require 'digest/md5'
 
 class ShortenedUrl < ActiveRecord::Base
-  def self.create_with_last_accessed params
-    find_or_create_by!(checksum: checksum(params[:encoded_url])) do |url|
-      url.encoded_url = params[:encoded_url]
-      url.last_accessed = Time.now
+  def self.create_from_encoded_url encoded_url
+    find_or_create_by!(checksum: checksum(encoded_url)) do |url|
+      url.encoded_url = encoded_url
     end
   end
 

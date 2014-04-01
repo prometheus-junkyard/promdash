@@ -12,7 +12,7 @@ describe SingleWidgetController do
 
   describe "#show" do
     it "assigns the graph data blob" do
-      shortened_url = ShortenedUrl.create_with_last_accessed @params
+      shortened_url = ShortenedUrl.create_from_encoded_url "some_url"
       get :show, {slug: shortened_url.to_param}
       expect(assigns(:blob)).to eq(shortened_url.encoded_url)
     end

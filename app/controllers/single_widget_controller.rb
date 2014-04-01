@@ -12,7 +12,7 @@ class SingleWidgetController < ApplicationController
   end
 
   def create
-    shortened_url = ShortenedUrl.create_with_last_accessed params
+    shortened_url = ShortenedUrl.create_from_encoded_url params[:encoded_url]
     payload = {
       id: SlugMaker.slug("#{shortened_url.id} #{params[:dashboard_name]} #{params[:graph_title]}")
     }
