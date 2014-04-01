@@ -1,18 +1,22 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
   $scope.generateWidgetLink = function(event) {
+    if ($scope.showTab !== 'staticlink') {
+      return;
+    }
     var graphBlob = {};
     graphBlob.widget = $scope.frame;
     graphBlob.globalConfig = dashboardData.globalConfig;
-    $scope.widgetLink = location.origin + "/widget##" + UrlHashEncoder(graphBlob);
-
-    if (event) {
-      // TODO: find more robust means of accessing the corresponding input field.
-      var input = event.currentTarget.parentElement.parentElement.querySelector("[ng-model=widgetLink]")
-      InputHighlighter(input);
-    }
+    WidgetLinkHelper
+      .createLink({
+         encoded_url: UrlHashEncoder(graphBlob),
+         graph_title: $scope.getTitle(),
+         dashboard_name: dashboardName
+       }, event)
+      .setLink($scope)
+      .highlightInput(event);
   };
 
   $scope.removeFrame = function() {
