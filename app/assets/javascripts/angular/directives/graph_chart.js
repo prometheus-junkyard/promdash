@@ -87,6 +87,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
         rsGraph = new Rickshaw.Graph({
           element: element[0],
+          min: yMin(series),
           interpolation: scope.graphSettings.interpolationMethod,
           renderer: (scope.graphSettings.stacked ? 'stack' : 'line'),
           series: series
@@ -151,6 +152,17 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
       function elementHeight($element) {
         return $element.outerHeight(true);
+      }
+
+      function yMin(series) {
+        var yValues = series.map(function(s) {
+          return s.data.map(function(d) {
+            return d.y;
+          });
+        });
+        var flatYValues = d3.merge(yValues);
+        var yMin = Math.min.apply(Math, flatYValues);
+        return yMin > 0 ? 0 : yMin;
       }
 
       function setLegendPresence(series) {
