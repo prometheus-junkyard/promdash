@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20140331155558) do
   create_table "shortened_urls", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "encoded_url",   limit: 255
+    t.text     "encoded_url"
     t.datetime "last_accessed"
   end
 
