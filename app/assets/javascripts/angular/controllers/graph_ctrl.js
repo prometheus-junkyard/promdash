@@ -80,8 +80,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   });
 
-  $scope.$watch('globalEndTime', function() {
-    $scope.graph.endTime = $scope.globalEndTime;
+  $scope.$on('setEndTime', function(ev, endTime) {
+    $scope.graph.endTime = endTime;
     $scope.refreshGraph();
   });
 
@@ -98,4 +98,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   if ($scope.graph.axes.length == 0) {
     $scope.addAxis();
   }
+
+  $scope.refreshGraph();
 }]);

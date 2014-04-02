@@ -57,6 +57,10 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.globalConfig.endTime = Prometheus.Graph.earlierEndTime($scope.globalConfig.endTime, $scope.globalConfig.range);
     };
 
+    $scope.$watch('globalConfig.endTime', function() {
+      $scope.$broadcast('setEndTime', $scope.globalConfig.endTime);
+    });
+
     $scope.refreshDashboard = function() {
       $scope.$broadcast('refreshDashboard');
     };
