@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", "GraphiteTimeConverter", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper, GraphiteTimeConverter) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
@@ -33,11 +33,16 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
     var queryStringComponents = parser.search.substring(1).split('&');
     if ($scope.frame.graphite) {
       queryStringComponents = queryStringComponents.map(function(e) {
-        if (e.indexOf('height=') === 0 ) {
+        switch (0) {
+        case e.indexOf('height='):
           return setDimension(e, $scope.frameHeight().height);
-        } else if (e.indexOf('width=') === 0) {
+        case e.indexOf('width='):
           var width = $scope.frameHeight().height / $scope.aspectRatio;
           return setDimension(e, width);
+        case e.indexOf('from='):
+          return setDimension(e, GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime));
+        case e.indexOf('until='):
+          return setDimension(e, GraphiteTimeConverter.graphiteUntil($scope.frame.endTime));
         }
         return e;
       });
@@ -79,6 +84,14 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;
   };
+
+  $scope.$on('setRange', function(ev, range) {
+    $scope.frame.range = range;
+  });
+
+  $scope.$on('setEndTime', function(ev, endTime) {
+    $scope.frame.endTime = endTime;
+  });
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshFrame();
