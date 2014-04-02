@@ -1,0 +1,38 @@
+<div class="graph_control_tabpane panel panel-default">
+  <div class="panel-heading">Time Options</div>
+  <div class="panel-body">
+    <div class="col-lg-4">
+      <label>Relative range:</label>
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
+            <i class="icon-minus"></i>
+          </button>
+        </span>
+        <input type="text" class="form-control" ng-model="range" placeholder="Range">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
+            <i class="icon-plus"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <label>End time:</label>
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
+            <i class="icon-fb"></i>
+          </button>
+        </span>
+        <input type="text" class="form-control" datetime-picker datetime="endTime" data-format="yyyy-MM-dd" placeholder="Until">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
+            <i class="icon-ff"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

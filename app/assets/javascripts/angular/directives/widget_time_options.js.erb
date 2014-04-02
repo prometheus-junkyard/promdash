@@ -1,0 +1,27 @@
+angular.module("Prometheus.directives").directive('widgetTimeOptions', function() {
+  return {
+    restrict: "E",
+    scope: {
+      endTime: "=",
+      range: "=",
+    },
+    link: function(scope, element, attrs) {
+      scope.increaseRange = function() {
+        scope.range = Prometheus.Graph.nextLongerRange(scope.range);
+      };
+
+      scope.decreaseRange = function() {
+        scope.range = Prometheus.Graph.nextShorterRange(scope.range);
+      };
+
+      scope.increaseEndTime = function() {
+        scope.endTime = Prometheus.Graph.laterEndTime(scope.endTime, scope.range);
+      };
+
+      scope.decreaseEndTime = function() {
+        scope.endTime = Prometheus.Graph.earlierEndTime(scope.endTime, scope.range);
+      };
+    },
+    templateUrl: "<%= asset_path('widget_time_options_template.html') %>"
+  };
+});

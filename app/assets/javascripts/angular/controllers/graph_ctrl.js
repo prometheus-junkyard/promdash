@@ -57,22 +57,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.graph.expressions.splice(index, 1);
   });
 
-  $scope.increaseRange = function() {
-    $scope.graph.range = Prometheus.Graph.nextLongerRange($scope.graph.range);
-  };
-
-  $scope.decreaseRange = function() {
-    $scope.graph.range = Prometheus.Graph.nextShorterRange($scope.graph.range);
-  };
-
-  $scope.increaseEndTime = function() {
-    $scope.graph.endTime = Prometheus.Graph.laterEndTime($scope.graph.endTime, $scope.graph.range);
-  };
-
-  $scope.decreaseEndTime = function() {
-    $scope.graph.endTime = Prometheus.Graph.earlierEndTime($scope.graph.endTime, $scope.graph.range);
-  };
-
   $scope.addAxis = function() {
     var len = $scope.graph.axes.push(Prometheus.Graph.getAxisDefaults());
     $scope.graph.axes[len-1]['id'] = len;
