@@ -11,6 +11,7 @@
       <!-- Frame control tab buttons -->
       <div class="btn-group">
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')"><i title="Frame Source" class="icon-add-to-list"></i></div>
+        <div class="btn btn-primary btn-sm" ng-show="frame.graphite" ng-click="toggleTab('timerange')"><i title="Time options" class="icon-clock"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')"><i title="Frame Source" class="icon-cog"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshFrame()"><i title="Refresh" class="icon-cycle"></i></div>
@@ -25,7 +26,11 @@
           <input type="text" class="form-control" ng-model="frame.title" placeholder="Enter Title" required>
         </div>
       </div>
-      <!-- 2) Frame Settings -->
+
+      <!-- 2) Time Options -->
+      <widget-time-options ng-show="showTab == 'timerange'" range="frame.range" end-time="frame.endTime"></widget-time-options>
+
+      <!-- 3) Frame Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_settings'">
         <div class="panel-heading">Frame Settings</div>
         <div class="panel-body">
@@ -35,7 +40,7 @@
         </div>
       </div>
 
-      <!-- 3) Static link to graph -->
+      <!-- 4) Static link to graph -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
         <div class="panel-heading">Link to this graph</div>
         <div class="panel-body">
