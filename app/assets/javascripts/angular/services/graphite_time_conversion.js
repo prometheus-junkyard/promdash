@@ -14,7 +14,7 @@ angular.module("Prometheus.services").factory('GraphiteTimeConverter', function(
   return {
     graphiteFrom: function(range, endTime) {
       var rangeSeconds = Prometheus.Graph.parseDuration(range);
-      if (endTime === null) {
+      if (endTime === null || endTime === undefined) {
         return '-' + rangeSeconds + 'seconds';
       } else {
         return timestampToGraphiteTime(endTime - (rangeSeconds * 1000));
@@ -22,7 +22,7 @@ angular.module("Prometheus.services").factory('GraphiteTimeConverter', function(
     },
 
     graphiteUntil: function(endTime) {
-      if (endTime === null) {
+      if (endTime === null || endTime === undefined) {
         return 'now';
       } else {
         return timestampToGraphiteTime(endTime);

@@ -75,7 +75,7 @@ Prometheus.Graph = {
       title: 'Title',
       stacked: false,
       range: '1h',
-      endTime: 0,
+      endTime: null,
       expressions: [],
       type: "graph"
     };
