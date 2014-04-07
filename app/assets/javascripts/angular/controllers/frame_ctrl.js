@@ -40,6 +40,9 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
           var width = $scope.frameHeight().height / $scope.aspectRatio;
           return setDimension(e, width);
         case e.indexOf('from='):
+          if (!$scope.frame.range) {
+            return e;
+          }
           return setDimension(e, GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime));
         case e.indexOf('until='):
           return setDimension(e, GraphiteTimeConverter.graphiteUntil($scope.frame.endTime));
