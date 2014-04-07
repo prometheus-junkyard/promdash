@@ -3,3 +3,5 @@ PromDash
 =============
 
 Dashboard builder for Prometheus.
+
+See the [PromDash Wiki](https://github.com/prometheus/promdash/wiki) for usage information.
