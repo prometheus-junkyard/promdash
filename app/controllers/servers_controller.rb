@@ -4,7 +4,7 @@ class ServersController < ApplicationController
   # GET /servers
   # GET /servers.json
   def index
-    @servers = Server.all
+    @servers = Server.order("lower(name)")
   end
 
   # GET /servers/1
