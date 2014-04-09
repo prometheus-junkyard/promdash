@@ -2006,6 +2006,13 @@ textarea.input-lg {
           user-select: none;
 }
 
+.btn.btn-default.btn-with-link {
+  padding: 0;
+}
+.btn.btn-default.btn-with-link a {
+  padding: 6px 12px;
+}
+
 .btn:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
