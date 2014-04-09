@@ -5,13 +5,13 @@ class DashboardsController < ApplicationController
   # GET /dashboards
   # GET /dashboards.json
   def index
-    @dashboards = Dashboard.all
+    @dashboards = Dashboard.order("lower(name)")
   end
 
   # GET /dashboards/1
   # GET /dashboards/1.json
   def show
-    @servers = Server.all
+    @servers = Server.order("lower(name)")
   end
 
   # GET /dashboards/new
