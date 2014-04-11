@@ -7,9 +7,10 @@
 <h1 class="col-lg-12"><%= page_title @dashboard.name %></h1>
 
 <div id="dashboard" ng-controller="DashboardCtrl">
+  <div ng-show="modalOpen" ng-click="closeCloneControls()" class="modal_overlay"></div>
   <div id="global_controls">
-    <div class="col-lg-2">
-      <div class="input-group">
+    <div class="global_grouping">
+      <div class="global_time_input input-group">
         <span class="input-group-btn">
           <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
             <i class="icon-minus"></i>
@@ -24,8 +25,8 @@
       </div>
     </div>
 
-    <div class="col-lg-3">
-      <div class="input-group">
+    <div class="global_grouping">
+      <div class="global_date_input input-group">
         <span class="input-group-btn">
           <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
             <i class="icon-fb"></i>
@@ -40,7 +41,7 @@
       </div>
     </div>
 
-    <div class="pull-left">
+    <div class="global_grouping">
       <div class="btn-group">
         <button type="button" class="btn btn-default" ng-click="refreshDashboard()" title="Refresh dashboard"><i class="icon-cycle"></i></button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -59,7 +60,7 @@
       </div>
     </div>
 
-    <div class="col-lg-3">
+    <div class="global_grouping">
       <div class="btn-group">
         <button class="btn btn-default" ng-click="showDashboardSettings = !showDashboardSettings" title="Dashboard Settings">
           <span class="glyphicon glyphicon-cog"></span>
@@ -68,7 +69,7 @@
           <span class="glyphicon glyphicon-fullscreen"></span>
         </button>
       </div>
-      <div id="dashboard_settings" class="panel panel-default" ng-show="showDashboardSettings">
+      <div class="dashboard_settings panel panel-default" ng-show="showDashboardSettings">
         <div class="panel-heading">Dashboard Settings</div>
         <div class="panel-body">
           <label>Columns:
@@ -103,6 +104,8 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="global_grouping">
       <button class="btn btn-primary" ng-click="saveDashboard()" ng-disabled="saving">
         <span ng-show="saving">Saving...</span>
         <span ng-show="!saving">Save Changes</span>
@@ -178,11 +181,50 @@
   <div class="col-lg-12">
     <form class="form-inline">
       <div class="form-group">
-        <button class="btn btn-primary" id="add_graph" ng-click="addGraph()">Add Graph</button>
+        <button class="btn btn-primary add_widget_button" ng-click="addGraph()">Add Graph</button>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" id="add_graph" ng-click="addFrame()">Add Frame</button>
+        <button class="btn btn-primary add_widget_button" ng-click="addFrame()">Add Frame</button>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary add_widget_button"
+          ng-click="showCloneMenu()" title="Clone Graph">
+          Clone Widget
+        </button>
       </div>
     </form>
+  </div>
+
+  <div class="js-clone_menu clone_widget_menu panel panel-default" ng-show="showCloneControls">
+    <div class="panel-heading">
+      Clone Graph
+      <i ng-click="closeCloneControls()" class="clone_widget_close pointer pull-right icon-cross"></i>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div>
+          <label ng-show="dashboardNames.length">Dashboard:
+            <select class="clone_select form-control" type="text"
+              ng-model="dashboardForClone"
+              ng-change="queryDashboard()"
+              ng-options="d as d.name for d in dashboardNames">
+            </select>
+          </label>
+        </div>
+        <div>
+          <label ng-show="dashboardWidgets.length">Graph:
+            <select class="clone_select form-control"
+              ng-model="widgetToClone"
+              ng-options="g as (g.title || g.url) for g in dashboardWidgets">
+            </select>
+          </label>
+        </div>
+      </div>
+      <div ng-show="widgetToClone" class="form-group">
+        <button class="btn btn-primary add_widget_button" ng-click="copyWidget()" title="Clone Widget">
+          Clone
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,11 +1,18 @@
 class DashboardsController < ApplicationController
-  before_action :set_dashboard, only: [:edit, :destroy, :clone]
+  before_action :set_dashboard, only: [:edit, :destroy, :widgets, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :update]
 
   # GET /dashboards
   # GET /dashboards.json
   def index
-    @dashboards = Dashboard.order("lower(name)")
+    @dashboards = Dashboard.alphabetical
+    if params[:filter] == "cloneable"
+      @dashboards = @dashboards.cloneable
+    end
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { render json: @dashboards }
+    end
   end
 
   # GET /dashboards/1
@@ -70,6 +77,10 @@ class DashboardsController < ApplicationController
       format.html { redirect_to dashboards_url }
       format.json { head :no_content }
     end
+  end
+
+  def widgets
+    render json: @dashboard.widgets
   end
 
   private

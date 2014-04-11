@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -27,6 +27,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     {css: "light_theme", name: "Light"},
     {css: "dark_theme", name: "Dark"}
   ];
+  $scope.dashboardNames = [];
 
   SharedGraphBehavior($scope);
 
@@ -75,8 +76,16 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     if (ev.keyCode === 27) { // Escape keycode
       $scope.exitFullscreen();
       $scope.redrawGraphs();
+      $scope.$apply(function() {
+        $scope.closeCloneControls();
+      });
     }
   });
+
+  $scope.closeCloneControls = function() {
+    $scope.showCloneControls = false;
+    $scope.modalOpen = false;
+  };
 
   $scope.toggleGridSettings = function(tab) {
     $scope.showGridSettings
@@ -140,4 +149,28 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
   if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }
+
+  $scope.queryDashboard = function() {
+    $http.get('/dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
+      $scope.dashboardWidgets = payload.data;
+      $scope.widgetToClone = payload.data[0];
+    });
+  };
+
+  $scope.showCloneMenu = function() {
+    $scope.showCloneControls = true;
+    $scope.modalOpen = !$scope.modalOpen;
+  };
+
+  $http.get('/dashboards.json', {params: {filter: "cloneable"}}).then(function(payload) {
+    $scope.dashboardNames = payload.data;
+    $scope.dashboardForClone = payload.data.filter(function(d) {
+      return d.name == dashboardName;
+    })[0] || payload.data[0];
+    $scope.queryDashboard();
+  });
+
+  $scope.copyWidget = function() {
+    $scope.widgets.push(angular.copy($scope.widgetToClone));
+  };
 }]);

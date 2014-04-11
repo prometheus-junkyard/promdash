@@ -90,3 +90,7 @@ Prometheus.Graph = {
     };
   }
 };
+
+$(function() {
+  $(".js-clone_menu").draggable();
+});

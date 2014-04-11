@@ -7,9 +7,12 @@ class Dashboard < ActiveRecord::Base
   validate :acceptable_slug
   validates :slug,
     format: {
-    with: /\A[a-z0-9\-]+\z/,
-    message: "Only alphanumeric characters connected by hyphens allowed"
-  }
+      with: /\A[a-z0-9\-]+\z/,
+      message: "Only alphanumeric characters connected by hyphens are allowed."
+    }
+
+  scope :alphabetical, -> { order("lower(name)") }
+  scope :cloneable, -> { where("dashboard_json is not null").select :id, :name }
 
   def self.new_with_slug(params)
     dashboard = new(params)
@@ -31,6 +34,11 @@ class Dashboard < ActiveRecord::Base
 
   def black_listed_slug_names
     %w(dashboard servers about help signin signout home contact assets w)
+  end
+
+  def widgets
+    return [] unless dashboard_json
+    (JSON.parse dashboard_json)['widgets']
   end
 
   def create_slug
