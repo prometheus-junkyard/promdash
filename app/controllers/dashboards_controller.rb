@@ -1,5 +1,5 @@
 class DashboardsController < ApplicationController
-  before_action :set_dashboard, only: [:edit, :destroy]
+  before_action :set_dashboard, only: [:edit, :destroy, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :update]
 
   # GET /dashboards
@@ -23,10 +23,19 @@ class DashboardsController < ApplicationController
   def edit
   end
 
+  def clone
+    @source_id = @dashboard.id
+    @dashboard = @dashboard.make_clone
+    render 'new'
+  end
+
   # POST /dashboards
   # POST /dashboards.json
   def create
     @dashboard = Dashboard.new_with_slug(dashboard_params)
+    if params[:source_id].present?
+      @dashboard.dashboard_json = Dashboard.find(params[:source_id]).dashboard_json
+    end
 
     respond_to do |format|
       if @dashboard.save

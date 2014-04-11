@@ -3,6 +3,7 @@ PrometheusDashboard::Application.routes.draw do
   resources :dashboards
   resources :servers
 
+  get '/dashboards/:id/clone', to: 'dashboards#clone', as: :clone_dashboard
   get '/w/:slug', to: 'single_widget#show'
   post '/w', to: 'single_widget#create'
   get '/embed/:slug', to: 'embed#show'

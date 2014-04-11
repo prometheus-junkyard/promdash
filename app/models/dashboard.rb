@@ -16,6 +16,12 @@ class Dashboard < ActiveRecord::Base
     dashboard
   end
 
+  def make_clone
+    clone = dup
+    clone.name = "#{name} clone"
+    clone
+  end
+
   def acceptable_slug
     if black_listed_slug_names.include? slug
       errors.add(:slug, "Reserved name")
