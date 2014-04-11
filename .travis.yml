@@ -1,6 +1,7 @@
 language: ruby
 cache: bundler
 script:
+  - cp config/database.yml.example config/database.yml
   - bundle config --global jobs 4
   - bundle exec rake
   - bundle exec rake spec:javascript
