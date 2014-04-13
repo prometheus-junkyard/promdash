@@ -2,6 +2,7 @@
   <div class="widget_wrapper panel panel-default pull-left" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
     <div class="js_widget_wrapper widget_title panel-heading">
       <error-message error-messages="errorMessages"></error-message>
+      <span ng-show="dashboard"><a href="/{{dashboard.slug}}" class="dashboard_link pointer">{{dashboard.name}}</a> &mdash; </span>
       {{title()}}
       <span class="graph_ajax_status pull-right" ng-show="requestsInFlight">
         <img src="<%= asset_path 'spinner.gif' %>" alt="AJAX indicator">
@@ -20,7 +21,7 @@
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('graph')"><i title="Graph and axis settings" class="icon-line-graph"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('palette')"><i title="Palette" class="icon-palette"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="toggleTab('legend')"><i title="Legend Settings" class="icon-list"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
+        <div ng-hide="widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
         <div class="btn btn-primary btn-sm" ng-click="refreshGraph()"><i title="Refresh" class="icon-cycle"></i></div>
       </div>
 

@@ -347,6 +347,11 @@ error-message {
   padding: 0;
 }
 
+.dashboard_link {
+  position: relative;
+  z-index: 1;
+}
+
 .graph_settings_image {
   background-repeat: no-repeat;
   background-size: 30px 13px;

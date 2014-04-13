@@ -1,6 +1,7 @@
 require 'digest/md5'
 
 class ShortenedUrl < ActiveRecord::Base
+  belongs_to :dashboard
   def self.create_from_encoded_url encoded_url
     find_or_create_by!(checksum: checksum(encoded_url)) do |url|
       url.encoded_url = encoded_url

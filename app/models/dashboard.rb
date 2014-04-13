@@ -1,6 +1,7 @@
 require 'slug_maker'
 
 class Dashboard < ActiveRecord::Base
+  has_many :shortened_urls
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
   validate :acceptable_slug
