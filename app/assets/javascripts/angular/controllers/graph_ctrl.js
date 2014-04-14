@@ -16,11 +16,16 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
       .highlightInput(event);
   };
 
+  // TODO: Set these on graph creation so we don't have to keep doing these
+  // checks
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "cardinal";
+  $scope.graph.axes = $scope.graph.axes || [];
+  $scope.graph.axes.forEach(function(axis) {
+    axis.renderer = axis.renderer || "line";
+  });
 
   $scope.serversById = ServersByIdObject($scope.servers);
-  $scope.graph.axes = [];
   $scope.requestsInFlight = 0;
   $scope.data = null;
 
@@ -63,16 +68,20 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   };
 
   $scope.removeAxis = function(idx) {
-    var len = $scope.graph.axes.length;
-    if (len == 1) {
-      alert('Cannot remove last axis');
-      return;
-    }
+    var axes = $scope.graph.axes;
+    var len = axes.length;
 
-    $scope.graph.axes.splice(idx, 1);
+    $scope.graph.expressions.forEach(function(expr) {
+      if (expr.axis_id === axes[idx].id) {
+        expr.axis_id = axes[0].id
+      }
+    });
+
+    axes.splice(idx, 1);
     for (var i = 0; i < len-1; i++) {
-      $scope.graph.axes[i]['id'] = i + 1;
+      axes[i]['id'] = i + 1;
     }
+    $scope.refreshGraph();
   };
 
   $scope.$on('setRange', function(ev, range) {

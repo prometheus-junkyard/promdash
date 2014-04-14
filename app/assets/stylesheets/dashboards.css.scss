@@ -349,8 +349,40 @@ error-message {
 
 .graph_settings_image {
   background-repeat: no-repeat;
-  background-size: 30px 13px;
+  background-size: 30px 17px;
+  background-position-y: -1px;
   padding-left: 35px;
+}
+
+hr {
+  border-top: 1px solid #CCCCCC;
+}
+
+.axis_container {
+  border-right: 1px solid #CCCCCC;
+}
+
+.axis_button {
+  position: relative;
+  bottom: 3px;
+}
+
+.add_axis {
+  margin: 30% auto;
+  display: block;
+}
+
+.axis_attr {
+  .attr_name {
+    display: block;
+    margin-top: 5px;
+  }
+  .radio {
+    margin: 5px 0;
+    &:last-child {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .stacked {
@@ -358,6 +390,9 @@ error-message {
 }
 .lines {
   background-image: asset_url("om_lines.png");
+}
+.scatterplot {
+  background-image: asset_url("om_scatter.png");
 }
 .cardinal {
   background-image: asset_url("interp_cardinal.png");
@@ -371,6 +406,10 @@ error-message {
 
 .pointer {
   cursor: pointer;
+}
+
+.float_r {
+  float: right;
 }
 
 @-webkit-keyframes flashing
@@ -393,3 +432,4 @@ error-message {
   50%  {color: #FF0000;}
   100% {color: #FFFFFF;}
 }
+
