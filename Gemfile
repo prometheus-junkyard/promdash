@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails'
 
 group :production do
   gem 'mysql2'
@@ -17,7 +17,7 @@ group :test, :development do
   gem 'pry'
   gem 'jasmine-rails'
   gem 'rspec-rails', "~> 3.0.0.beta2"
-  gem 'capybara'
+  gem 'capybara', github: 'jnicklas/capybara'
   gem 'capybara-webkit'
 end
 

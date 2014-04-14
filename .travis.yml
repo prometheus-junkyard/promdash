@@ -1,9 +1,11 @@
 language: ruby
 cache: bundler
-script:
+before_script:
   - cp config/database.yml.example config/database.yml
+  - bundle exec rake db:test:prepare
+script:
   - bundle config --global jobs 4
-  - bundle exec rake
+  - bundle exec rake spec
   - bundle exec rake spec:javascript
 rvm:
   - 2.1.0
