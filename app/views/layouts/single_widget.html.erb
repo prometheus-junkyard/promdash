@@ -2,7 +2,7 @@
 <html lang="en" ng-app="Prometheus" ng-controller="ThemeCtrl" class="{{theme()}}">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Prometheus Dashboard" %></title>
+    <title><%= page_title %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Prometheus, yo." %>">
 
     <%= stylesheet_link_tag "application", :media => "all" %>

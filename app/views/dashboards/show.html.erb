@@ -4,7 +4,7 @@
   servers = <%= @servers.to_json.html_safe %>;
 </script>
 
-<h1 class="col-lg-12"><%= @dashboard.name %></h1>
+<h1 class="col-lg-12"><%= page_title @dashboard.name %></h1>
 
 <div id="dashboard" ng-controller="DashboardCtrl">
   <div id="global_controls">
