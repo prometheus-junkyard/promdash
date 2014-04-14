@@ -84,6 +84,7 @@ Prometheus.Graph = {
   getAxisDefaults: function() {
     return {
       orientation: 'left',
+      renderer: 'line',
       scale: 'linear',
       format: 'kmbt'
     };

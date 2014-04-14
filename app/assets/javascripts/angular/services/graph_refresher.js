@@ -53,9 +53,9 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
           console.log('No server selected for expression, skipping.');
           continue;
         }
-        var axisId = exp['axis_id'];
 
-        var expression = $scope.graph.expressions[i].expression;
+        var axisId = exp['axis_id'];
+        var expression = exp.expression;
 
         loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, axisId);
       }
