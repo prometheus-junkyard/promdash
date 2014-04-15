@@ -109,4 +109,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   }
 
   $scope.refreshGraph();
+  if (location.pathname.match(/^\/w\//)) { // On a widget page.
+    $scope.widgetPage = true;
+    $scope.dashboard = dashboard;
+  }
 }]);

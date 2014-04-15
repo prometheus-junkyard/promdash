@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe SingleWidgetController do
   before(:each) do
+    @dashboard = Dashboard.create name: "example dash", slug: "example-dash"
     @params = {
       encoded_url: "some_url",
       dashboard_name: "example dash",
@@ -11,8 +12,16 @@ describe SingleWidgetController do
   end
 
   describe "#show" do
-    it "assigns the graph data blob" do
+    it "doesn't blow up if there is no associated dashboard" do
       shortened_url = ShortenedUrl.create_from_encoded_url "some_url"
+      expect {
+        get :show, {slug: shortened_url.to_param}
+      }.to_not raise_error
+      expect(response).to be_success
+    end
+
+    it "assigns the graph data blob" do
+      shortened_url = @dashboard.shortened_urls.create_from_encoded_url "some_url"
       get :show, {slug: shortened_url.to_param}
       expect(assigns(:blob)).to eq(shortened_url.encoded_url)
     end
