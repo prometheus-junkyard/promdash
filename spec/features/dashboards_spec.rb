@@ -22,6 +22,20 @@ feature "Dashboard" do
     expect(page).to have_content(/new dashboard/i)
   end
 
+  describe "cloning the dashboard" do
+    before(:each) do
+      visit new_dashboard_path
+      fill_in('Name', with: 'New Dashboard')
+      find('.actions input').click
+      visit root_path
+    end
+
+    scenario "go to the new page" do
+      click_link 'Clone'
+      expect(page).to have_content(/new dashboard/i)
+    end
+  end
+
   describe "editing the dashboard" do
     before(:each) do
       visit new_dashboard_path
