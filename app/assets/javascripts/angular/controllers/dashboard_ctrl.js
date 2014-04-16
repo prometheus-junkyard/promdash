@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "$location", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", function($scope, $window, $http, $timeout, $document, $location, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -15,7 +15,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     return angular.toJson(angular.copy(currentObj)) !== angular.toJson(originalObj);
   }
 
-  $scope.fullscreen = false;
+  $scope.fullscreen = $location.search().fullscreen;
   $scope.saving = false;
   $scope.aspectRatios = [
     {value: 0.75,    fraction: "4:3"},
