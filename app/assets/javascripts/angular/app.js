@@ -14,4 +14,6 @@ angular.module("Prometheus",
   $rootScope.alert = function(thing) {
     alert(thing);
   };
+}]).config(["$locationProvider", function($locationProvider) {
+  $locationProvider.html5Mode(true);
 }]);
