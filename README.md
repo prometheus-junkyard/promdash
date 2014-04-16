@@ -27,10 +27,7 @@ Start the Rails server:
 In production mode, you need to define a number of environment variables to
 configure the database parameters:
 
-    PROMDASH_MYSQL_DATABASE="<db-name>"
-    PROMDASH_MYSQL_HOST="<db-host>""
-    PROMDASH_MYSQL_PASSWORD="<db-password>""
-    PROMDASH_MYSQL_USERNAME="<db-username>"
+    DATABASE_URL="mysql2://username:password@host/database"
     RAILS_ENV="production"
 
 Create a self-contained Ruby environment and precompile assets:
