@@ -14,10 +14,10 @@
   margin-bottom: 8px;
 }
 
-#dashboard_settings {
+.dashboard_settings {
   position: absolute;
-  top: 34px;
-  left: 15px;
+  top: 33px;
+  width: 275px;
   z-index: 1000;
 }
 
@@ -29,6 +29,18 @@
   z-index: 1050; // Bootstrap's navbar is at 1030.
   background-color: #FFFFFF;
   padding: 3px;
+}
+
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1050; // Bootstrap's navbar is at 1030.
+  padding: 3px;
+  background-color: #555555;
+  opacity: 0.4;
 }
 
 .widget_wrapper {
@@ -71,12 +83,6 @@
 
 .graph_control_tabpane select {
   margin-bottom: 2px;
-}
-
-#add_graph {
-  clear: both;
-  display: block;
-  margin-left: 5px;
 }
 
 // Fix spacing issues with Entypo icons inside Bootstrap buttons.
@@ -407,6 +413,46 @@ hr {
 }
 .step {
   background-image: asset_url("interp_step.png");
+}
+
+.global_grouping {
+  float: left;
+  margin-right: 15px;
+  position: relative;
+  &:first-child {
+    margin-left: 15px;
+  }
+}
+
+.global_time_input {
+  width: 165px;
+}
+
+.global_date_input {
+  width: 220px;
+}
+
+.add_widget_button {
+  margin-right: 5px;
+}
+
+.clone_widget_menu {
+  position: fixed;
+  left: 40%;
+  top: 35%;
+  width: 275px;
+  z-index: 9999;
+  & .panel-heading {
+    cursor: move;
+  }
+}
+
+.clone_select {
+  min-width: 150px;
+}
+
+.clone_widget_close {
+  margin-top: 3px;
 }
 
 .pointer {

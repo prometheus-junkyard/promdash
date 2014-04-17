@@ -3,6 +3,10 @@ require 'spec_helper'
 describe DashboardsController do
   before(:each) do
     @dashboard = Dashboard.new_with_slug(name: "example dashboard")
+    @dashboard.dashboard_json = {'widgets' => [
+      {"title"=>"Graph 1"},
+      {"title"=>"Title"}
+    ]}.to_json
     @dashboard.save!
   end
 
@@ -56,6 +60,36 @@ describe DashboardsController do
     }.to change{ Dashboard.count }.by(-1)
 
     expect(response).to redirect_to(dashboards_path)
+  end
+
+  context "cloneable dashboards" do
+    let(:do_request) { get :index, filter: "cloneable", format: :json }
+    let(:dashboards) { Dashboard.where("dashboard_json is not null").select(:id, :name) }
+    it "returns a list of dashboard ids and names" do
+      do_request
+      expect(response.body).to eq(dashboards.to_json)
+    end
+
+    it "only returns dashboards with dashboard_json" do
+      Dashboard.create! name: "no json", slug: "no-json"
+      do_request
+      expect(response.body).to eq(dashboards.to_json)
+    end
+  end
+
+  context "getting widgets json" do
+    it "dashboard_json exists" do
+      get :widgets, id: @dashboard
+      widgets = [{title: "Graph 1"}, {title: "Title"}]
+      expect(response.body).to eq(widgets.to_json)
+    end
+
+    it "dashboard_json is nil" do
+      d = Dashboard.new_with_slug name: "no dash json"
+      d.save
+      get :widgets, id: d
+      expect(response.body).to eq("[]")
+    end
   end
 
   context "cloning dashboards" do

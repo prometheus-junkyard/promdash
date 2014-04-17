@@ -19,4 +19,22 @@ describe Dashboard do
       expect(d).to_not be_valid
     end
   end
+
+  context "scopes" do
+    before(:each) do
+      %w{c t r a}.each {|name| Dashboard.create! name: name, slug: "#{name}-slug" }
+    end
+
+    it "sorts alphabetically" do
+      expect(Dashboard.alphabetical.map &:name).to eq %w{a c r t}
+    end
+
+    it "only returns dashboards with widgets for cloning" do
+      dashboards = Dashboard.take(2)
+      dashboards.each do |d|
+        d.update_attribute :dashboard_json, {some: "json"}.to_json
+      end
+      expect(Dashboard.cloneable.map &:id).to match_array(dashboards.map &:id)
+    end
+  end
 end
