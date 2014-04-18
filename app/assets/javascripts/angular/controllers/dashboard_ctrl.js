@@ -3,18 +3,6 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     $scope.$broadcast('redrawGraphs');
   }
 
-  $window.onbeforeunload = function() {
-    var message = 'You have some unsaved changes!';
-    if (unsavedChangesCheck($scope.widgets, originalWidgets) ||
-          unsavedChangesCheck($scope.globalConfig, originalConfig)) {
-      return message;
-    }
-  }
-
-  function unsavedChangesCheck(currentObj, originalObj) {
-    return angular.toJson(angular.copy(currentObj)) !== angular.toJson(originalObj);
-  }
-
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.aspectRatios = [

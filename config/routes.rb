@@ -1,5 +1,11 @@
 PrometheusDashboard::Application.routes.draw do
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
+
+  if Rails.env.test?
+    require_relative '../spec/support/fauxmetheus/fauxmetheus'
+    get '/api/:path' => FauxMetheus
+  end
+
   resources :dashboards
   resources :servers
 

@@ -3,8 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
+gem 'mysql2'
+
 group :production do
-  gem 'mysql2'
   gem 'thin'
 end
 
@@ -14,11 +15,14 @@ group :development do
 end
 
 group :test, :development do
+  gem 'sinatra'
   gem 'pry'
   gem 'jasmine-rails'
   gem 'rspec-rails', "~> 3.0.0.beta2"
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
+  gem 'launchy'
   gem 'capybara'
-  gem 'capybara-webkit'
 end
 
 # Use SCSS for stylesheets
