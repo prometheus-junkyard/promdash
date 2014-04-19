@@ -176,6 +176,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           }
         });
 
+        // Insert (x, null) pair at any discontinuity in the data.
+        // Rickshaw.Series.zeroFill breaks logarithmic graphs.
+        Rickshaw.Series.fill(series, null);
+
         // If all series are removed from a certain axis but a scale has been
         // assigned to that axis, it will render with the wrong range.
         if (!a1series.length) {
