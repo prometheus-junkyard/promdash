@@ -43,8 +43,8 @@ angular.module("Prometheus.services").factory('VariableInterpolator', ["$rootSco
 
     // Replace the filtered variables.
     for (var i in pipeObj) {
-      // Need to escape the | in the piped statement.
-      escapedSeq = i.replace(/\|/g, "\\|")
+      // Need to escape any special matchers.
+      var escapedSeq = i.replace(/([.*+?^=!:$()|\[\]\/\\])/g, "\\$1");
       str = str.replace(new RegExp(escapedSeq, "g"), pipeObj[i]);
     }
 
