@@ -16,8 +16,8 @@
 
   <tbody>
     <% @dashboards.each do |dashboard| %>
-      <tr>
-        <td><%= link_to dashboard.name, dashboard_slug_path(dashboard.slug) %></td>
+      <tr class="mousetrap_list">
+        <td><%= link_to dashboard.name, dashboard_slug_path(dashboard.slug), class: "mousetrap_open_link" %></td>
         <td>
           <%= link_to 'Rename', edit_dashboard_path(dashboard) %>
           &nbsp;&nbsp;

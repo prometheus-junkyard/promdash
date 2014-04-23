@@ -15,6 +15,7 @@
 //= require jquery.min
 //= require jquery-ui.min
 //= require angular.min
+//= require mousetrap.min
 //= require jquery_ujs
 //= require bootstrap.min
 //= require bootstrap-datetimepicker
