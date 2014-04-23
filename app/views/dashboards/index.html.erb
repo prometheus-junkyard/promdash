@@ -23,7 +23,7 @@
           &nbsp;&nbsp;
           <%= link_to 'Clone', clone_dashboard_path(id: dashboard.id) %>
           &nbsp;&nbsp;
-          <%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Delete', dashboard, class: "mousetrap_delete_link", method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>

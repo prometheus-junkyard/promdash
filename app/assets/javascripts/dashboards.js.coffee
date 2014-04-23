@@ -41,7 +41,11 @@ M.bind ['j', 'k'], (e, key)->
 
     $list_items.get(active_index - 1).classList.add('mousetrap_active')
 
-# Opening list items.
+# Interacting with list items.
 M.bind ['o', 'return'], ->
   return unless ["/", "/dashboards", "/servers"].indexOf(location.pathname) > -1
   document.querySelector('.mousetrap_active .mousetrap_open_link').click()
+
+M.bind 'd', ->
+  return unless ["/", "/dashboards", "/servers"].indexOf(location.pathname) > -1
+  document.querySelector('.mousetrap_active .mousetrap_delete_link').click()
