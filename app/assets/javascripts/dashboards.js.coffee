@@ -33,13 +33,21 @@ M.bind ['j', 'k'], (e, key)->
     if active_index > -1
       $list_items.removeClass('mousetrap_active')
 
-    $list_items.get(active_index + 1).classList.add('mousetrap_active')
+    active = $list_items.get(active_index + 1)
+    active.classList.add('mousetrap_active')
+    if window.innerHeight + scrollY < ($(active).offset().top + 60)
+      scrollTo 0, scrollY + $(active).height()
+
   if key == "k"
     return if active_index <= 0
     if active_index > -1
       $list_items.removeClass('mousetrap_active')
 
-    $list_items.get(active_index - 1).classList.add('mousetrap_active')
+    active = $list_items.get(active_index - 1)
+    active.classList.add('mousetrap_active')
+
+    if scrollY > ($(active).offset().top - 60)
+      scrollTo 0, scrollY - $(active).height()
 
 # Interacting with list items.
 M.bind ['o', 'return'], ->
