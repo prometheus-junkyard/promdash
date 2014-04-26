@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "Dashboard" do
+feature "Dashboard", js: true do
   scenario "visiting the dashboard index" do
     visit root_path
     expect(page.has_content?("Dashboards")).to eq(true)
@@ -24,13 +24,12 @@ feature "Dashboard" do
 
   describe "cloning the dashboard" do
     before(:each) do
-      visit new_dashboard_path
-      fill_in('Name', with: 'New Dashboard')
-      find('.actions input').click
-      visit root_path
+      d = Dashboard.new_with_slug name: 'New Dashboard'
+      d.save!
     end
 
     scenario "go to the new page" do
+      visit root_path
       click_link 'Clone'
       expect(page).to have_content(/new dashboard/i)
     end
@@ -38,9 +37,8 @@ feature "Dashboard" do
 
   describe "editing the dashboard" do
     before(:each) do
-      visit new_dashboard_path
-      fill_in('Name', with: 'New Dashboard')
-      find('.actions input').click
+      d = Dashboard.new_with_slug name: 'New Dashboard'
+      d.save!
       visit root_path
     end
 
@@ -79,14 +77,17 @@ feature "Dashboard" do
         expect(page).to have_content(/editing dashboard/i)
       end
     end
+  end
 
-    scenario "destroy" do
-      Dashboard.destroy_all
-      visit new_dashboard_path
-      fill_in('Name', with: 'New Dashboard')
-      find('.actions input').click
-      visit root_path
-      expect { click_link('Delete') }.to change { Dashboard.count }.by(-1)
-    end
+  scenario "destroy" do
+    d = Dashboard.new_with_slug name: 'New Dashboard'
+    d.save!
+    visit root_path
+    expect {
+      click_link('Delete')
+      accept_alert
+      # need to wait for the request to complete
+      sleep 0.3
+    }.to change { Dashboard.count }.by(-1)
   end
 end

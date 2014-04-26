@@ -37,6 +37,6 @@ ActiveRecord::Schema.define(version: 20140413155227) do
     t.integer  "dashboard_id"
   end
 
-  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true
+  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true, using: :btree
 
 end
