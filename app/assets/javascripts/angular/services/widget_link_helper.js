@@ -20,7 +20,7 @@ angular.module("Prometheus.services").factory('WidgetLinkHelper', ["$http", "Inp
       }
 
       // TODO: find more robust means of accessing the corresponding input field.
-      var input = event.currentTarget.parentElement.parentElement.querySelector("[ng-model=widgetLink]")
+      var input = $(event.currentTarget).closest(".widget_wrapper").find("[ng-model=widgetLink]")[0];
       InputHighlighter(input);
     }
   };

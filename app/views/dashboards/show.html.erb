@@ -7,61 +7,46 @@
 <h1 class="col-lg-12"><%= page_title @dashboard.name %></h1>
 
 <div id="dashboard" ng-controller="DashboardCtrl">
-  <div ng-show="modalOpen" ng-click="closeCloneControls()" class="modal_overlay"></div>
   <div id="global_controls">
     <div class="global_grouping">
-      <div class="global_time_input input-group">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
-            <i class="icon-minus"></i>
-          </button>
-        </span>
-        <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
-            <i class="icon-plus"></i>
-          </button>
-        </span>
-      </div>
+      <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
+        <i class="icon-minus"></i>
+      </button>
+      <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range">
+      <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
+        <i class="icon-plus"></i>
+      </button>
     </div>
 
     <div class="global_grouping">
-      <div class="global_date_input input-group">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
-            <i class="icon-fb"></i>
-          </button>
-        </span>
-        <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
-            <i class="icon-ff"></i>
-          </button>
-        </span>
-      </div>
+      <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
+        <i class="icon-fb"></i>
+      </button>
+      <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
+      <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
+        <i class="icon-ff"></i>
+      </button>
     </div>
 
     <div class="global_grouping">
-      <div class="btn-group">
-        <button type="button" class="btn btn-default" ng-click="refreshDashboard()" title="Refresh dashboard"><i class="icon-cycle"></i></button>
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <span ng-if="globalConfig.refresh">every {{globalConfig.refresh}}</span>
-          <span ng-if="!globalConfig.refresh">never</span>
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a href="#" ng-click="globalConfig.refresh = ''">never</a></li>
-          <li><a href="#" ng-click="globalConfig.refresh = '30s'">30s</a></li>
-          <li><a href="#" ng-click="globalConfig.refresh = '1m'">1m</a></li>
-          <li><a href="#" ng-click="globalConfig.refresh = '2m'">2m</a></li>
-          <li><a href="#" ng-click="globalConfig.refresh = '5m'">5m</a></li>
-          <li><a href="#" ng-click="globalConfig.refresh = '10m'">10m</a></li>
-        </ul>
-      </div>
+      <button type="button" class="btn btn-default" ng-click="refreshDashboard()" title="Refresh dashboard"><i class="icon-cycle"></i></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span ng-if="globalConfig.refresh">every {{globalConfig.refresh}}</span>
+        <span ng-if="!globalConfig.refresh">never</span>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#" ng-click="globalConfig.refresh = ''">never</a></li>
+        <li><a href="#" ng-click="globalConfig.refresh = '30s'">30s</a></li>
+        <li><a href="#" ng-click="globalConfig.refresh = '1m'">1m</a></li>
+        <li><a href="#" ng-click="globalConfig.refresh = '2m'">2m</a></li>
+        <li><a href="#" ng-click="globalConfig.refresh = '5m'">5m</a></li>
+        <li><a href="#" ng-click="globalConfig.refresh = '10m'">10m</a></li>
+      </ul>
     </div>
 
     <div class="global_grouping">
-      <div class="btn-group">
+      <div>
         <button class="btn btn-default" ng-click="showDashboardSettings = !showDashboardSettings" title="Dashboard Settings">
           <span class="glyphicon glyphicon-cog"></span>
         </button>
@@ -106,7 +91,7 @@
       </div>
     </div>
     <div class="global_grouping">
-      <button class="btn btn-primary" ng-click="saveDashboard()" ng-disabled="saving">
+      <button class="btn btn-default" ng-click="saveDashboard()" ng-disabled="saving">
         <span ng-show="saving">Saving...</span>
         <span ng-show="!saving">Save Changes</span>
       </button>
@@ -195,7 +180,7 @@
     </form>
   </div>
 
-  <div class="js-clone_menu clone_widget_menu panel panel-default" ng-show="showCloneControls">
+  <div class="modal_container panel panel-default" ng-show="showCloneControls">
     <div class="panel-heading">
       Clone Graph
       <i ng-click="closeCloneControls()" class="clone_widget_close pointer pull-right icon-cross"></i>
@@ -220,7 +205,7 @@
           </label>
         </div>
       </div>
-      <div ng-show="widgetToClone" class="form-group">
+      <div ng-show="widgetToClone">
         <button class="btn btn-primary add_widget_button" ng-click="copyWidget()" title="Clone Widget">
           Clone
         </button>

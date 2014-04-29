@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "InputHighlighter", "ServersByIdObject", "WidgetLinkHelper", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, InputHighlighter, ServersByIdObject, WidgetLinkHelper) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService) {
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
       return;
@@ -31,6 +31,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
   $scope.removeGraph = function() {
     $scope.$emit('removeWidget', $scope.index);
+    $scope.closeGraphDelete();
   };
 
   $scope.toggleTab = function(tab) {
@@ -97,6 +98,19 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();
   });
+
+  $scope.$on('closeModal', function() {
+    $scope.showGraphDelete = false;
+  });
+
+  $scope.closeGraphDelete = function() {
+    ModalService.closeModal();
+  };
+
+  $scope.graphDeleteModal = function() {
+    ModalService.toggleModal();
+    $scope.showGraphDelete = true;
+  };
 
   $scope.title = function() {
     return VariableInterpolator($scope.graph.title, $scope.vars);
