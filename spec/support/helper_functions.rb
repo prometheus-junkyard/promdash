@@ -3,7 +3,7 @@ def accept_alert
 end
 
 def open_tab tab_name
-  find(".widget_wrapper").hover
+  find(".widget_title").hover
   find("[title='#{tab_name}']").click
 end
 

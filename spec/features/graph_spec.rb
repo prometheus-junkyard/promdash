@@ -103,6 +103,43 @@ feature "Dashboard#show", js: true do
       end
     end
 
+    describe "removing widgets" do
+      describe "graphs" do
+        before { open_tab 'Remove graph' }
+
+        it "should remove graphs" do
+          click_button 'Delete'
+          expect(all('.widget_title').count).to eq 0
+        end
+
+        it "should cancel" do
+          click_button 'Cancel'
+          expect(all('.widget_title').count).to eq 1
+        end
+      end
+
+      describe "frames" do
+        before do
+          open_tab 'Remove graph'
+          click_button 'Delete'
+          click_button 'Add Frame'
+          accept_alert
+          open_tab 'Remove frame'
+        end
+
+        it "should remove frames" do
+          click_button 'Delete'
+          expect(all('.widget_title').count).to eq 0
+        end
+
+        it "should cancel" do
+          click_button 'Cancel'
+          expect(all('.widget_title').count).to eq 1
+        end
+
+      end
+    end
+
     describe "adding widgets" do
       it "should add graphs" do
         click_button 'Add Graph'

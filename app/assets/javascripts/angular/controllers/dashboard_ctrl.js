@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", "ModalService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter, ModalService) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -71,9 +71,12 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
   });
 
   $scope.closeCloneControls = function() {
-    $scope.showCloneControls = false;
-    $scope.modalOpen = false;
+    ModalService.closeModal();
   };
+
+  $scope.$on('closeModal', function() {
+    $scope.showCloneControls = false;
+  });
 
   $scope.toggleGridSettings = function(tab) {
     $scope.showGridSettings
@@ -147,7 +150,7 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
 
   $scope.showCloneMenu = function() {
     $scope.showCloneControls = true;
-    $scope.modalOpen = !$scope.modalOpen;
+    ModalService.toggleModal();
   };
 
   $http.get('/dashboards.json', {params: {filter: "cloneable"}}).then(function(payload) {

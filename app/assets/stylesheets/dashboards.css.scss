@@ -6,6 +6,8 @@
 //= require bootstrap-datetimepicker.min
 //= require rickshaw.min
 
+$light-secondary-background: #f0f0f0;
+
 #dashboard {
   margin-bottom: 20px;
 }
@@ -44,6 +46,10 @@
 }
 
 .widget_wrapper {
+  background-color: $light-secondary-background;
+  border: none;
+  padding: 5px;
+  position: relative;
   width: 100%;
 }
 
@@ -53,12 +59,13 @@
 }
 
 .widget_title {
+  border: none;
+  border-bottom: 1px dotted green;
   cursor: move;
   // This was added to hide overly long titles, but it also hides the error
   // reporting, so for now it is commented out.
   // overflow: hidden;
   position: relative;
-  text-align: center;
   white-space: nowrap;
 }
 
@@ -66,18 +73,45 @@
   font-weight: normal;
 }
 
-.remove_graph_btn {
-  right: 7px;
-  top: 7px;
-  position: absolute;
-}
-
 .graph_control_tabbar {
   position: absolute;
+  right: 0;
   z-index: 1000;
 }
 
+.graph_config_menu {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  & .btn {
+    border-radius: 0;
+    background-color: inherit;
+    border: none;
+    color: #666;
+    &:hover {
+      color: #428bca;
+    }
+  }
+}
+
+.legend_buttons {
+  position: absolute;
+  z-index: 50;
+  right: 0;
+  top: 41px;
+  padding: 5px;
+  & .btn:first-child:not(:last-child) {
+    border-radius: 0;
+  }
+  & .btn:last-child:not(:first-child) {
+    border-radius: 0;
+  }
+}
+
 .graph_control_tabpane {
+  position: absolute;
+  right: 0;
+  top: -1px;
   width: 500px;
 }
 
@@ -102,10 +136,6 @@
   height: 100%;
   overflow: hidden;
   width: 100%;
-}
-
-.graphite_frame {
-  background-color: #000000;
 }
 
 .single_widget .panel {
@@ -159,7 +189,7 @@ $light-text: #333333;
 error-message {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 5px;
   width: 100%;
 
   .errors {
@@ -181,30 +211,40 @@ error-message {
       width: 100%;
     }
     .tooltips {
+      left: -6px;
+      z-index: 1;
       -webkit-animation: flashing 1s ease 1s infinite;
       -moz-animation: flashing 1s ease 1s infinite;
       animation: flashing 1s ease 1s infinite;
     }
-    .tooltips ng-pluralize {
-      position: absolute;
-      width: 90px;
-      color: $light-text;
-      height: 30px;
-      line-height: 22px;
-      text-align: center;
-      visibility: hidden;
-      border-radius: 3px;
-      border: 1px solid $light-border;
-      background-color: #FFFFFF;
-    }
-    .tooltips:hover ng-pluralize {
-      visibility: visible;
-      font-weight: bold;
-      bottom: -9px;
-      left: 25px;
-      z-index: 999;
-    }
   }
+}
+
+.bootstrap-datetimepicker-widget {
+  thead tr:first-child th:hover,
+  td.day:hover,
+  td.hour:hover,
+  td.minute:hover,
+  td.second:hover {
+    border-radius: 0;
+  }
+  td.active.active {
+    border-radius: 0;
+    background-image: linear-gradient(rgb(0, 68, 204), rgb(0, 68, 204));
+  }
+}
+
+.dropdown-menu {
+  border-radius: 0;
+  border: none;
+}
+
+.rickshaw_graph .detail .item {
+  border-radius: 0;
+}
+
+.rickshaw_legend {
+  margin: 3px 0 0 5px;
 }
 
 .dark_theme {
@@ -212,8 +252,15 @@ error-message {
   $dark-border: #404040;
   $dark-line: rgba(255,255,255,.2);
   $dark-text: #FFFFFF;
-  $dark-secondary-background: #252525;
+  $dark-secondary-text: #252525;
+
+  // Changes to this value need to also be made to the bgcolor query string key
+  // in frame_ctrl.js.
+  $dark-secondary-background: #191919;
+
+  $dark-tertiary-background: #505050;
   $dark-accent: #96557e;
+  $dark-button-hover: #383838;
 
   a {
     color: $dark-accent;
@@ -231,6 +278,14 @@ error-message {
       }
     }
 
+    .legend_buttons {
+      background-color: $dark-secondary-background;
+    }
+
+    .widget_wrapper {
+      background-color: $dark-secondary-background;
+    }
+
     .form-control:focus {
       border-color: #96557e;
       outline: 0;
@@ -240,27 +295,54 @@ error-message {
                   0 0 8px rgba(150, 85, 126, 0.6);
     }
 
-    #global_controls {
+    .global_grouping {
       .form-control, .btn-default {
-        background-color: $dark-background;
-        border-color: $dark-border;
+        background-color: $dark-secondary-background;
+        border-color: $dark-secondary-background;
         color: $dark-text;
       }
     }
 
     .dropdown-menu > .active > a {
-      background-color: $dark-accent;
+      background-color: $dark-tertiary-background;
     }
     .dropdown-menu li a {
       color: $dark-text;
       &:hover {
-        background-color: $dark-accent;
+        background-color: $dark-tertiary-background;
       }
     }
 
+    .widget_title {
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+    }
+
+    .graph_config_menu .btn {
+      color: #606060;
+    }
+
+    .global_grouping, .widget_title {
+      & .btn:hover {
+        color: $dark-text;
+      }
+    }
+
+    .spin {
+      color: $dark-text;
+    }
+
     .btn-primary {
-      background-color: $dark-accent;
-      border-color: #89486d;
+      background-color: $dark-secondary-background;
+      border-color: $dark-secondary-background;
+    }
+
+    .graph_control_tabpane .btn-primary {
+      background-color: $dark-secondary-background;
+      border-color: $dark-secondary-background;
+      &:hover {
+        background-color: $dark-button-hover;
+        border-color: $dark-button-hover;
+      }
     }
 
     .dropdown-menu, .graph_chart {
@@ -277,10 +359,10 @@ error-message {
       }
       td.active.active {
         background-color: $dark-accent;
-        background-image: linear-gradient(rgb(150, 85, 126), rgb(124, 70, 112));
+        background-image: linear-gradient(rgb(150, 85, 126), rgb(150, 85, 126));
       }
       .btn {
-        color: $dark-accent;
+        color: $dark-text;
       }
       .btn:hover, .btn:focus {
         color: $dark-text;
@@ -292,21 +374,17 @@ error-message {
     }
 
     .panel-heading {
-      background-color: #202020;
+      background-color: $dark-secondary-background;
       border-color: $dark-border;
       color: $dark-text;
     }
 
     .panel-body {
-      color: $dark-background;
+      color: $dark-secondary-text;
     }
 
     .rickshaw_graph {
-      background-color: $dark-background;
-
-      svg {
-        background-color: $dark-background;
-      }
+      background-color: $dark-secondary-background;
 
       .detail {
         background: $dark-line;
@@ -436,15 +514,12 @@ hr {
   margin-right: 5px;
 }
 
-.clone_widget_menu {
+.modal_container {
   position: fixed;
   left: 40%;
   top: 35%;
   width: 275px;
   z-index: 9999;
-  & .panel-heading {
-    cursor: move;
-  }
 }
 
 .clone_select {
@@ -484,3 +559,45 @@ hr {
   100% {color: #FFFFFF;}
 }
 
+.spin {
+  -webkit-animation:spin 4s linear infinite;
+  -moz-animation:spin 4s linear infinite;
+  animation:spin 4s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% { -moz-transform: rotate(-360deg); }
+}
+@-webkit-keyframes spin {
+  100% { -webkit-transform: rotate(-360deg); }
+}
+@keyframes spin {
+  100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); }
+}
+
+// Over-ride bootstrap
+.panel {
+  margin-bottom: 10px;
+}
+
+.panel, .panel-heading, .btn, .form-control {
+  border-radius: 0;
+}
+
+.global_grouping .form-control {
+  display: inline-block;
+  width: 174px;
+}
+
+.dashboard_settings .form-control {
+  display: block;
+}
+
+
+.dropdown-menu {
+  margin-top: 4px;
+}
+
+.panel-default > .panel-heading {
+  background-color: $light-secondary-background;
+}

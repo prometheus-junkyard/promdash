@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", "GraphiteTimeConverter", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper, GraphiteTimeConverter) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", "GraphiteTimeConverter", "ModalService", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper, GraphiteTimeConverter, ModalService) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
@@ -21,6 +21,20 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
 
   $scope.removeFrame = function() {
     $scope.$emit('removeWidget', $scope.index);
+    $scope.closeFrameDelete();
+  };
+
+  $scope.$on('closeModal', function() {
+    $scope.showFrameDelete = false;
+  });
+
+  $scope.closeFrameDelete = function() {
+    ModalService.closeModal();
+  };
+
+  $scope.frameDeleteModal = function() {
+    ModalService.toggleModal();
+    $scope.showFrameDelete = true;
   };
 
   $scope.toggleTab = function(tab) {
@@ -49,6 +63,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
         }
         return e;
       });
+      queryStringComponents.push("bgcolor=%23191919");
     }
     parser.search = '?' + queryStringComponents.join('&') + '&decache=' + $scope.refreshCounter;
     return parser.href;
