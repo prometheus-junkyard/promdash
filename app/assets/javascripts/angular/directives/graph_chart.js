@@ -8,15 +8,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
-      var legend = null;
-      var seriesToggle = null;
-      var xAxis = null;
-      var yAxis = null;
-      var yAxis2 = null;
-      var logScale = null;
-      var linearScale = null;
-      var yScales = {};
-      var axesBounds = {};
+      var $el = $(element[0]);
 
       function formatTimeSeries(series) {
         series.forEach(function(s) {
@@ -27,89 +19,16 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         });
       }
 
-      function refreshGraph(graph, series) {
-        var $el = $(element[0]);
-        if (!series.length) {
-          $el.empty();
-          return;
-        }
-        graph.series.splice(0, graph.series.length);
-        // Remove the onclick handler from each old .action anchor tag, which
-        // controls the show/hide action on legend.
-        $el.find(".action").each(function() {
-          this.onclick = null;
-          this.remove();
-        });
-        $el.find(".legend ul").empty();
-
-        // BUG: If legend items have the same name, they are all assigned the
-        // same color after resize.
-        // https://github.com/shutterstock/rickshaw/blob/master/src/js/Rickshaw.Series.js#L73
-        // The same object is returned each time from itemByName().
-        // Our vendored Rickshaw file is edited at comments /*stn*/ to fix
-        // this.
-        formatTimeSeries(series);
-        setLegendPresence(series);
-
-        graph.series.load({items: series});
-
-        // Series toggle is leaking.
-        (seriesToggle || {}).legend = null;
-        seriesToggle = null;
-        seriesToggle = new Rickshaw.Graph.Behavior.Series.Toggle({
-          graph: graph,
-          legend: legend
-        });
-
-        graph.configure({
-          dotSize: 2,
-          interpolation: scope.graphSettings.interpolationMethod,
-          height: calculateGraphHeight($el.find(".legend"))
-        });
-        graph.render();
-        xAxis.render();
-
-        var leftAxisSettings = scope.graphSettings.axes[0];
-        var rightAxisSettings = scope.graphSettings.axes[1];
-
-        yAxis.scale = yScales[1] || yScales[2];
-        yAxis.tickFormat = YAxisUtilities.getTickFormat(leftAxisSettings.format);
-        yAxis.render();
-
-        // Don't re-render right Y-axis if it was removed.
-        var removeY2 = false;
-        if (scope.graphSettings.axes.length > 1) {
-          var scale = yScales[2] || yScales[1];
-          var tickFormat = YAxisUtilities.getTickFormat(rightAxisSettings.format);
-          if (!yAxis2) {
-            yAxis2 = createYAxis2(graph, tickFormat, scale);
-          }
-          yAxis2.scale = scale;
-          yAxis2.tickFormat = tickFormat;
-          yAxis2.height = rsGraph.height;
-          yAxis2.width = rsGraph.width;
-          yAxis2.render();
-        } else if (yAxis2) {
-          removeY2 = true;
-        }
-
-        // Remove all callbacks; they cause unexpected behavior when
-        // re-rendering.
-        graph.updateCallbacks = [];
-
-        if (removeY2) {
-          // Remove the markup for yAxis2.
-          var el = yAxis2.vis[0][0];
-          d3.selectAll(el.querySelectorAll('.y_ticks[transform]')).remove();
-          d3.selectAll(el.querySelectorAll('.y_grid:last-child')).remove();
-          yAxis2 = null;
-        }
-      }
-
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
-        $(element[0]).css('height', graphHeight);
+        $el.css('height', graphHeight);
+
+        if (rsGraph) {
+          $el.html('<div class="graph_chart"><div class="legend"></div></div>');
+          rsGraph = null;
+        }
+        var graphEl = $el.find('.graph_chart').get(0);
 
         if (scope.graphData == null) {
           return;
@@ -132,6 +51,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         }
 
         // Set scale in yScales based on max/min of all series on that axis.
+        var axesBounds = {};
+
         var a1series = series.filter(function(s) {
           return s.axis_id === 1;
         });
@@ -150,6 +71,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           min: a2LimitFn(Math.min),
         };
 
+        var yScales = {};
         series.forEach(function(s) {
           var axes = scope.graphSettings.axes;
           var matchingAxis = axes.filter(function(a) {
@@ -189,11 +111,6 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           yScales[2] = yScales[1];
         }
 
-        if (rsGraph) {
-          refreshGraph(rsGraph, series);
-          return;
-        }
-
         if (series.length === 0) {
           return;
         }
@@ -202,17 +119,17 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         setLegendPresence(series);
 
         rsGraph = new Rickshaw.Graph({
-          element: element[0],
+          element: graphEl,
           renderer: 'multi',
           min: yMinForGraph,
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
 
-        var $legend = $(element[0]).find(".legend");
-        legend = createLegend(rsGraph, $legend[0]);
+        var $legend = $el.find(".legend");
+        var legend = createLegend(rsGraph, $legend[0]);
 
-        seriesToggle = new Rickshaw.Graph.Behavior.Series.Toggle({
+        var seriesToggle = new Rickshaw.Graph.Behavior.Series.Toggle({
           graph: rsGraph,
           legend: legend
         });
@@ -240,7 +157,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         rsGraph.series.legend = legend;
         rsGraph.render();
 
-        xAxis = new Rickshaw.Graph.Axis.Time({
+        var xAxis = new Rickshaw.Graph.Axis.Time({
           graph: rsGraph
         });
         xAxis.render();
@@ -254,19 +171,15 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           tickFormat: YAxisUtilities.getTickFormat(leftAxisSettings.format),
           scale: yScales[1] || yScales[2]
         };
-        yAxis = createYAxis(yAxisLeft);
+        var yAxis = createYAxis(yAxisLeft);
         yAxis.render();
 
         if (rightAxisSettings && yScales[2]) {
           var scale = yScales[2];
           var tickFormat = YAxisUtilities.getTickFormat(rightAxisSettings.format);
-          yAxis2 = createYAxis2(rsGraph, tickFormat, scale);
+          var yAxis2 = createYAxis2(rsGraph, tickFormat, scale);
           yAxis2.render();
         }
-
-        // Remove all callbacks; they cause unexpected behavior when
-        // re-rendering.
-        rsGraph.updateCallbacks = [];
 
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
           graph: rsGraph,
@@ -293,7 +206,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           tickFormat: tickFormat,
           scale: scale
         };
-        yAxis2 = createYAxis(yAxisRight);
+        var yAxis2 = createYAxis(yAxisRight);
         yAxis2.height = graph.height;
         yAxis2.width = graph.width;
         yAxis2.berthRate = 0;
