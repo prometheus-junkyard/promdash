@@ -177,8 +177,15 @@ $light-secondary-background: #f0f0f0;
     color: #a0a0a0;
   }
 
-  .labels {
+  .labels_table {
+    margin-top: 2px;
     font-size: 11px;
+    th, td {
+      padding: 0;
+    }
+    th {
+      padding-right: 7px;
+    }
   }
 }
 
