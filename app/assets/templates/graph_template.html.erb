@@ -6,14 +6,14 @@
       {{title()}}
 
       <div class="btn-group pull-right graph_config_menu">
-        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()"><i title="Refresh" ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('datasources')"><i title="Datasources" class="icon-add-to-list"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')"><i title="Time options" class="icon-clock"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('graph')"><i title="Graph and axis settings" class="icon-line-graph"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('palette')"><i title="Palette" class="icon-palette"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('legend')"><i title="Legend Settings" class="icon-list"></i></div>
-        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)"><i title="Link to Graph" class="icon-link"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="graphDeleteModal()"><i title="Remove graph" class="icon-trash"></i></div>
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" title="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('datasources')" title="Datasources"><i class="icon-add-to-list"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')" title="Time options"><i class="icon-clock"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('graph')" title="Graph and axis settings"><i class="icon-line-graph"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('palette')" title="Palette"><i class="icon-palette"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('legend')" title="Legend Settings"><i class="icon-list"></i></div>
+        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" title="Link to Graph"><i class="icon-link"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="graphDeleteModal()" title="Remove graph"><i class="icon-trash"></i></div>
       </div>
 
     </div>
