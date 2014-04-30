@@ -260,13 +260,13 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       }
 
       function renderLabels(labels) {
-        var labelStrings = [];
+        var labelRows = [];
         for (label in labels) {
           if (label != "__name__") {
-            labelStrings.push("<strong>" + label + "</strong>: " + labels[label]);
+            labelRows.push("<tr><th>" + label + "</th><td>" + labels[label] + "</td></tr>");
           }
         }
-        return labels = "<div class=\"labels\">" + labelStrings.join("<br>") + "</div>";
+        return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
       }
 
       scope.$watch('graphSettings.stacked', redrawGraph);
