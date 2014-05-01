@@ -254,6 +254,10 @@ error-message {
   margin: 3px 0 0 5px;
 }
 
+.template_variables {
+  margin: 10px 0 20px;
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;
@@ -268,6 +272,7 @@ error-message {
   $dark-tertiary-background: #505050;
   $dark-accent: #96557e;
   $dark-button-hover: #383838;
+  $dark-inactive-icon: #606060;
 
   a {
     color: $dark-accent;
@@ -308,6 +313,20 @@ error-message {
         border-color: $dark-secondary-background;
         color: $dark-text;
       }
+      .caret {
+        border-top-color: $dark-inactive-icon;
+      }
+      .btn {
+        color: $dark-inactive-icon;
+        &:hover {
+          .caret {
+            border-top-color: $dark-text;
+          }
+          background-color: $dark-button-hover;
+          border-color: $dark-button-hover;
+          color: $dark-text;
+        }
+      }
     }
 
     .dropdown-menu > .active > a {
@@ -325,7 +344,7 @@ error-message {
     }
 
     .graph_config_menu .btn {
-      color: #606060;
+      color: $dark-inactive-icon;
     }
 
     .global_grouping, .widget_title {

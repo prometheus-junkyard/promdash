@@ -18,7 +18,7 @@
 //= require jquery_ujs
 //= require bootstrap.min
 //= require bootstrap-datetimepicker
-//= require ui-bootstrap-custom-0.10.0.min
+//= require ui-bootstrap-custom-tpls-0.10.0.min
 //= require d3.v3.js
 //= require rickshaw.min
 //= require sortable.js

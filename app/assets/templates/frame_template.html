@@ -3,12 +3,12 @@
     <div class="widget_title panel-heading" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
       {{getTitle()}}
       <div class="btn-group pull-right graph_config_menu" ng-show="showControls || showTab">
-        <div class="btn btn-primary btn-sm" ng-click="refreshFrame()" title="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')" title="Frame Source"><i class="icon-add-to-list"></i></div>
-        <div class="btn btn-primary btn-sm" ng-show="frame.graphite" ng-click="toggleTab('timerange')" title="Time options"><i class="icon-clock"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')" title="Frame Settings"><i class="icon-cog"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" title="Link to Graph"><i class="icon-link"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="frameDeleteModal()" title="Remove frame"><i class="icon-trash"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="refreshFrame()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')" tooltip-append-to-body="true" tooltip="Frame Source"><i class="icon-add-to-list"></i></div>
+        <div class="btn btn-primary btn-sm" ng-show="frame.graphite" ng-click="toggleTab('timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')" tooltip-append-to-body="true" tooltip="Frame Settings"><i class="icon-cog"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="frameDeleteModal()" tooltip-append-to-body="true" tooltip="Remove frame"><i class="icon-trash"></i></div>
       </div>
     </div>
 
