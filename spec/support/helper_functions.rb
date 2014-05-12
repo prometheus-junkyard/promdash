@@ -4,7 +4,7 @@ end
 
 def open_tab tab_name
   find(".widget_title").hover
-  find("[title='#{tab_name}']").click
+  find("[tooltip='#{tab_name}']").click
 end
 
 def model_element model
