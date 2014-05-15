@@ -25,7 +25,13 @@
         <div class="panel-heading">Datasources</div>
         <div class="panel-body">
           <div ng-repeat="expr in graph.expressions">
-            <expression expr="expr" servers="servers" axes="graph.axes" servers-by-id="serversById" index="$index"></expression>
+            <expression
+              expr="expr"
+              servers="servers"
+              axes="graph.axes"
+              servers-by-id="serversById"
+              legend-format-strings="graph.legendFormatStrings"
+              index="$index"></expression>
           </div>
           <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
         </div>
@@ -144,9 +150,15 @@
               value="never"> never</label>
           </div>
           <label>Legend format:</label>
-          <br />
-          <input class="form-control" ng-model="graph.legendFormatString">
-          <br/>
+          <div class="legend_string_container" ng-repeat="str in graph.legendFormatStrings track by $index">
+            <input class="form-control legend_string_input" ng-model="str.name">
+            <button class="btn btn-primary" type="button" ng-hide="$first" ng-click="removeLegendString($index)">
+              <i class="icon-cross"></i>
+            </button>
+            <button class="legend_string_add btn btn-primary" ng-show="$last" type="button" ng-click="addLegendString()">
+              <i class="icon-plus"></i>
+            </button>
+          </div>
         </div>
       </div>
 

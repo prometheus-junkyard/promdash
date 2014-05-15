@@ -5,7 +5,7 @@ feature "Dashboard#show", js: true do
     before(:each) do
       @server = Server.create! name: "prometheus", url: "http://localhost:#{Capybara.server_port}/"
       @dashboard =
-        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/dashboard_json')
+        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/1_expression_dashboard_json')
       visit dashboard_slug_path @dashboard.slug
     end
 
@@ -13,82 +13,18 @@ feature "Dashboard#show", js: true do
       expect(page).to have_selector '.graph_chart > svg'
     end
 
-    describe "the legend" do
-      it "should show the legend" do
-        within_graph do
-          expect(page).to have_content "prometheus_targetpool_duration_ms"
-        end
-      end
-
-      it "should be able to turn off the legend" do
-        open_tab 'Legend Settings'
-        choose 'never'
-        within_graph do
-          expect(page).to have_no_content "prometheus_targetpool_duration_ms"
-        end
-      end
-
-      describe "legend format string" do
-        before(:each) { open_tab 'Legend Settings' }
-        let(:legend_string) { model_element 'graph.legendFormatString' }
-
-        it "constants" do
-          legend_string.set 'Hello'
-          within_graph do
-            expect(page).to have_content 'Hello'
-          end
-        end
-
-        it "single interpolation" do
-          legend_string.set '{{quantile}}'
-          within_graph do
-            %w{0.99 0.9 0.5 0.05 0.01}.each do |quantile|
-              expect(page).to have_content quantile
-            end
-          end
-        end
-
-        it "single piped interpolation" do
-          legend_string.set '{{quantile | toPercent}}'
-          within_graph do
-            %w{99% 90% 50% 5% 1%}.each do |quantile|
-              expect(page).to have_content quantile
-            end
-          end
-        end
-
-        it "double piped interpolation" do
-          legend_string.set '{{quantile | toPercent}} {{quantile | toPercent}}'
-          within_graph do
-            ["99% 99%", "90% 90%", "50% 50%", "5% 5%", "1% 1%"].each do |quantile|
-              expect(page).to have_content quantile
-            end
-          end
-        end
-
-        describe "regex interpolation" do
-          it "acceptable string" do
-            legend_string.set '{{job | regex:"pro":"faux"}}'
-            within_graph do
-              expect(page).to have_content "fauxmetheus"
-            end
-          end
-
-          it "bad string" do
-            legend_string.set '{{job | regex:"pro":"}}'
-            within_graph do
-              expect(page).to have_content "undefined"
-            end
-          end
-        end
-      end
-    end
-
     describe "single widget link" do
       it "should generate a link" do
         open_tab 'Link to Graph'
         widget_link = model_element 'widgetLink'
         shortened_url = ShortenedUrl.last
+        if shortened_url.nil?
+          # The request to make the ShortenedUrl sometimes is slower than the
+          # spec. Give the request an extra 0.3 seconds to finish if this is
+          # the case.
+          sleep 0.3
+          shortened_url = ShortenedUrl.last
+        end
         expect(widget_link.value).to match /#{shortened_url.id}-#{@dashboard.slug}/
       end
     end
