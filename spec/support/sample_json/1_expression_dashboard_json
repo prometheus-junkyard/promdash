@@ -1,0 +1,31 @@
+{"globalConfig":
+  {"numColumns":2,
+   "aspectRatio":0.75,
+   "theme":"dark_theme",
+   "endTime":null,
+   "vars":{}},
+   "widgets":[
+     {"title":"Title",
+      "stacked":false,
+      "range":"1h",
+      "endTime":null,
+      "expressions":[
+        {"server_id":1,
+         "id":0,
+         "legend_id":1,
+         "axis_id":1,
+         "expression":"prometheus_targetpool_duration_ms"}
+      ],
+      "type":"graph",
+      "legendSetting":"sometimes",
+      "interpolationMethod":"cardinal",
+      "axes":[
+        {"orientation":"left",
+         "renderer":"line",
+         "scale":"linear",
+         "format":"kmbt",
+         "id":1}
+      ]
+    }
+  ]
+}

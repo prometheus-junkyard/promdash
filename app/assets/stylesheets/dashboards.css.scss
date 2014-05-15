@@ -115,10 +115,6 @@ $light-secondary-background: #f0f0f0;
   width: 500px;
 }
 
-.graph_control_tabpane select {
-  margin-bottom: 2px;
-}
-
 // Fix spacing issues with Entypo icons inside Bootstrap buttons.
 [class^="icon-"][class^="icon-"], [class*=" icon-"] {
   width: auto !important;
@@ -554,6 +550,25 @@ hr {
 
 .clone_widget_close {
   margin-top: 3px;
+}
+
+.legend_string_container {
+  margin: 10px 0;
+}
+
+.legend_string_input {
+  display: inline-block;
+  margin-right: 5px;
+  width: 75%;
+}
+
+.expression_select {
+  margin: 5px 0;
+}
+
+.third_width {
+  display: inline-block;
+  width: 153px;
 }
 
 .pointer {

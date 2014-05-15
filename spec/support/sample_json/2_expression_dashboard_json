@@ -1,0 +1,40 @@
+{"globalConfig":
+  {"numColumns":2,
+   "aspectRatio":0.75,
+   "theme":"dark_theme",
+   "endTime":null,
+   "vars":{}},
+   "widgets":[
+     {"title":"Title",
+      "stacked":false,
+      "range":"1h",
+      "endTime":null,
+      "legendFormatStrings": [
+        {"id": 1, "name": "string 1", "hidden": false },
+        {"id": 2, "name": "string 2", "hidden": false }
+      ],
+      "expressions":[
+        {"server_id":1,
+         "id":0,
+         "legend_id":1,
+         "axis_id":1,
+         "expression":"prometheus_targetpool_duration_ms"},
+        {"server_id":1,
+         "id":1,
+         "legend_id":2,
+         "axis_id":1,
+         "expression":"prometheus_targetpool_duration_ms"}
+      ],
+      "type":"graph",
+      "legendSetting":"always",
+      "interpolationMethod":"cardinal",
+      "axes":[
+        {"orientation":"left",
+         "renderer":"line",
+         "scale":"linear",
+         "format":"kmbt",
+         "id":1}
+      ]
+    }
+  ]
+}

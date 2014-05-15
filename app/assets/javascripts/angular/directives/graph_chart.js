@@ -10,12 +10,21 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       var rsGraph = null;
       var $el = $(element[0]);
 
-      function formatTimeSeries(series) {
-        series.forEach(function(s) {
-          if (!scope.graphSettings.legendFormatString) {
-            return;
-          }
-          s.name = VariableInterpolator(scope.graphSettings.legendFormatString, s.labels);
+      function setLegendString(series) {
+        // TODO(stuartnelson3): Do something with this function. Put it somewhere or simplify it.
+        var expressions = scope.graphSettings.expressions;
+        expressions.forEach(function(exp) {
+          series.forEach(function(s) {
+            if (s.exp_id === exp.id) {
+              var lst = scope.graphSettings.legendFormatStrings.filter(function(lst) {
+                return lst.id === exp.legend_id;
+              })[0];
+              if (!(lst || {}).name) {
+                return;
+              }
+              s.name = VariableInterpolator(lst.name, s.labels);
+            }
+          });
         });
       }
 
@@ -34,7 +43,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           return;
         }
 
-        var series = RickshawDataTransformer(scope.graphData, scope.graphSettings.axes);
+        var series = RickshawDataTransformer(scope.graphData);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -115,7 +124,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           return;
         }
 
-        formatTimeSeries(series);
+        setLegendString(series);
         setLegendPresence(series);
 
         rsGraph = new Rickshaw.Graph({
@@ -269,10 +278,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
       }
 
+
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
-      scope.$watch('graphSettings.legendFormatString', redrawGraph);
+      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
+      scope.$watch('graphSettings.expressions', redrawGraph, true);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
       scope.$on('redrawGraphs', function() {
