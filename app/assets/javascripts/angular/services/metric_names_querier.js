@@ -12,7 +12,7 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", fu
       scope.metricNames = metricNames;
       return;
     }).error(function() {
-      alert("Error loading available metrics!");
+      console.log("Error loading available metrics!");
     });
   }
 }]);
