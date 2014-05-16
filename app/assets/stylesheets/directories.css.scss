@@ -1,0 +1,32 @@
+$directory-border: #cccccc;
+.content {
+  padding-bottom: 40px;
+}
+
+.directory_container {
+  border: 1px solid $directory-border;
+  margin: 20px 0;
+  padding: 0 10px;
+  .table {
+    margin-bottom: 10px;
+  }
+}
+
+.directory_name {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 3px;
+}
+
+.directory_icon {
+  margin-right: 10px;
+}
+
+.dashboard_name {
+  width: 400px;
+}
+
+.create_form form {
+  display: inline-block;
+  margin-right: 5px;
+}

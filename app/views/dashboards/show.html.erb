@@ -1,6 +1,7 @@
 <script type="text/javascript">
   dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
   dashboardName = "<%= @dashboard.name %>";
+  directoryName = "<%= @directoryName %>";
   servers = <%= @servers.to_json.html_safe %>;
 </script>
 
@@ -187,6 +188,15 @@
     </div>
     <div class="panel-body">
       <div class="form-group">
+        <div>
+          <label ng-show="directoryNames.length">Directory:
+            <select class="clone_select form-control" type="text"
+              ng-model="directoryForClone"
+              ng-change="queryDirectory()"
+              ng-options="d as d.name for d in directoryNames">
+            </select>
+          </label>
+        </div>
         <div>
           <label ng-show="dashboardNames.length">Dashboard:
             <select class="clone_select form-control" type="text"

@@ -6,8 +6,9 @@ PrometheusDashboard::Application.routes.draw do
     get '/api/:path' => FauxMetheus
   end
 
-  resources :dashboards
+  resources :dashboards, except: :index
   resources :servers
+  resources :directories
 
   get '/dashboards/:id/clone', to: 'dashboards#clone', as: :clone_dashboard
   get '/dashboards/:id/widgets', to: 'dashboards#widgets'
@@ -16,5 +17,5 @@ PrometheusDashboard::Application.routes.draw do
   get '/embed/:slug', to: 'embed#show'
   get '/:slug', to: 'dashboards#show', as: 'dashboard_slug'
   match '/:slug', to: 'dashboards#update', as: 'dashboard_slug_put', via: [:put, :patch]
-  root 'dashboards#index'
+  root 'directories#index'
 end

@@ -141,10 +141,21 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
     $scope.addGraph();
   }
 
+  $scope.queryDirectory = function() {
+    $scope.directoryForClone.id = $scope.directoryForClone.id || "unassigned";
+    $http.get('/directories/' + $scope.directoryForClone.id).then(function(payload) {
+      $scope.dashboardNames = payload.data.dashboards;
+      $scope.dashboardForClone = payload.data.dashboards.filter(function(d) {
+        return d.name == dashboardName;
+      })[0] || payload.data.dashboards[0];
+      $scope.queryDashboard();
+    });
+  };
+
   $scope.queryDashboard = function() {
     $http.get('/dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
-      $scope.dashboardWidgets = payload.data;
-      $scope.widgetToClone = payload.data[0];
+      $scope.dashboardWidgets = payload.data.widgets;
+      $scope.widgetToClone = payload.data.widgets[0];
     });
   };
 
@@ -153,12 +164,12 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
     ModalService.toggleModal();
   };
 
-  $http.get('/dashboards.json', {params: {filter: "cloneable"}}).then(function(payload) {
-    $scope.dashboardNames = payload.data;
-    $scope.dashboardForClone = payload.data.filter(function(d) {
+  $http.get('/directories.json').then(function(payload) {
+    $scope.directoryNames = payload.data.directories;
+    $scope.directoryForClone = payload.data.directories.filter(function(d) {
       return d.name == dashboardName;
-    })[0] || payload.data[0];
-    $scope.queryDashboard();
+    })[0] || payload.data.directories[0];
+    $scope.queryDirectory();
   });
 
   $scope.copyWidget = function() {

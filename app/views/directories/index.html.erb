@@ -1,0 +1,34 @@
+<h2><%= page_title 'Dashboards' %></h2>
+
+<div class="create_form">
+  <%= form_tag(new_directory_path, method: 'get') do %>
+    <button type="submit" class="btn btn-primary">New Directory</button>
+  <% end %>
+  <%= form_tag(new_dashboard_path, method: 'get') do %>
+    <button type="submit" class="btn btn-primary">New Dashboard</button>
+  <% end %>
+</div>
+
+<% @directories.each do |directory| %>
+  <div class="directory_container">
+    <div>
+      <h3 class="directory_name"><%= directory.name %></h3>
+      <%= link_to edit_directory_path(directory), class: "directory_icon" do %>
+        <i class="icon-pencil"></i>
+      <% end %>
+      <%= link_to directory, method: :delete, data: { confirm: 'Are you sure?' }, class: "directory_icon" do %>
+        <i class="icon-trash"></i>
+      <% end %>
+    </div>
+    <%= render 'dashboards_table', dashboards: directory.dashboards %>
+  </div>
+<% end %>
+
+<% if @unassigned_dashboards.present? %>
+  <div class="directory_container">
+    <div>
+      <h3 class="directory_name">Unassigned dashboards</h3>
+    </div>
+    <%= render 'dashboards_table', dashboards: @unassigned_dashboards %>
+  </div>
+<% end %>

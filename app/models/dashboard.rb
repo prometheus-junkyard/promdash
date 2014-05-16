@@ -1,7 +1,9 @@
 require 'slug_maker'
 
 class Dashboard < ActiveRecord::Base
+  belongs_to :directory
   has_many :shortened_urls
+
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
   validate :acceptable_slug
@@ -13,6 +15,7 @@ class Dashboard < ActiveRecord::Base
 
   scope :alphabetical, -> { order("lower(name)") }
   scope :cloneable, -> { where("dashboard_json is not null").select :id, :name }
+  scope :unassigned, -> { where("directory_id is null") }
 
   def self.new_with_slug(params)
     dashboard = new(params)

@@ -1,0 +1,14 @@
+<table class="table table-condensed">
+  <% dashboards.each do |dashboard| %>
+    <tr>
+      <td class="dashboard_name"><%= link_to dashboard.name, dashboard_slug_path(dashboard.slug) %></td>
+      <td>
+        <%= link_to 'Rename', edit_dashboard_path(dashboard) %>
+        &nbsp;&nbsp;
+        <%= link_to 'Clone', clone_dashboard_path(id: dashboard.id) %>
+        &nbsp;&nbsp;
+        <%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+</table>

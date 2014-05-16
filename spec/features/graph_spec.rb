@@ -4,8 +4,9 @@ feature "Dashboard#show", js: true do
   describe "interacting with graphs" do
     before(:each) do
       @server = Server.create! name: "prometheus", url: "http://localhost:#{Capybara.server_port}/"
-      @dashboard =
-        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/1_expression_dashboard_json')
+      @dashboard = FactoryGirl.create(:dashboard)
+      @unassigned_dashboard = FactoryGirl.create(:dashboard)
+      FactoryGirl.create :directory, dashboards: [ @dashboard ]
       visit dashboard_slug_path @dashboard.slug
     end
 
@@ -98,6 +99,16 @@ feature "Dashboard#show", js: true do
           expect(all('.widget_title').count).to eq 2
         end
 
+        it "doesn't show directories without dashboards" do
+          directory = FactoryGirl.create :directory
+          visit current_url
+          click_button 'Clone Widget'
+          select = model_element 'directoryForClone'
+          within select do
+            expect(page).to have_no_content directory.name
+          end
+        end
+
         it "automatically selects the current dashboard" do
           select = model_element 'dashboardForClone'
           expect(select.text).to eq(@dashboard.name)
@@ -106,6 +117,13 @@ feature "Dashboard#show", js: true do
         it "automatically selects the first graph" do
           select = model_element 'widgetToClone'
           expect(select.text).to eq(find('.widget_title').text)
+        end
+
+        it "lets you select from unassigned dashboards" do
+          select = model_element 'directoryForClone'
+          select.find('option', text: 'Unassigned dashboards').select_option
+          select = model_element 'dashboardForClone'
+          expect(select.text).to eq(@unassigned_dashboard.name)
         end
       end
     end

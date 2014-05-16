@@ -10,12 +10,6 @@ describe DashboardsController do
     @dashboard.save!
   end
 
-  it "#index" do
-    get :index
-    expect(response).to be_success
-    expect(assigns(:dashboards)).to_not be_nil
-  end
-
   it "#new" do
     get :new
     expect(response).to be_success
@@ -36,6 +30,14 @@ describe DashboardsController do
       d.save!
       post :create, dashboard: { name: "dashboard clone"}, source_id: d.id
       expect(Dashboard.last.dashboard_json).to eq(d.dashboard_json)
+    end
+
+    it "clones a dashboard and associates it with a directory" do
+      directory = FactoryGirl.create :directory
+      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: {some: "key"}.to_json)
+      d.save!
+      post :create, dashboard: { name: "dashboard clone", directory_id: directory.id }, source_id: d.id
+      expect(Dashboard.last.directory_id).to eq(directory.id)
     end
   end
 
@@ -59,28 +61,13 @@ describe DashboardsController do
       delete :destroy, id: @dashboard
     }.to change{ Dashboard.count }.by(-1)
 
-    expect(response).to redirect_to(dashboards_path)
-  end
-
-  context "cloneable dashboards" do
-    let(:do_request) { get :index, filter: "cloneable", format: :json }
-    let(:dashboards) { Dashboard.where("dashboard_json is not null").select(:id, :name) }
-    it "returns a list of dashboard ids and names" do
-      do_request
-      expect(response.body).to eq(dashboards.to_json)
-    end
-
-    it "only returns dashboards with dashboard_json" do
-      Dashboard.create! name: "no json", slug: "no-json"
-      do_request
-      expect(response.body).to eq(dashboards.to_json)
-    end
+    expect(response).to redirect_to(root_path)
   end
 
   context "getting widgets json" do
     it "dashboard_json exists" do
       get :widgets, id: @dashboard
-      widgets = [{title: "Graph 1"}, {title: "Title"}]
+      widgets = { widgets: [{title: "Graph 1"}, {title: "Title"}]}
       expect(response.body).to eq(widgets.to_json)
     end
 
@@ -88,7 +75,7 @@ describe DashboardsController do
       d = Dashboard.new_with_slug name: "no dash json"
       d.save
       get :widgets, id: d
-      expect(response.body).to eq("[]")
+      expect(response.body).to eq({widgets:[]}.to_json)
     end
   end
 
