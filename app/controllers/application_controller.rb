@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('This record was not found')
   end
 
-
   private
   # By default, Rails 4 sets the X-Frame-Options header to 'SAMEORIGIN'. Using
   # this method as an after_action allows external iframes to access those

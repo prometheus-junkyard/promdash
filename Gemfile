@@ -5,6 +5,8 @@ gem 'rails', '4.0.0'
 
 gem 'mysql2'
 
+gem 'active_model_serializers'
+
 group :production do
   gem 'thin'
 end
@@ -15,6 +17,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'factory_girl_rails'
   gem 'sinatra'
   gem 'pry'
   gem 'jasmine-rails'

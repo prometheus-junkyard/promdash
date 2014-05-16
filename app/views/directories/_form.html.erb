@@ -1,0 +1,47 @@
+<%= form_for @directory do |f| %>
+  <% if @directory.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@directory.errors.count, "error") %> prohibited this directory from being saved:</h2>
+
+      <ul>
+      <% @directory.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field form-group">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, class: "form-control input-small" %>
+  </div>
+
+  <% if @directory.dashboards.present? %>
+    <h3>Remove dashboards</h3>
+  <% end %>
+  <% @directory.dashboards.each do |dashboard|%>
+    <div class="form-group">
+      <label class="pointer">
+        <%= check_box_tag "directory[dashboard_ids][]", dashboard.id, true %>
+        <%= dashboard.name %>
+      </label>
+    </div>
+  <% end %>
+
+  <% if @unassigned_dashboards.present? %>
+    <h3>Add unassigned dashboards</h3>
+  <% end %>
+  <% @unassigned_dashboards.each do |dashboard|%>
+    <div class="form-group">
+      <label class="pointer">
+      <%= check_box_tag "directory[dashboard_ids][]", dashboard.id, false %>
+      <%= dashboard.name %>
+      </label>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back', directories_path, class: "btn btn-default" %>
+  </div>
+<% end %>

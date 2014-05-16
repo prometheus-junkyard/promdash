@@ -1,23 +1,12 @@
 class DashboardsController < ApplicationController
   before_action :set_dashboard, only: [:edit, :destroy, :widgets, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :update]
-
-  # GET /dashboards
-  # GET /dashboards.json
-  def index
-    @dashboards = Dashboard.alphabetical
-    if params[:filter] == "cloneable"
-      @dashboards = @dashboards.cloneable
-    end
-    respond_to do |format|
-      format.html { render 'index' }
-      format.json { render json: @dashboards }
-    end
-  end
+  before_action :set_directories, only: [:edit, :new, :clone]
 
   # GET /dashboards/1
   # GET /dashboards/1.json
   def show
+    @directoryName = @dashboard.directory.name if @dashboard.directory
     @servers = Server.order("lower(name)")
   end
 
@@ -49,7 +38,10 @@ class DashboardsController < ApplicationController
         format.html { redirect_to dashboard_slug_path(@dashboard.slug), notice: 'Dashboard was successfully created.' }
         format.json { render action: 'show', status: :created, location: @dashboard }
       else
-        format.html { render action: 'new' }
+        format.html do
+          set_directories
+          render action: 'new'
+        end
         format.json { render json: @dashboard.errors, status: :unprocessable_entity }
       end
     end
@@ -63,7 +55,10 @@ class DashboardsController < ApplicationController
         format.html { redirect_to dashboard_slug_path(@dashboard.slug), notice: 'Dashboard was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do
+          set_directories
+          render action: 'edit'
+        end
         format.json { render json: @dashboard.errors, status: :unprocessable_entity }
       end
     end
@@ -74,13 +69,13 @@ class DashboardsController < ApplicationController
   def destroy
     @dashboard.destroy
     respond_to do |format|
-      format.html { redirect_to dashboards_url }
+      format.html { redirect_to root_path }
       format.json { head :no_content }
     end
   end
 
   def widgets
-    render json: @dashboard.widgets
+    render json: @dashboard.widgets, root: :widgets
   end
 
   private
@@ -89,8 +84,12 @@ class DashboardsController < ApplicationController
     @dashboard = Dashboard.find(params[:id])
   end
 
+  def set_directories
+    @directories = Directory.all
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def dashboard_params
-    params.require(:dashboard).permit(:name, :dashboard_json, :slug)
+    params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id)
   end
 end

@@ -24,6 +24,15 @@
       <%= f.text_field :slug, class: "form-control input-small" %>
     </div>
   <% end %>
+
+  <div class="form-group">
+    <%= f.label :directory %><br>
+    <%= select_tag "dashboard[directory_id]",
+      options_from_collection_for_select(@directories, "id", "name", @dashboard.directory_id),
+      class: "form-control",
+      prompt: "- Select directory -" %>
+  </div>
+
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
     <%= link_to 'Back', dashboards_path, class: "btn btn-default" %>
