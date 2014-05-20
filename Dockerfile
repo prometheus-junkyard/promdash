@@ -10,7 +10,8 @@ WORKDIR    /promdash
 ENTRYPOINT [ "./run" ]
 CMD        [ "thin", "start" ]
 ADD        . /promdash
-RUN        bundle install --without="development test migration" && \
+RUN        cp config/database.yml.example config/database.yml && \
+           bundle install --deployment --binstubs --without="development test migration" && \
            bundle exec rake assets:precompile
 RUN        printf '#!/bin/sh\n \
            [ -z "$DATABASE_URL" ] && { echo "DATABASE_URL not set"; exit 1; }\n \
