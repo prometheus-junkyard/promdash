@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140413155227) do
+ActiveRecord::Schema.define(version: 20140512235812) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 20140413155227) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
+    t.integer  "directory_id"
+  end
+
+  add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id", using: :btree
+
+  create_table "directories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "servers", force: true do |t|
@@ -37,6 +46,6 @@ ActiveRecord::Schema.define(version: 20140413155227) do
     t.integer  "dashboard_id"
   end
 
-  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true
+  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true, using: :btree
 
 end

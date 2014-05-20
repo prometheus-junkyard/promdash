@@ -1,15 +1,20 @@
-<b>Expression {{index + 1}}</b>
+<div><b>Expression {{index + 1}}</b></div>
 <select
-  class="form-control"
+  class="form-control expression_select third_width"
   ng-model="expr.server_id"
   ng-options="s.id as s.name for s in servers"
   ng-change="MetricNamesQuerier(expr.server_id, serversById[expr.server_id]['url'], this)">
   <option value="">- Select Server -</option>
 </select>
-<select class="form-control" ng-model="expr.axis_id" ng-options="a.id as ('Axis ' + a.id) for a in axes">
+<select class="form-control expression_select third_width" ng-model="expr.axis_id" ng-options="a.id as ('Axis ' + a.id) for a in axes">
   <option value="">- Select Axis -</option>
 </select>
-<div class="input-group">
+<select class="form-control expression_select third_width"
+  ng-model="expr.legend_id"
+  ng-options="s.id as s.name for s in legendFormatStrings">
+  <option value="">- Select Format String -</option>
+</select>
+<div class="input-group expression_select">
   <input type="text" class="form-control"
     ng-model="expr.expression"
     typeahead="m for m in metricNames | filter:expr.expression"

@@ -1,18 +1,6 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", "ModalService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter, ModalService) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
-  }
-
-  $window.onbeforeunload = function() {
-    var message = 'You have some unsaved changes!';
-    if (unsavedChangesCheck($scope.widgets, originalWidgets) ||
-          unsavedChangesCheck($scope.globalConfig, originalConfig)) {
-      return message;
-    }
-  }
-
-  function unsavedChangesCheck(currentObj, originalObj) {
-    return angular.toJson(angular.copy(currentObj)) !== angular.toJson(originalObj);
   }
 
   $scope.fullscreen = false;
@@ -83,9 +71,12 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
   });
 
   $scope.closeCloneControls = function() {
-    $scope.showCloneControls = false;
-    $scope.modalOpen = false;
+    ModalService.closeModal();
   };
+
+  $scope.$on('closeModal', function() {
+    $scope.showCloneControls = false;
+  });
 
   $scope.toggleGridSettings = function(tab) {
     $scope.showGridSettings
@@ -150,24 +141,35 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl',["$scope", "
     $scope.addGraph();
   }
 
+  $scope.queryDirectory = function() {
+    $scope.directoryForClone.id = $scope.directoryForClone.id || "unassigned";
+    $http.get('/directories/' + $scope.directoryForClone.id).then(function(payload) {
+      $scope.dashboardNames = payload.data.dashboards;
+      $scope.dashboardForClone = payload.data.dashboards.filter(function(d) {
+        return d.name == dashboardName;
+      })[0] || payload.data.dashboards[0];
+      $scope.queryDashboard();
+    });
+  };
+
   $scope.queryDashboard = function() {
     $http.get('/dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
-      $scope.dashboardWidgets = payload.data;
-      $scope.widgetToClone = payload.data[0];
+      $scope.dashboardWidgets = payload.data.widgets;
+      $scope.widgetToClone = payload.data.widgets[0];
     });
   };
 
   $scope.showCloneMenu = function() {
     $scope.showCloneControls = true;
-    $scope.modalOpen = !$scope.modalOpen;
+    ModalService.toggleModal();
   };
 
-  $http.get('/dashboards.json', {params: {filter: "cloneable"}}).then(function(payload) {
-    $scope.dashboardNames = payload.data;
-    $scope.dashboardForClone = payload.data.filter(function(d) {
+  $http.get('/directories.json').then(function(payload) {
+    $scope.directoryNames = payload.data.directories;
+    $scope.directoryForClone = payload.data.directories.filter(function(d) {
       return d.name == dashboardName;
-    })[0] || payload.data[0];
-    $scope.queryDashboard();
+    })[0] || payload.data.directories[0];
+    $scope.queryDirectory();
   });
 
   $scope.copyWidget = function() {

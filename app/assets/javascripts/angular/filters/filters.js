@@ -10,11 +10,19 @@ angular.module("Prometheus.filters").filter('toPercentile', function() {
   }
 });
 
-angular.module("Prometheus.filters").filter('hostname', function() {
+angular.module("Prometheus.filters").filter('hostnameFqdn', function() {
   return function(input) {
     var a = document.createElement("a");
     a.href = input;
     return a.host;
+  }
+});
+
+angular.module("Prometheus.filters").filter('hostname', function() {
+  return function(input) {
+    var a = document.createElement("a");
+    a.href = input;
+    return a.host.split(".", 1)[0];
   }
 });
 

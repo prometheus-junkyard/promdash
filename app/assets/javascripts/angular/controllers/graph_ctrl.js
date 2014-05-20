@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "InputHighlighter", "ServersByIdObject", "WidgetLinkHelper", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, InputHighlighter, ServersByIdObject, WidgetLinkHelper) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService) {
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
       return;
@@ -19,6 +19,9 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   // TODO: Set these on graph creation so we don't have to keep doing these
   // checks
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
+  $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
+    {id: 1, name: ""}
+  ];
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "cardinal";
   $scope.graph.axes = $scope.graph.axes || [];
   $scope.graph.axes.forEach(function(axis) {
@@ -31,6 +34,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
   $scope.removeGraph = function() {
     $scope.$emit('removeWidget', $scope.index);
+    $scope.closeGraphDelete();
   };
 
   $scope.toggleTab = function(tab) {
@@ -40,8 +44,10 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.addExpression = function() {
     var serverId = 0;
     var axisId = 0;
+    var id = 0;
     if ($scope.graph.expressions.length != 0) {
       var prev = $scope.graph.expressions[$scope.graph.expressions.length-1];
+      id = prev['id'] + 1;
       serverId = prev['server_id'];
       axisId = prev['axis_id'];
     } else if ($scope.servers.length != 0) {
@@ -50,12 +56,12 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     }
 
     var exp = {
+      'id': id,
       'server_id': serverId,
       'axis_id': axisId,
       'expression': ''
     };
     $scope.graph.expressions.push(exp);
-    var url = $scope.serversById[serverId]['url'];
   };
 
   $scope.$on('removeExpression', function(ev, index) {
@@ -98,8 +104,31 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   });
 
+  $scope.$on('closeModal', function() {
+    $scope.showGraphDelete = false;
+  });
+
+  $scope.closeGraphDelete = function() {
+    ModalService.closeModal();
+  };
+
+  $scope.graphDeleteModal = function() {
+    ModalService.toggleModal();
+    $scope.showGraphDelete = true;
+  };
+
   $scope.title = function() {
     return VariableInterpolator($scope.graph.title, $scope.vars);
+  };
+
+  $scope.addLegendString = function() {
+    var lsts = $scope.graph.legendFormatStrings;
+    var id = (new Date).getTime().toString(16);
+    lsts.push({id: id, name: ""});
+  };
+
+  $scope.removeLegendString = function(index) {
+    $scope.graph.legendFormatStrings.splice(index, 1);
   };
 
   $scope.refreshGraph = GraphRefresher($scope);

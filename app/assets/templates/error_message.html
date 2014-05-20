@@ -1,10 +1,5 @@
 <div class="errors" ng-show="errorMessages.length">
   <span ng-click="showErrors = !showErrors" class="glyphicon glyphicon-exclamation-sign tooltips pointer">
-    <ng-pluralize
-      count="errorMessages.length"
-      when="{'1': '1 error','other': '{} errors'}">
-      {{errorMessages.length}} errors
-    </ng-pluralize>
   </span>
   <div class="error" ng-show="showErrors">
     <div ng-repeat="errorMessage in errorMessages track by $index">
