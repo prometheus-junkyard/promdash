@@ -1,7 +1,7 @@
 <table class="table table-condensed">
   <% dashboards.each do |dashboard| %>
     <tr class="mousetrap_list">
-      <td class="dashboard_name"><%= link_to dashboard.name, dashboard_slug_path(dashboard.slug) %></td>
+      <td class="dashboard_name"><%= link_to dashboard.name, dashboard_slug_path(dashboard.slug), class: "mousetrap_open_link" %></td>
       <td>
         <%= link_to 'Rename', edit_dashboard_path(dashboard) %>
         &nbsp;&nbsp;

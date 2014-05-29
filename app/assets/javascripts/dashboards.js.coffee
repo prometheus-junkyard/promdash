@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 M = Mousetrap
+M.locations = ["/", "/directories", "/servers"]
 
 # Goto.
 M.bind 'g d', ->
@@ -24,7 +25,7 @@ M.bind 'c', ->
 
 # List movement.
 M.bind ['j', 'k'], (e, key)->
-  return unless ["/", "/dashboards", "/servers"].indexOf(location.pathname) > -1
+  return unless M.locations.indexOf(location.pathname) > -1
   $list_items = $(".mousetrap_list")
   items_array = Array.prototype.slice.call $list_items, 0
   active_index = items_array.indexOf($list_items.siblings('.mousetrap_active')[0])
@@ -51,9 +52,13 @@ M.bind ['j', 'k'], (e, key)->
 
 # Interacting with list items.
 M.bind ['o', 'return'], ->
-  return unless ["/", "/dashboards", "/servers"].indexOf(location.pathname) > -1
+  return unless M.locations.indexOf(location.pathname) > -1
   document.querySelector('.mousetrap_active .mousetrap_open_link').click()
 
 M.bind 'd', ->
-  return unless ["/", "/dashboards", "/servers"].indexOf(location.pathname) > -1
+  return unless M.locations.indexOf(location.pathname) > -1
   document.querySelector('.mousetrap_active .mousetrap_delete_link').click()
+
+# Interacting with dashboard page.
+M.bind 'F', ->
+  document.querySelector('[ng-click="enableFullscreen()"]')?.click()
