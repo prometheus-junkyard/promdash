@@ -16,12 +16,10 @@ M.bind 'g b', ->
   history.back()
 
 # Creation.
-M.bind 'c', ->
-  switch location.pathname
-    when "/"
-      location.href = "/dashboards/new"
-    when "/servers"
-      location.href= "/servers/new"
+M.bind 'c d', ->
+  location.href = "/dashboards/new"
+M.bind 'c s', ->
+  location.href= "/servers/new"
 
 # List movement.
 M.bind ['j', 'k'], (e, key)->
@@ -62,3 +60,9 @@ M.bind 'd', ->
 # Interacting with dashboard page.
 M.bind 'F', ->
   document.querySelector('[ng-click="enableFullscreen()"]')?.click()
+M.bind 'c w', ->
+  document.querySelector('[ng-click="addGraph()"]')?.click()
+M.bind 'c f', ->
+  document.querySelector('[ng-click="addFrame()"]')?.click()
+M.bind 'c c', ->
+  document.querySelector('[ng-click="showCloneMenu()"]')?.click()
