@@ -1,15 +1,11 @@
 require 'spec_helper'
 
 feature "Graph legend", js: true do
-  before(:each) {
-    @server = Server.create! name: "prometheus", url: "http://localhost:#{Capybara.server_port}/"
-  }
+  before(:each) { FactoryGirl.create :server }
 
   describe "general behavior" do
     before(:each) do
-      @dashboard =
-        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/2_expression_dashboard_json')
-      visit dashboard_slug_path @dashboard.slug
+      visit dashboard_slug_path FactoryGirl.create(:dashboard).slug
     end
 
     it "shows the default legend string when one is removed" do
@@ -23,9 +19,7 @@ feature "Graph legend", js: true do
 
   describe "two legend strings" do
     before(:each) do
-      @dashboard =
-        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/2_expression_dashboard_json')
-      visit dashboard_slug_path @dashboard.slug
+      visit dashboard_slug_path FactoryGirl.create(:dashboard, :two_expressions).slug
     end
 
     it "has both legend strings" do
@@ -57,9 +51,7 @@ feature "Graph legend", js: true do
 
   describe "one legend string" do
     before(:each) do
-      @dashboard =
-        Dashboard.create! name: "Sample Dash", slug: "sample-dash", dashboard_json: File.read('./spec/support/sample_json/1_expression_dashboard_json')
-      visit dashboard_slug_path @dashboard.slug
+      visit dashboard_slug_path FactoryGirl.create(:dashboard).slug
     end
 
     it "should show the legend" do

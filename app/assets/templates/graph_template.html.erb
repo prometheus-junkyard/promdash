@@ -95,6 +95,22 @@
               </div>
             </div>
 
+            <div class="axis_attr">
+              <span class="attr_name">Y Range:</span>
+              <div>
+                <input
+                  class="y_min_select form-control"
+                  ng-keyup="checkValidNumber($event)"
+                  ng-model="axis.yMin"
+                  placeholder="Min">
+                <input
+                  class="y_min_select form-control"
+                  ng-keyup="disableYMaxSibling($event); checkValidNumber($event)"
+                  ng-model="axis.yMax"
+                  placeholder="Max">
+              </div>
+            </div>
+
             <!-- <div> -->
             <!--   <label>Orientation:</label> -->
             <!--   <div class="radio"> -->
