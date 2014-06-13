@@ -54,3 +54,13 @@ Run the production server from the bundled environment:
 
 - Perform a hard refresh in the browser to ensure all loaded assets are up-to-date.
 - Test basic functionality as appropriate (Prometheus and Graphite graph settings, etc.).
+
+### Security Considerations
+
+Since we frequently need to display various PromDash views in inline frames, we
+disabled Rails' default header `X-Frame-Options: SAMEORIGIN` for all views:
+
+https://github.com/prometheus/promdash/commit/5b1da215296b5316568ad7c8449652f0d7f74ebe
+
+If you are worried about [clickjacking attacks](http://en.wikipedia.org/wiki/Clickjacking),
+it is safe to revert this commit as long as you don't need to display dashboards in iframes.
