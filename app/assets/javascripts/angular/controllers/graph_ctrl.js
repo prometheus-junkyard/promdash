@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", "YAxisUtilities", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService, YAxisUtilities) {
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
       return;
@@ -130,6 +130,9 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.removeLegendString = function(index) {
     $scope.graph.legendFormatStrings.splice(index, 1);
   };
+
+  $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
+  $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
   $scope.refreshGraph = GraphRefresher($scope);
 

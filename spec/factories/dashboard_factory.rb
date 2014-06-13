@@ -11,5 +11,9 @@ FactoryGirl.define do
     end
 
     dashboard_json File.read('./spec/support/sample_json/1_expression_dashboard_json')
+
+    trait :two_expressions do
+      dashboard_json File.read('./spec/support/sample_json/2_expression_dashboard_json')
+    end
   end
 end

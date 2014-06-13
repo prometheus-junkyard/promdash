@@ -81,6 +81,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         };
 
         var yScales = {};
+        var scaleId;
+        var graphMax;
         series.forEach(function(s) {
           var axes = scope.graphSettings.axes;
           var matchingAxis = axes.filter(function(a) {
@@ -89,6 +91,22 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
+
+          var enteredYMin = parseFloat(matchingAxis.yMin, 10);
+          var enteredYMax = parseFloat(matchingAxis.yMax, 10);
+          if (!isNaN(enteredYMax)) {
+            bound.max = enteredYMax;
+            graphMax = enteredYMax;
+            scaleId = s.axis_id;
+          }
+          if (!isNaN(enteredYMin)) {
+            // min is used for the linear scale; all numbers are acceptable.
+            min = matchingAxis.yMin;
+
+            // bound.min is used for the logarithmic scale; 0 and numbers of
+            // opposite sign are not acceptable.
+            bound.min = (enteredYMin * bound.min) > 0 ? enteredYMin : bound.min;
+          }
 
           // If the min and max are equal for a logarithmic scale, the series
           // data value ends up being placed at 0 instead of 1.
@@ -131,6 +149,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           element: graphEl,
           renderer: 'multi',
           min: yMinForGraph,
+          max: scaleId ? yScales[scaleId](graphMax) : 1,
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
