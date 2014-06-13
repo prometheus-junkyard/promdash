@@ -24,8 +24,13 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.
     var urlVars = UrlVariablesDecoder();
+    var templateVarRe = /^var\.(.*)$/;
     for (var o in urlVars) {
-      $scope.globalConfig.vars[o] = urlVars[o];
+      var matches = o.match(templateVarRe)
+      if (matches) {
+        var templateVar = matches[1]
+        $scope.globalConfig.vars[templateVar] = urlVars[o];
+      }
     }
 
     $scope.vars = [];
