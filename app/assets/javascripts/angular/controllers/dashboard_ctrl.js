@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "SharedGraphBehavior", "InputHighlighter", "ModalService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, SharedGraphBehavior, InputHighlighter, ModalService) {
+angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "UrlVariablesDecoder", "SharedGraphBehavior", "InputHighlighter", "ModalService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, UrlVariablesDecoder, SharedGraphBehavior, InputHighlighter, ModalService) {
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -47,7 +47,6 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
       $scope.saving = false;
     });
   }
-
 
   $scope.enableFullscreen = function() {
     $scope.fullscreen = true;
@@ -175,4 +174,8 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
   $scope.copyWidget = function() {
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
+
+  if (UrlVariablesDecoder().fullscreen) {
+    $scope.enableFullscreen();
+  }
 }]);
