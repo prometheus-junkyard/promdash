@@ -1,8 +1,6 @@
 require 'slug_maker'
 
 class SingleWidgetController < ApplicationController
-  after_action :allow_iframe, only: :show
-
   def show
     shortened_url = ShortenedUrl.find(params[:slug])
     shortened_url.update_last_accessed

@@ -25,7 +25,7 @@ group :test, :development do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'launchy'
-  gem 'capybara'
+  gem 'capybara', "~> 2.3.0"
 end
 
 # Use SCSS for stylesheets

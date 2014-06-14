@@ -552,6 +552,12 @@ hr {
   margin-top: 3px;
 }
 
+.y_min_select {
+  display: inline-block;
+  margin-top: 5px;
+  width: 45%;
+}
+
 .legend_string_container {
   margin: 10px 0;
 }
@@ -581,6 +587,11 @@ hr {
 
 .mousetrap_active {
   background-color: #EEEEEE;
+}
+
+.invalid_input {
+  border-color: #FF4136 !important;
+  border-width: 2px;
 }
 
 @-webkit-keyframes flashing
