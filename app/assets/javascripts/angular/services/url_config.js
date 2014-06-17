@@ -10,7 +10,7 @@ angular.module("Prometheus.services").factory('UrlConfigDecoder', function($loca
   };
 });
 
-angular.module("Prometheus.services").factory('UrlHashEncoder', ["$location", "UrlConfigDecoder", function($location, UrlConfigDecoder) {
+angular.module("Prometheus.services").factory('UrlHashEncoder', ["UrlConfigDecoder", function(UrlConfigDecoder) {
   return function(config) {
     var urlConfig = UrlConfigDecoder();
     for (var o in config) {
