@@ -1,4 +1,29 @@
-angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", "$window", "$http", "$timeout", "$document", "WidgetHeightCalculator", "UrlConfigEncoder", "UrlVariablesDecoder", "SharedGraphBehavior", "InputHighlighter", "ModalService", function($scope, $window, $http, $timeout, $document, WidgetHeightCalculator, UrlConfigEncoder, UrlVariablesDecoder, SharedGraphBehavior, InputHighlighter, ModalService) {
+angular.module("Prometheus.controllers")
+.controller('DashboardCtrl', ["$scope",
+            "$window",
+            "$http",
+            "$timeout",
+            "$document",
+            "$location",
+            "WidgetHeightCalculator",
+            "UrlConfigEncoder",
+            "UrlVariablesDecoder",
+            "SharedGraphBehavior",
+            "InputHighlighter",
+            "ModalService",
+            function($scope,
+                     $window,
+                     $http,
+                     $timeout,
+                     $document,
+                     $location,
+                     WidgetHeightCalculator,
+                     UrlConfigEncoder,
+                     UrlVariablesDecoder,
+                     SharedGraphBehavior,
+                     InputHighlighter,
+                     ModalService) {
+
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
   }
@@ -130,9 +155,23 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
     $scope.globalConfig.vars = vars;
   }, true);
 
+  $scope.syncEntireUrlEncode = function() {
+    if (!$scope.globalConfig.keepUrlUpdated) {
+      $scope.globalConfig.encodeEntireUrl = false;
+    }
+  };
+
   $scope.$watch('globalConfig', function() {
     if ($scope.globalConfig.keepUrlUpdated) {
-      UrlConfigEncoder({globalConfig: $scope.globalConfig});
+      if ($scope.globalConfig.range) {
+        $location.search("range", $scope.globalConfig.range)
+      }
+      if ($scope.globalConfig.endTime) {
+        $location.search("until", (new Date($scope.globalConfig.endTime)).toISOString())
+      }
+      if ($scope.globalConfig.encodeEntireUrl) {
+        UrlConfigEncoder({globalConfig: $scope.globalConfig});
+      }
     }
   }, true);
 
@@ -175,7 +214,23 @@ angular.module("Prometheus.controllers").controller('DashboardCtrl', ["$scope", 
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
 
-  if (UrlVariablesDecoder().fullscreen) {
+  var searchVars = UrlVariablesDecoder()
+  if (searchVars.fullscreen) {
     $scope.enableFullscreen();
+  }
+
+  if (searchVars.range) {
+    $scope.globalConfig.range = searchVars.range;
+    $scope.widgets.forEach(function(w) {
+      w.range = searchVars.range;
+    });
+  }
+
+  if (searchVars.until) {
+    var date = Date.parse(searchVars.until);
+    $scope.globalConfig.endTime = date;
+    $scope.widgets.forEach(function(w) {
+      w.endTime = date;
+    });
   }
 }]);
