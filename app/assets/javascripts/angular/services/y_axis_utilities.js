@@ -18,7 +18,11 @@ angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
     },
     checkValidNumber: function(event) {
       var el = event.currentTarget;
-      if (isNaN(el.value)) {
+      var inputSplit = el.value.split("=");
+      var maybeCond = inputSplit[0];
+      var maybeValue = parseFloat(maybeCond, 10);
+      var val = parseFloat(inputSplit[1], 10);
+      if (maybeCond && isNaN(maybeValue) && ([">", "<"].indexOf(maybeCond) === -1 || isNaN(val))) {
         el.classList.add("invalid_input");
       } else {
         el.classList.remove("invalid_input");

@@ -92,11 +92,40 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
 
+          var maxSplit = (matchingAxis.yMax || "").split("=");
+          var maybeCond = maxSplit[0];
+
           var enteredYMin = parseFloat(matchingAxis.yMin, 10);
-          var enteredYMax = parseFloat(matchingAxis.yMax, 10);
-          if (!isNaN(enteredYMax)) {
-            bound.max = enteredYMax;
-            graphMax = enteredYMax;
+          var maybeYMax = parseFloat(maybeCond, 10);
+          if (isNaN(maybeYMax) && maxSplit[1]) {
+            maybeYMax = parseFloat(maxSplit[1], 10);
+            switch (maybeCond) {
+              case ">":
+                if (axesBounds[matchingAxis.id].max > maybeYMax) {
+                  graphMax = axesBounds[matchingAxis.id].max;
+                  bound.max = axesBounds[matchingAxis.id].max;
+                } else {
+                  bound.max = maybeYMax;
+                  graphMax = maybeYMax;
+                }
+                scaleId = s.axis_id;
+                break;
+              case "<":
+                if (axesBounds[matchingAxis.id].max < maybeYMax) {
+                  graphMax = axesBounds[matchingAxis.id].max;
+                  bound.max = axesBounds[matchingAxis.id].max;
+                } else {
+                  bound.max = maybeYMax;
+                  graphMax = maybeYMax;
+                }
+                scaleId = s.axis_id;
+                break;
+              default:
+                // Do nothing.
+            }
+          } else if (!isNaN(maybeYMax)) {
+            bound.max = maybeYMax;
+            graphMax = maybeYMax;
             scaleId = s.axis_id;
           }
           if (!isNaN(enteredYMin)) {
