@@ -74,7 +74,12 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('redrawGraphs');
     };
     $scope.nextCycleRedraw = function() {
-      $timeout(function() { $scope.redrawGraphs(); }, 0);
+      $timeout(function() {
+        $scope.redrawGraphs();
+        var $widgetColumns = $(".widget_column");
+        var min = Math.min.apply(Math, $widgetColumns.map(function() { return $(this).height(); }));
+        $widgetColumns.height(min);
+      }, 0);
     }
 
     $scope.addVariable = function(name, value) {
