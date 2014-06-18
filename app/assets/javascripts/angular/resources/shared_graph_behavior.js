@@ -73,6 +73,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.redrawGraphs = function() {
       $scope.$broadcast('redrawGraphs');
     };
+
     $scope.nextCycleRedraw = function() {
       $timeout(function() {
         $scope.redrawGraphs();

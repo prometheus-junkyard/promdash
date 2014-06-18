@@ -79,6 +79,7 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.exitFullscreen = function() {
+    $(".widget_column").height('auto');
     $scope.$apply(function() {
       $scope.fullscreen = false;
     });
