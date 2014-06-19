@@ -178,10 +178,15 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           element: graphEl,
           renderer: 'multi',
           min: yMinForGraph,
-          max: scaleId ? yScales[scaleId](graphMax) : 1,
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
+
+        if (scaleId) {
+          rsGraph.max = yScales[scaleId](graphMax);
+        } else {
+          rsGraph.max = rsGraph.renderer.domain().y[1];
+        }
 
         var $legend = $el.find(".legend");
         var legend = createLegend(rsGraph, $legend[0]);
