@@ -80,6 +80,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         var $widgetColumns = $(".widget_column");
         var min = Math.min.apply(Math, $widgetColumns.map(function() { return $(this).height(); }));
         $widgetColumns.height(min);
+        $widgetColumns.height('auto');
       }, 0);
     }
 
