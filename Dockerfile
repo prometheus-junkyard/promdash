@@ -8,7 +8,7 @@ RUN        gem install bundler
 
 WORKDIR    /promdash
 ENTRYPOINT [ "./run" ]
-CMD        [ "thin", "start" ]
+CMD        [ "./bin/thin", "start" ]
 ADD        . /promdash
 RUN        cp config/database.yml.example config/database.yml && \
            bundle install --deployment --binstubs --without="development test migration" && \
