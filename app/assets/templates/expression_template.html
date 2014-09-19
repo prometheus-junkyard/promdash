@@ -16,9 +16,10 @@
 </select>
 <div class="input-group expression_select">
   <input type="text" class="form-control"
-    ng-model="expr.expression"
-    typeahead="m for m in metricNames | filter:expr.expression"
-    placeholder="Enter expression" required>
+    ng-model="expression"
+    typeahead="m for m in metricNames | filter:$viewValue"
+    typeahead-on-select="setExpression($item)"
+    placeholder="Enter expression" />
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
     <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="icon-minus"></i></button>
