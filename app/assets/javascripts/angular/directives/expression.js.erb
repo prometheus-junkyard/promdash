@@ -12,6 +12,14 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
       var server = scope.serversById[scope.expr.server_id];
+
+      // Drastically improves performance to bind to new variable, and then
+      // when a new expression is chosen update scope.expr.expression only once.
+      scope.expression = scope.expr.expression;
+      scope.setExpression = function(newExpr) {
+        scope.expr.expression = newExpr;
+      };
+
       scope.MetricNamesQuerier = MetricNamesQuerier;
       MetricNamesQuerier(scope.expr.server_id, server.url, scope);
 
@@ -23,10 +31,6 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
           el.focus();
           el.setSelectionRange(lastCursorPosition, lastCursorPosition + metricName.length)
         }, 0);
-      };
-
-      scope.setExpression = function(expr, metricName) {
-        expr.expression = metricName;
       };
 
       function insertSelection(metricName, el) {
