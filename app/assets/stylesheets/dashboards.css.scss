@@ -653,3 +653,8 @@ hr {
 .panel-default > .panel-heading {
   background-color: $light-secondary-background;
 }
+// Over-ride bootstrap.
+.alignLeft {
+  position: absolute;
+  left: 0;
+}

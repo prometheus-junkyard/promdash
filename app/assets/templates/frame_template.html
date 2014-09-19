@@ -24,7 +24,10 @@
       </div>
 
       <!-- 2) Time Options -->
-      <widget-time-options ng-show="showTab == 'timerange'" range="frame.range" end-time="frame.endTime"></widget-time-options>
+      <widget-time-options
+        ng-show="showTab == 'timerange'"
+        range="frame.range"
+        end-time="frame.endTime"></widget-time-options>
 
       <!-- 3) Frame Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_settings'">

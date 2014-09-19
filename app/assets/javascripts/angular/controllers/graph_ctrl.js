@@ -1,4 +1,24 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", "YAxisUtilities", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService, YAxisUtilities) {
+angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
+                                                    "$http", "$window",
+                                                    "$timeout",
+                                                    "VariableInterpolator",
+                                                    "UrlHashEncoder",
+                                                    "GraphRefresher",
+                                                    "ServersByIdObject",
+                                                    "WidgetLinkHelper",
+                                                    "ModalService",
+                                                    "CheckWidgetMenuAlignment",
+                                                    "YAxisUtilities",
+                                                    function($scope, $http,
+                                                             $window, $timeout,
+                                                             VariableInterpolator,
+                                                             UrlHashEncoder,
+                                                             GraphRefresher,
+                                                             ServersByIdObject,
+                                                             WidgetLinkHelper,
+                                                             ModalService,
+                                                             CheckWidgetMenuAlignment,
+                                                             YAxisUtilities) {
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
       return;
@@ -39,6 +59,9 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
 
   $scope.toggleTab = function(tab) {
     $scope.showTab = $scope.showTab == tab ? null : tab;
+    if ($scope.showTab) {
+      $timeout(CheckWidgetMenuAlignment(tab), 0);
+    }
   };
 
   $scope.addExpression = function() {

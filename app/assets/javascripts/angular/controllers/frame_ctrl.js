@@ -1,4 +1,21 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", "GraphiteTimeConverter", "ModalService", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper, GraphiteTimeConverter, ModalService) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
+                                                    "$sce", "$timeout",
+                                                    "VariableInterpolator",
+                                                    "UrlHashEncoder",
+                                                    "InputHighlighter",
+                                                    "WidgetLinkHelper",
+                                                    "GraphiteTimeConverter",
+                                                    "ModalService",
+                                                    "CheckWidgetMenuAlignment",
+                                                    function($scope, $sce,
+                                                             $timeout,
+                                                             VariableInterpolator,
+                                                             UrlHashEncoder,
+                                                             InputHighlighter,
+                                                             WidgetLinkHelper,
+                                                             GraphiteTimeConverter,
+                                                             ModalService,
+                                                             CheckWidgetMenuAlignment) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
 
@@ -39,6 +56,9 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
 
   $scope.toggleTab = function(tab) {
     $scope.showTab = $scope.showTab == tab ? null : tab;
+    if ($scope.showTab) {
+      $timeout(CheckWidgetMenuAlignment(tab), 0);
+    }
   };
 
   function buildFrameURL(url) {
