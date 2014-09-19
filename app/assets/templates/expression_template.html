@@ -19,6 +19,7 @@
     ng-model="expression"
     typeahead="m for m in metricNames | filter:$viewValue"
     typeahead-on-select="setExpression($item)"
+    typeahead-wait-ms="100"
     placeholder="Enter expression" />
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
