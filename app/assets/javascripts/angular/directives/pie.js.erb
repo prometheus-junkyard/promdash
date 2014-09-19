@@ -1,0 +1,14 @@
+angular.module("Prometheus.directives").directive('pie', function() {
+  return {
+    scope: {
+      graph: "=graphSettings",
+      servers: "=",
+      aspectRatio: "=",
+      frameHeight: "&",
+      index: "=",
+      vars: "="
+    },
+    restrict: "AE",
+    templateUrl: "<%= asset_path('pie_template.html') %>"
+  };
+});

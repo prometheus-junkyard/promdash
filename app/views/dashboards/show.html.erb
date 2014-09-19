@@ -154,6 +154,15 @@
               frame-height="frameHeight()"
               vars="globalConfig.vars">
           </span>
+          <span ng-switch-when="pie">
+            <pie
+              graph-settings="widget"
+              servers="servers"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
+              frame-height="frameHeight()"
+              vars="globalConfig.vars">
+          </span>
           <span ng-switch-when="frame">
             <inline-frame
               frame-settings="widget"
@@ -173,6 +182,9 @@
     <form class="form-inline">
       <div class="form-group">
         <button class="btn btn-primary add_widget_button" ng-click="addGraph()">Add Graph</button>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary add_widget_button" ng-click="addPie()">Add Pie Chart</button>
       </div>
       <div class="form-group">
         <button class="btn btn-primary add_widget_button" ng-click="addFrame()">Add Frame</button>
