@@ -34,6 +34,14 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         }
         // figure out how to scope this to $el...
         var svg = dimple.newSvg(".graph_chart", 590, 400);
+        svg.append("text")
+          .attr("x", 590 / 2)
+          .attr("y", 20)
+          .style("text-anchor", "middle")
+          .style("fill", "white")
+          .style("font-family", "sans-serif")
+          .style("font-weight", "bold")
+          .text(scope.data[0].Metric.__name__);
         pieGraph = new dimple.chart(svg, scope.data);
         pieGraph.setBounds(20, 20, 460, 360)
         pieGraph.addMeasureAxis("p", "Value");
