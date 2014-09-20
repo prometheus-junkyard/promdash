@@ -113,8 +113,8 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
     $scope.graph.legendFormatStrings.splice(index, 1);
   };
 
-  $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
-  $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
+  // $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
+  // $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
   // Query for the data.
   $scope.refreshGraph = function() {
