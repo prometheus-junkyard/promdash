@@ -32,10 +32,10 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
             e.Value = parseFloat(e.Value);
           });
         }
-        // figure out how to scope this to $el...
-        var svg = dimple.newSvg(".graph_chart", 590, 400);
+
+        var svg = dimple.newSvg($el.find(".graph_chart")[0], $el.width(), graphHeight);
         svg.append("text")
-          .attr("x", 590 / 2)
+          .attr("x", $el.width() / 2)
           .attr("y", 20)
           .style("text-anchor", "middle")
           .style("fill", "white")
@@ -43,9 +43,10 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           .style("font-weight", "bold")
           .text(scope.data[0].Metric.__name__);
         pieGraph = new dimple.chart(svg, scope.data);
-        pieGraph.setBounds(20, 20, 460, 360)
+        // pieGraph.setBounds(20, 20, 460, 360)
         pieGraph.addMeasureAxis("p", "Value");
-        pieGraph.addSeries("Instance", dimple.plot.pie);
+        var pies = pieGraph.addSeries("Instance", dimple.plot.pie);
+        pies.radius = (graphHeight / 2) - 10
         pieGraph.addLegend(500, 20, 90, 300, "left");
         pieGraph.draw();
       }
