@@ -9,6 +9,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
     },
     link: function(scope, element, attrs) {
       var $el = $(element[0]);
+      var tooltip = {};
       var pieGraph;
 
       function redrawGraph() {
@@ -30,10 +31,13 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           scope.data.forEach(function(e) {
             e.Instance = e.Metric.instance;
             e.Value = parseFloat(e.Value);
+            tooltip[e.Metric.instance] = e.Metric;
           });
         }
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], $el.width(), graphHeight);
+
+        // Temporary title.
         svg.append("text")
           .attr("x", $el.width() / 2)
           .attr("y", 20)
@@ -42,11 +46,22 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           .style("font-family", "sans-serif")
           .style("font-weight", "bold")
           .text(scope.data[0].Metric.__name__);
+
         pieGraph = new dimple.chart(svg, scope.data);
-        // pieGraph.setBounds(20, 20, 460, 360)
         pieGraph.addMeasureAxis("p", "Value");
+
         var pies = pieGraph.addSeries("Instance", dimple.plot.pie);
         pies.radius = (graphHeight / 2) - 10
+        pies.getTooltipText = function (e) {
+          var tt = [];
+          var instanceInfo = tooltip[e.aggField[0]];
+          for (var k in instanceInfo) {
+            tt.push(k + ": " + instanceInfo[k]);
+          }
+          tt.push("value: " + e.pValue);
+          return tt;
+        };
+
         pieGraph.addLegend(500, 20, 90, 300, "left");
         pieGraph.draw();
       }
