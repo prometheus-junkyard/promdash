@@ -28,27 +28,31 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         }
 
         if (scope.data.Value) {
+          tooltip = {};
           scope.data = Array.prototype.slice.call(scope.data.Value);
-          scope.data.forEach(function(e) {
-            e.Instance = e.Metric.instance;
-            e.Value = parseFloat(e.Value);
-            tooltip[e.Metric.instance] = e.Metric;
-          });
         }
+
+        scope.data.forEach(function(e) {
+          e.value = parseFloat(e.Value);
+          delete e.Metric["__name__"];
+          tooltip[e.Metric.instance] = e.Metric;
+
+          if (scope.graphSettings.legendFormatString) {
+            e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.Metric);
+          } else {
+            e.ts = properties(e.Metric).join(", ");
+          }
+        });
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], graphWidth, graphHeight);
 
         pieGraph = new dimple.chart(svg, scope.data);
-        pieGraph.addMeasureAxis("p", "Value");
+        pieGraph.addMeasureAxis("p", "value");
 
-        var pies = pieGraph.addSeries("Instance", dimple.plot.pie);
+        var pies = pieGraph.addSeries("ts", dimple.plot.pie);
         pies.radius = (graphHeight / 2) - 10
-        pies.getTooltipText = function (e) {
-          var tt = [];
-          var instanceInfo = tooltip[e.aggField[0]];
-          for (var k in instanceInfo) {
-            tt.push(k + ": " + instanceInfo[k]);
-          }
+        pies.getTooltipText = function(e) {
+          tt = properties(tooltip[e.aggField[0]]);
           tt.push("value: " + e.pValue);
           return tt;
         };
@@ -63,8 +67,16 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         pieGraph.draw();
       }
 
+      function properties(instanceInfo) {
+          var tt = [];
+          for (var k in instanceInfo) {
+            tt.push(k + ": " + instanceInfo[k]);
+          }
+          return tt;
+      }
+
       scope.$watch('graphSettings.legendSetting', redrawGraph);
-      scope.$watch('graphSettings.expressions', redrawGraph, true);
+      scope.$watch('graphSettings.legendFormatString', redrawGraph);
       scope.$watch('data', redrawGraph, true);
       scope.$on('redrawGraphs', function() {
         redrawGraph();
