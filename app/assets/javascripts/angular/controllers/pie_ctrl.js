@@ -113,7 +113,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
       'server_id': serverId,
       'expression': ''
     };
-  } else {
+  } else if ($scope.graph.expression.expression) {
     $scope.refreshGraph();
   }
 
