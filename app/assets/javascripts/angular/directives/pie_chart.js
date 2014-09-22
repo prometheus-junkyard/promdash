@@ -37,16 +37,6 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], $el.width(), graphHeight);
 
-        // Temporary title.
-        svg.append("text")
-          .attr("x", $el.width() / 2)
-          .attr("y", 20)
-          .style("text-anchor", "middle")
-          .style("fill", "white")
-          .style("font-family", "sans-serif")
-          .style("font-weight", "bold")
-          .text(scope.data[0].Metric.__name__);
-
         pieGraph = new dimple.chart(svg, scope.data);
         pieGraph.addMeasureAxis("p", "Value");
 
@@ -64,13 +54,6 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
 
         pieGraph.addLegend(500, 20, 90, 300, "left");
         pieGraph.draw();
-      }
-
-      function calculateGraphHeight($legend) {
-        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
-        var height = graphHeight - elementHeight($legend);
-        if (height < 1) height = 1;
-        return height;
       }
 
       scope.$watch('graphSettings.expressions', redrawGraph, true);

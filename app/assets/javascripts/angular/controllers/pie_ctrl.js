@@ -89,19 +89,6 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
     return VariableInterpolator($scope.graph.title, $scope.vars);
   };
 
-  $scope.addLegendString = function() {
-    var lsts = $scope.graph.legendFormatStrings;
-    var id = (new Date).getTime().toString(16);
-    lsts.push({id: id, name: ""});
-  };
-
-  $scope.removeLegendString = function(index) {
-    $scope.graph.legendFormatStrings.splice(index, 1);
-  };
-
-  // $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
-  // $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
-
   // Query for the data.
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
