@@ -46,20 +46,6 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.data = null;
 
-  if (!Object.keys($scope.graph.expression).length){
-    var serverId = 0;
-    var id = 0;
-    if ($scope.servers.length != 0) {
-      serverId = $scope.servers[0]['id'];
-    }
-
-    $scope.graph.expression = {
-      'id': id,
-      'server_id': serverId,
-      'expression': ''
-    };
-  }
-
   $scope.removeGraph = function() {
     $scope.$emit('removeWidget', $scope.index);
     $scope.closeGraphDelete();
@@ -131,7 +117,22 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
       // failure
     });
   };
-  $scope.refreshGraph();
+
+  if (!$scope.graph.expression){
+    var serverId = 0;
+    var id = 0;
+    if ($scope.servers.length != 0) {
+      serverId = $scope.servers[0]['id'];
+    }
+
+    $scope.graph.expression = {
+      'id': id,
+      'server_id': serverId,
+      'expression': ''
+    };
+  } else {
+    $scope.refreshGraph();
+  }
 
   if (location.pathname.match(/^\/w\//)) { // On a widget page.
     $scope.widgetPage = true;
