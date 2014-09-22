@@ -79,6 +79,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
     var server = $scope.serversById[exp['server_id'] || 1];
+    $scope.requestInFlight = true;
     $http.get(server.url + "api/query", {
       params: {
         expr: exp.expression
@@ -88,6 +89,8 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
       $scope.data = payload.data;
     }, function() {
       // failure
+    }).finally(function() {
+      $scope.requestInFlight = false;
     });
   };
 
