@@ -39,10 +39,6 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
   // TODO: Set these on graph creation so we don't have to keep doing these
   // checks
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
-  $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
-    {id: 1, name: ""}
-  ];
-  $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "cardinal";
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.data = null;
 
