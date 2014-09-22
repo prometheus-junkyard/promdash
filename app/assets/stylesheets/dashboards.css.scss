@@ -143,12 +143,14 @@ $light-secondary-background: #f0f0f0;
 }
 
 .rickshaw_legend {
-  color: #555555;
-  padding: 0;
-  border-radius: 0;
-  width: 100%;
-  border-color: #DDDDDD;
   background: none;
+  border-color: #DDDDDD;
+  border-radius: 0;
+  color: #555555;
+  font-size: 10px;
+  margin: 3px 0 0 5px;
+  padding: 0;
+  width: 100%;
   ul {
     margin: 0;
   }
@@ -244,10 +246,6 @@ error-message {
 
 .rickshaw_graph .detail .item {
   border-radius: 0;
-}
-
-.rickshaw_legend {
-  margin: 3px 0 0 5px;
 }
 
 .template_variables {
