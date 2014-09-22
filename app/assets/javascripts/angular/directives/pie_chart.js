@@ -15,6 +15,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
+        var graphWidth = $el.width();
         $el.css('height', graphHeight);
 
         if (pieGraph) {
@@ -35,7 +36,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           });
         }
 
-        var svg = dimple.newSvg($el.find(".graph_chart")[0], $el.width(), graphHeight);
+        var svg = dimple.newSvg($el.find(".graph_chart")[0], graphWidth, graphHeight);
 
         pieGraph = new dimple.chart(svg, scope.data);
         pieGraph.addMeasureAxis("p", "Value");
@@ -52,10 +53,17 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           return tt;
         };
 
-        pieGraph.addLegend(500, 20, 90, 300, "left");
+        var showLegend = !(
+          scope.graphSettings.legendSetting === "never" ||
+            (scope.graphSettings.legendSetting === "sometimes" && scope.data.length > 5)
+        );
+        if (showLegend) {
+          pieGraph.addLegend(10, 15, graphWidth - 20, graphHeight, "left");
+        }
         pieGraph.draw();
       }
 
+      scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.expressions', redrawGraph, true);
       scope.$watch('data', redrawGraph, true);
       scope.$on('redrawGraphs', function() {
