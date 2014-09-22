@@ -54,16 +54,6 @@ angular.module("Prometheus.controllers").controller('PieCtrl', ["$scope",
     }
   };
 
-  $scope.$on('setRange', function(ev, range) {
-    $scope.graph.range = range;
-    $scope.refreshGraph();
-  });
-
-  $scope.$on('setEndTime', function(ev, endTime) {
-    $scope.graph.endTime = endTime;
-    $scope.refreshGraph();
-  });
-
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();
   });
