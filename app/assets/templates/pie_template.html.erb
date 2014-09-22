@@ -39,46 +39,6 @@
         <div class="panel-body">
           <label>Graph Title:</label>
           <input class="form-control" ng-model="graph.title">
-          <br/>
-
-          <hr>
-
-          <div class="col-xs-6" ng-class="{axis_container:$first}" ng-repeat="axis in graph.axes">
-            <div>
-              <label>Y-Axis {{$index + 1}}</label>
-              <button
-                ng-hide="$index === 0"
-                class="btn btn-default btn-xs float_r axis_button"
-                ng-click="removeAxis($index)">
-                <i class="icon-cross"></i>
-              </button>
-            </div>
-            <div class="axis_attr">
-              <span class="attr_name">Type:</span>
-              <div class="radio">
-                <label class="graph_settings_image lines"><input type="radio" ng-model="axis.renderer" value="line"> lines</label>
-              </div>
-              <div class="radio">
-                <label class="graph_settings_image stacked"><input type="radio" ng-model="axis.renderer" value="stack"> stacked</label>
-              </div>
-              <div class="radio">
-                <label class="graph_settings_image scatterplot"><input type="radio" ng-model="axis.renderer" value="scatterplot"> scatter plot</label>
-              </div>
-            </div>
-
-            <!-- <div> -->
-            <!--   <label>Orientation:</label> -->
-            <!--   <div class="radio"> -->
-            <!--     <label><input type="radio" ng&#45;model="axis.orientation" value="left">left</label> -->
-            <!--   </div> -->
-            <!--   <div class="radio"> -->
-            <!--     <label><input type="radio" ng&#45;model="axis.orientation" value="right">right</label> -->
-            <!--   </div> -->
-            <!-- </div> -->
-
-            <!-- <label>Title<input type="text" class="form&#45;control"></label> -->
-
-          </div>
         </div>
       </div>
 
