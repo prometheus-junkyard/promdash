@@ -332,10 +332,23 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       }
 
 
+      // Only $watch for changes on the expression.legend_id and
+      // legendFormatString.name. This replaces a deep watch on
+      // graphSettings.expressions that caused poor performance.
+      scope.$watch(function(scope) {
+        return scope.graphSettings.expressions.map(function(expr) {
+          return expr.legend_id;
+        });
+      }, redrawGraph, true);
+      scope.$watch(function(scope) {
+        return scope.graphSettings.legendFormatStrings.map(function(legendObj) {
+          return legendObj.name;
+        });
+      }, redrawGraph, true);
+
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
-      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
       scope.$on('redrawGraphs', function() {
