@@ -36,6 +36,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           e.value = parseFloat(e.Value);
           delete e.Metric["__name__"];
           tooltip[e.Metric.instance] = e.Metric;
+          e.instance = e.Metric.instance;
 
           if (scope.graphSettings.legendFormatString) {
             e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.Metric);
@@ -49,10 +50,10 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         pieGraph = new dimple.chart(svg, scope.data);
         pieGraph.addMeasureAxis("p", "value");
 
-        var pies = pieGraph.addSeries("ts", dimple.plot.pie);
+        var pies = pieGraph.addSeries(["instance", "ts"], dimple.plot.pie);
         pies.radius = (graphHeight / 2) - 10
         pies.getTooltipText = function(e) {
-          tt = properties(tooltip[e.aggField[0]]);
+          var tt = properties(tooltip[e.aggField[0]]);
           tt.push("value: " + e.pValue);
           return tt;
         };
