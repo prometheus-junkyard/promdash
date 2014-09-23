@@ -43,7 +43,11 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           return;
         }
 
-        var series = RickshawDataTransformer(scope.graphData);
+        var axisIdByExprId = {};
+        scope.graphSettings.expressions.forEach(function(expr) {
+          axisIdByExprId[expr.id] = expr.axis_id;
+        });
+        var series = RickshawDataTransformer(scope.graphData, axisIdByExprId);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -331,12 +335,16 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
       }
 
+      scope.$watch(function(scope) {
+        return scope.graphSettings.expressions.map(function(expr) {
+          return "" + expr.legend_id + expr.axis_id;
+        });
+      }, redrawGraph, true);
+      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
 
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
-      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
-      scope.$watch('graphSettings.expressions', redrawGraph, true);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
       scope.$on('redrawGraphs', function() {

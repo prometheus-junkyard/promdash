@@ -16,7 +16,7 @@
 </select>
 <div class="input-group expression_select">
   <input type="text" class="form-control"
-    ng-model="expression"
+    ng-model="expr.expression"
     typeahead="m for m in metricNames | filter:$viewValue"
     typeahead-on-select="setExpression($item)"
     typeahead-wait-ms="100"
