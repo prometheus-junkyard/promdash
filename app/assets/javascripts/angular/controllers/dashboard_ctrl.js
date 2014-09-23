@@ -145,12 +145,17 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.addPie = function() {
-    var graph = {
+    var pie = {
       title: "Title",
-      expression: "",
+      expression: {
+        id: 0,
+        server_id: 1,
+        expression: "",
+        legend_id: 1
+      },
       type: "pie"
     };
-    $scope.widgets.push(graph);
+    $scope.widgets.push(pie);
   };
 
   $scope.$watch('vars', function() {
