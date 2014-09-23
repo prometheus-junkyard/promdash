@@ -27,9 +27,9 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
             break;
           case 'matrix':
             allData[idx] = {
-              'axis_id': axisId,
-              'exp_id': expressionId,
-              'data': data
+              axis_id: axisId,
+              exp_id: expressionId,
+              data: data
             };
             break;
           default:
