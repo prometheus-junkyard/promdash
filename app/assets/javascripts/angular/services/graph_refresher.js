@@ -8,7 +8,7 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
       $scope.data = allData;
     };
 
-    function loadGraphData(idx, expression, server, axisId, expressionId) {
+    function loadGraphData(idx, expression, server, expressionId) {
       $scope.requestsInFlight++;
       var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
       $http.get(server.url + 'api/query_range', {
@@ -27,7 +27,6 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
             break;
           case 'matrix':
             allData[idx] = {
-              'axis_id': axisId,
               'exp_id': expressionId,
               'data': data
             };
@@ -55,10 +54,9 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
           continue;
         }
 
-        var axisId = exp['axis_id'];
         var expression = exp.expression;
 
-        loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, axisId, exp.id);
+        loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, exp.id);
       }
     };
   };

@@ -43,7 +43,11 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           return;
         }
 
-        var series = RickshawDataTransformer(scope.graphData);
+        var axisIdByExprId = {};
+        scope.graphSettings.expressions.forEach(function(expr) {
+          axisIdByExprId[expr.id] = expr.axis_id;
+        });
+        var series = RickshawDataTransformer(scope.graphData, axisIdByExprId);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -331,20 +335,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
       }
 
-
-      // Only $watch for changes on the expression.legend_id and
-      // legendFormatString.name. This replaces a deep watch on
-      // graphSettings.expressions that caused poor performance.
       scope.$watch(function(scope) {
         return scope.graphSettings.expressions.map(function(expr) {
-          return expr.legend_id;
+          return "" + expr.legend_id + expr.axis_id;
         });
       }, redrawGraph, true);
-      scope.$watch(function(scope) {
-        return scope.graphSettings.legendFormatStrings.map(function(legendObj) {
-          return legendObj.name;
-        });
-      }, redrawGraph, true);
+      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
 
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
