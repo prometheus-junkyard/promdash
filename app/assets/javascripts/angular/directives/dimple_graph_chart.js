@@ -44,10 +44,25 @@ angular.module("Prometheus.directives").directive('dimpleGraphChart', ["$locatio
           m.data.Value.forEach(function(e) {
             delete e.Metric["__name__"];
             tooltip[e.Metric.instance] = e.Metric;
-            e.Values.forEach(function(d, i) {
+            // for (var i = 0; i < e.Values.length; i += 10) {
+            //   e1 = e.Values[i]
+            //   e2 = e.Values[i+1]
+            //   e3 = e.Values[i+2]
+            //   var datum = {};
+            //   datum.value = (parseFloat(e1.Value)+
+            //     parseFloat(e2.Value)+
+            //     parseFloat(e3.Value))/3;
+            //   datum.timestamp = (e1.Timestamp+e2.Timestamp+e3.Timestamp)/3
+            //   datum.timestamp = (new Date(datum.timestamp * 1000)).toString()
+            //   datum.instance = e.Metric.instance;
+            //
+            //   datum.ts = properties(e.Metric).join(", ");
+            //   data.push(datum);
+            // }
+            e.Values.forEach(function(d) {
               var datum = {};
               datum.value = parseFloat(d.Value);
-              datum.timestamp = d.Timestamp/1000000;
+              datum.timestamp = d.Timestamp;
               datum.instance = e.Metric.instance;
 
               // if (scope.graphSettings.legendFormatString) {
@@ -55,7 +70,7 @@ angular.module("Prometheus.directives").directive('dimpleGraphChart', ["$locatio
               // } else {
               datum.ts = properties(e.Metric).join(", ");
               // }
-              data[i] = datum;
+              data.push(datum);
             });
           });
         });
@@ -65,7 +80,8 @@ angular.module("Prometheus.directives").directive('dimpleGraphChart', ["$locatio
         graph = new dimple.chart(svg, data);
         graph.addCategoryAxis("x", "timestamp");
         graph.addMeasureAxis("y", "value");
-        graph.addSeries("ts", dimple.plot.line);
+        var s = graph.addSeries("ts", dimple.plot.line);
+        s.interpolation = "cardinal";
         graph.draw();
       }
 

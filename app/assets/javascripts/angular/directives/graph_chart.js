@@ -44,6 +44,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         }
 
         var series = RickshawDataTransformer(scope.graphData);
+        debugger
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
