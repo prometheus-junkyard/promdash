@@ -4,7 +4,7 @@ Dashboard builder for Prometheus.
 
 ## Testing
 
-[![Build Status](https://travis-ci.org/prometheus/promdash.svg?branch=master)](https://travis-ci.org/prometheus/promdash)
+[![Build Status](https://semaphoreapp.com/api/v1/projects/98f65b9c-3ac5-4b1d-a0f5-150d1eefca93/233512/badge.png)](https://semaphoreapp.com/stuartnelson3/promdash)
 
     # Ruby tests.
     bundle exec rake
