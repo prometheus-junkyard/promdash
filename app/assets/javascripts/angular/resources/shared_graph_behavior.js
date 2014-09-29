@@ -96,7 +96,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if ($scope.refreshTimer) {
         $timeout.cancel($scope.refreshTimer);
       }
-      if ($scope.globalConfig.refresh) {
+      if ($scope.globalConfig.refresh && !urlVars.until) {
         setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
       }
     });
