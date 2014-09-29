@@ -9,6 +9,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
                                                     "ModalService",
                                                     "CheckWidgetMenuAlignment",
                                                     "YAxisUtilities",
+                                                    "Palettes",
                                                     function($scope, $http,
                                                              $window, $timeout,
                                                              VariableInterpolator,
@@ -18,7 +19,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
                                                              WidgetLinkHelper,
                                                              ModalService,
                                                              CheckWidgetMenuAlignment,
-                                                             YAxisUtilities) {
+                                                             YAxisUtilities,
+                                                             Palettes) {
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
       return;
@@ -51,6 +53,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.requestsInFlight = 0;
   $scope.data = null;
+  $scope.palettes = Palettes;
 
   $scope.removeGraph = function() {
     $scope.$emit('removeWidget', $scope.index);
@@ -112,6 +115,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
     }
     $scope.refreshGraph();
   };
+
+  $scope.$on('setPalette', function(ev, palette) {
+    $scope.graph.palette = palette;
+    $scope.refreshGraph();
+  });
 
   $scope.$on('setRange', function(ev, range) {
     $scope.graph.range = range;

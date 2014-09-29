@@ -78,6 +78,12 @@
               ng-options="t.css as t.name for t in themes">
             </select>
           </label>
+          <label>Color Scheme:
+            <select class="form-control" type="text"
+              ng-model="globalConfig.palette"
+              ng-options="p for p in palettes">
+            </select>
+          </label>
           <div class="checkbox">
             <label>
               <input type="checkbox" ng-model="globalConfig.showVars"> Show template variables

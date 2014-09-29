@@ -141,7 +141,15 @@
       <!-- 4) Palette Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'palette'">
         <div class="panel-heading">Palette Settings</div>
-        <div class="panel-body">Palette settings are not yet implemented.</div>
+        <div class="panel-body">
+          <label>Color scheme</label>
+          <br />
+          <div class="radio" ng-repeat="p in palettes">
+            <label><input type="radio" ng-model="graph.palette" ng-value="p">
+              {{p}}
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- 5) Legend Settings -->

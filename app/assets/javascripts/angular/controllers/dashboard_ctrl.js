@@ -11,6 +11,7 @@ angular.module("Prometheus.controllers")
             "SharedGraphBehavior",
             "InputHighlighter",
             "ModalService",
+            "Palettes",
             function($scope,
                      $window,
                      $http,
@@ -22,7 +23,8 @@ angular.module("Prometheus.controllers")
                      UrlVariablesDecoder,
                      SharedGraphBehavior,
                      InputHighlighter,
-                     ModalService) {
+                     ModalService,
+                     Palettes) {
 
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
@@ -43,6 +45,8 @@ angular.module("Prometheus.controllers")
   $scope.dashboardNames = [];
 
   SharedGraphBehavior($scope);
+  $scope.palettes = Palettes;
+  $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
 
   $scope.frameHeight = function() {
     return {

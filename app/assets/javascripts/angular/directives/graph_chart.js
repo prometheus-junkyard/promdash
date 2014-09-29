@@ -84,6 +84,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           min: a2LimitFn(Math.min),
         };
 
+        var palette = new Rickshaw.Color.Palette({scheme: scope.graphSettings.palette});
         var yScales = {};
         var scaleId;
         var graphMax;
@@ -92,6 +93,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var matchingAxis = axes.filter(function(a) {
             return a.id === s.axis_id;
           })[0] || axes[0];
+
+          s.color = palette.color();
 
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
@@ -346,6 +349,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
 
       scope.$watch('graphSettings.stacked', redrawGraph);
+      scope.$watch('graphSettings.palette', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
