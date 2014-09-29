@@ -5,9 +5,12 @@
   servers = <%= @servers.to_json.html_safe %>;
 </script>
 
-<h1 class="col-lg-12"><%= page_title @dashboard.name %></h1>
-
 <div id="dashboard" ng-controller="DashboardCtrl">
+  <h1 class="col-lg-12"
+    ng-class="{fullscreen_title: fullscreenTitle && fullscreen}">
+    <%= page_title @dashboard.name %>
+  </h1>
+
   <div id="global_controls">
     <div class="global_grouping">
       <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
@@ -141,7 +144,7 @@
     </table>
   </div>
 
-  <div ng-class="{fullscreen: fullscreen}">
+  <div ng-class="{fullscreen: fullscreen, fullscreen_title_bump: fullscreenTitle && fullscreen}">
     <ul ui-sortable="sortableOptions" ng-model="widgets" class="sortable-widgets">
       <li ng-repeat="widget in widgets" ng-class="[columnClass(), 'widget_column']">
         <span ng-switch="widget.type">

@@ -23,6 +23,13 @@ $light-secondary-background: #f0f0f0;
   z-index: 1000;
 }
 
+.fullscreen_title {
+  position: absolute;
+  z-index: 1051;
+  top: 0;
+  left: 10px;
+}
+
 .fullscreen {
   position: absolute;
   top: 0;
@@ -31,6 +38,10 @@ $light-secondary-background: #f0f0f0;
   z-index: 1050; // Bootstrap's navbar is at 1030.
   background-color: #FFFFFF;
   padding: 3px;
+}
+
+.fullscreen_title_bump {
+  padding-top: 60px;
 }
 
 .modal_overlay {

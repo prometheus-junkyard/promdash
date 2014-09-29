@@ -219,6 +219,10 @@ angular.module("Prometheus.controllers")
     $scope.enableFullscreen();
   }
 
+  if (searchVars.fullscreen_title) {
+    $scope.fullscreenTitle = true;
+  }
+
   if (searchVars.range) {
     $scope.globalConfig.range = searchVars.range;
     $scope.widgets.forEach(function(w) {
