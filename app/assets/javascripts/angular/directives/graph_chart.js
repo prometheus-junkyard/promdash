@@ -200,6 +200,9 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           legend: legend
         });
 
+        // Disable drag-n-drop sorting of legend elements.
+        $(seriesToggle.legend.list).sortable('disable');
+
         // Set legend elements to maximum element width so they line up.
         var $legendElements = $legend.find(".line");
         var widths = $legendElements.map(function(i, el) {
