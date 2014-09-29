@@ -66,6 +66,9 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     parser.href = url;
     var queryStringComponents = parser.search.substring(1).split('&');
     if ($scope.frame.graphite) {
+      if (url.indexOf("until") === -1) {
+        queryStringComponents.push("until=now");
+      }
       queryStringComponents = queryStringComponents.map(function(e) {
         switch (0) {
         case e.indexOf('height='):
