@@ -72,9 +72,9 @@ Prometheus.Graph = {
 
   getGraphDefaults: function() {
     return {
-      title: 'Title',
+      title: "Title",
       stacked: false,
-      range: '1h',
+      range: "1h",
       endTime: null,
       expressions: [],
       type: "graph"

@@ -1,46 +1,18 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
-                                                    "$http", "$window",
-                                                    "$timeout",
-                                                    "VariableInterpolator",
-                                                    "UrlHashEncoder",
-                                                    "GraphRefresher",
-                                                    "ServersByIdObject",
-                                                    "WidgetLinkHelper",
-                                                    "ModalService",
-                                                    "CheckWidgetMenuAlignment",
-                                                    "YAxisUtilities",
-                                                    "Palettes",
-                                                    function($scope, $http,
-                                                             $window, $timeout,
-                                                             VariableInterpolator,
-                                                             UrlHashEncoder,
-                                                             GraphRefresher,
-                                                             ServersByIdObject,
-                                                             WidgetLinkHelper,
-                                                             ModalService,
-                                                             CheckWidgetMenuAlignment,
-                                                             YAxisUtilities,
-                                                             Palettes) {
-  $scope.generateWidgetLink = function(event) {
-    if ($scope.showTab !== 'staticlink') {
-      return;
-    }
-    var graphBlob = {};
-    graphBlob.widget = $scope.graph;
-    graphBlob.globalConfig = dashboardData.globalConfig;
-    WidgetLinkHelper
-      .createLink({
-         encoded_url: UrlHashEncoder(graphBlob),
-         graph_title: $scope.graph.title,
-         dashboard_name: dashboardName
-       }, event)
-      .setLink($scope)
-      .highlightInput(event);
-  };
+angular.module("Prometheus.controllers").controller('GraphCtrl',
+                                                    ["$scope",
+                                                      "GraphRefresher",
+                                                      "YAxisUtilities",
+                                                      "SharedWidgetSetup",
+                                                      "Palettes",
+                                                      function($scope,
+                                                               GraphRefresher,
+                                                               YAxisUtilities,
+                                                               SharedWidgetSetup,
+                                                               Palettes) {
+  SharedWidgetSetup($scope);
 
   // TODO: Set these on graph creation so we don't have to keep doing these
   // checks
-  $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
   $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
     {id: 1, name: ""}
   ];
@@ -50,22 +22,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
     axis.renderer = axis.renderer || "line";
   });
 
-  $scope.serversById = ServersByIdObject($scope.servers);
   $scope.requestsInFlight = 0;
-  $scope.data = null;
   $scope.palettes = Palettes;
-
-  $scope.removeGraph = function() {
-    $scope.$emit('removeWidget', $scope.index);
-    $scope.closeGraphDelete();
-  };
-
-  $scope.toggleTab = function(tab) {
-    $scope.showTab = $scope.showTab == tab ? null : tab;
-    if ($scope.showTab) {
-      $timeout(CheckWidgetMenuAlignment(tab), 0);
-    }
-  };
 
   $scope.addExpression = function() {
     var serverId = 0;
@@ -130,27 +88,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope",
     $scope.graph.endTime = endTime;
     $scope.refreshGraph();
   });
-
-  $scope.$on('refreshDashboard', function(ev) {
-    $scope.refreshGraph();
-  });
-
-  $scope.$on('closeModal', function() {
-    $scope.showGraphDelete = false;
-  });
-
-  $scope.closeGraphDelete = function() {
-    ModalService.closeModal();
-  };
-
-  $scope.graphDeleteModal = function() {
-    ModalService.toggleModal();
-    $scope.showGraphDelete = true;
-  };
-
-  $scope.title = function() {
-    return VariableInterpolator($scope.graph.title, $scope.vars);
-  };
 
   $scope.addLegendString = function() {
     var lsts = $scope.graph.legendFormatStrings;

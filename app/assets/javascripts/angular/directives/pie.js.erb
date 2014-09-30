@@ -1,4 +1,4 @@
-angular.module("Prometheus.directives").directive('graph', function() {
+angular.module("Prometheus.directives").directive('pie', function() {
   return {
     scope: {
       graph: "=graphSettings",
@@ -8,6 +8,6 @@ angular.module("Prometheus.directives").directive('graph', function() {
       vars: "="
     },
     restrict: "AE",
-    templateUrl: "<%= asset_path('graph_template.html') %>"
+    templateUrl: "<%= asset_path('pie_template.html') %>"
   };
 });
