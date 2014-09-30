@@ -16,7 +16,7 @@ angular.module("Prometheus.directives").directive("widgetDeleteModal", ["ModalSe
       };
 
       scope.removeWidget = function() {
-        scope.$emit('removeWidget', $scope.index);
+        scope.$emit('removeWidget', scope.index);
         scope.closeWidgetDelete();
       };
     },
