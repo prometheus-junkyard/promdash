@@ -39,26 +39,8 @@ return function($scope) {
     $scope.refreshGraph();
   });
 
-  $scope.$on('closeModal', function() {
-    $scope.showGraphDelete = false;
-  });
-
-  $scope.closeGraphDelete = function() {
-    ModalService.closeModal();
-  };
-
-  $scope.graphDeleteModal = function() {
-    ModalService.toggleModal();
-    $scope.showGraphDelete = true;
-  };
-
   $scope.title = function() {
     return VariableInterpolator($scope.graph.title, $scope.vars);
-  };
-
-  $scope.removeGraph = function() {
-    $scope.$emit('removeWidget', $scope.index);
-    $scope.closeGraphDelete();
   };
 
   $scope.toggleTab = function(tab) {
