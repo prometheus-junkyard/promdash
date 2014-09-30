@@ -7,7 +7,8 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       serversById: "=",
       legendFormatStrings: "=",
       expr: "=",
-      index: "="
+      index: "=",
+      type: "@"
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");

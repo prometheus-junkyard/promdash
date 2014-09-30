@@ -139,13 +139,27 @@ angular.module("Prometheus.controllers")
     var url = prompt("Please enter the URL for the frame to display", "http://");
     $scope.widgets.push({
       type: "frame",
-      title: '',
+      title: "",
       url: url
     });
   };
 
   $scope.addGraph = function() {
     $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
+  };
+
+  $scope.addPie = function() {
+    var pie = {
+      title: "Title",
+      expression: {
+        id: 0,
+        server_id: 1,
+        expression: "",
+        legend_id: 1
+      },
+      type: "pie"
+    };
+    $scope.widgets.push(pie);
   };
 
   $scope.$watch('vars', function() {
