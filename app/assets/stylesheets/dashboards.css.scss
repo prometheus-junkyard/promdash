@@ -671,9 +671,3 @@ hr {
   position: absolute;
   left: 0;
 }
-
-svg:not(:root) {
-  overflow: visible;
-  z-index: 1;
-  position: absolute;
-}
