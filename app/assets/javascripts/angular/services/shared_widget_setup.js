@@ -33,7 +33,6 @@ return function($scope) {
   };
   $scope.serversById = ServersByIdObject($scope.servers);
   $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
-  $scope.data = null;
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();
