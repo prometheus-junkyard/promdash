@@ -285,6 +285,10 @@ error-message {
     color: $dark-accent;
   }
 
+  .dygraph-axis-label {
+    color: $dark-text;
+  }
+
   body, .fullscreen {
     color: $dark-text;
     background-color: $dark-background;

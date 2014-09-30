@@ -21,6 +21,7 @@
 //= require ui-bootstrap-tpls-0.11.0.min
 //= require d3.v3.js
 //= require rickshaw.min
+//= require dygraph-combined
 //= require sortable.js
 //= require angular/app.js
 //= require_tree .
