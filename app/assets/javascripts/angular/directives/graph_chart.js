@@ -3,12 +3,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
     scope: {
       graphSettings: '=',
       aspectRatio: '=',
-      graphData: '=',
       vars: '='
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
       var $el = $(element[0]);
+      var graphData = [];
 
       function setLegendString(series) {
         // TODO(stuartnelson3): Do something with this function. Put it somewhere or simplify it.
@@ -39,15 +39,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         }
         var graphEl = $el.find('.graph_chart').get(0);
 
-        if (scope.graphData == null) {
-          return;
-        }
-
         var axisIdByExprId = {};
         scope.graphSettings.expressions.forEach(function(expr) {
           axisIdByExprId[expr.id] = expr.axis_id;
         });
-        var series = RickshawDataTransformer(scope.graphData, axisIdByExprId);
+
+        var series = RickshawDataTransformer(graphData, axisIdByExprId);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -354,7 +351,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
-      scope.$on('redrawGraphs', function() {
+      scope.$on('redrawGraphs', function(e, data) {
+        if (data !== undefined) {
+          graphData = data;
+        }
         redrawGraph();
       });
     },

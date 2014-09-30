@@ -1,17 +1,14 @@
-angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "VariableInterpolator", function($http, VariableInterpolator) {
+angular.module("Prometheus.services").factory('GraphRefresher',
+                                              ["$http",
+                                               "$q",
+                                               "VariableInterpolator",
+                                               function($http,
+                                                        $q,
+                                                        VariableInterpolator) {
   return function($scope) {
-    // Collect data for all expressions in this array.
-    var allData = [];
-
-    function requestFinished() {
-      $scope.requestsInFlight--;
-      $scope.data = allData;
-    };
-
-    function loadGraphData(idx, expression, server, expressionId) {
-      $scope.requestsInFlight++;
+    function loadGraphData(idx, expression, server, expressionId, allData) {
       var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
-      $http.get(server.url + 'api/query_range', {
+      return $http.get(server.url + 'api/query_range', {
         params: {
           expr: expression,
           range: rangeSeconds,
@@ -38,26 +35,32 @@ angular.module("Prometheus.services").factory('GraphRefresher', ["$http", "Varia
       }).error(function(data, status, b) {
         var errMsg = "Expression " + (idx + 1) + ": Server returned status " + status + ".";
         $scope.errorMessages.push(errMsg);
-      }).finally(function() {
-        requestFinished();
       });
     }
 
     return function() {
+      var deferred = $q.defer();
+      var promises = [];
+      var allData = [];
       $scope.errorMessages = [];
       for (var i = 0; i < $scope.graph.expressions.length; i++) {
         var exp = $scope.graph.expressions[i];
         var server = $scope.serversById[exp['server_id']];
-
         if (server == undefined) {
           console.log('No server selected for expression, skipping.');
           continue;
         }
-
-        var expression = exp.expression;
-
-        loadGraphData(i, VariableInterpolator(expression, $scope.vars), server, exp.id);
+        var expression = VariableInterpolator(exp.expression, $scope.vars);
+        $scope.requestsInFlight = true;
+        promises.push(
+          loadGraphData(i, expression, server, exp.id, allData)
+        );
       }
+      $q.all(promises).then(function() {
+        $scope.requestsInFlight = false;
+        deferred.resolve(allData);
+      });
+      return deferred.promise;
     };
   };
 }]);
