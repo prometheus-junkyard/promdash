@@ -102,7 +102,14 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
   $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
-  $scope.refreshGraph = GraphRefresher($scope);
+  $scope.refreshGraph = function(scope) {
+    var refreshFn = GraphRefresher(scope);
+    return function() {
+      refreshFn().then(function(data) {
+        $scope.$broadcast('redrawGraphs', data);
+      });
+    };
+  }($scope);
 
   if ($scope.graph.axes.length == 0) {
     $scope.addAxis();
