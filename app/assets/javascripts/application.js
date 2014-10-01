@@ -22,6 +22,7 @@
 //= require d3.v3.js
 //= require rickshaw.min
 //= require dygraph-combined
+//= require dimple.v2.1.0.min
 //= require sortable.js
 //= require angular/app.js
 //= require_tree .

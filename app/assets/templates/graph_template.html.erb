@@ -7,13 +7,13 @@
 
       <div class="btn-group pull-right graph_config_menu">
         <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('graph')" tooltip-append-to-body="true" tooltip="Graph and axis settings"><i class="icon-line-graph"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="icon-list"></i></div>
-        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="graphDeleteModal()" tooltip-append-to-body="true" tooltip="Remove graph"><i class="icon-trash"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Graph and axis settings"><i class="icon-line-graph"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="icon-list"></i></div>
+        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="widgetDeleteModal()" tooltip-append-to-body="true" tooltip="Remove graph"><i class="icon-trash"></i></div>
       </div>
 
     </div>
@@ -31,6 +31,7 @@
               axes="graph.axes"
               servers-by-id="serversById"
               legend-format-strings="graph.legendFormatStrings"
+              type="{{graph.type}}"
               index="$index"></expression>
           </div>
           <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
@@ -203,31 +204,12 @@
     </div>
 
     <div ng-click="showTab = null">
-      <div dygraph graph-settings="graph" graph-data="data" aspect-ratio="aspectRatio" vars="vars">
+      <div dygraph graph-settings="graph" aspect-ratio="aspectRatio" vars="vars">
         <div class="graph_chart">
           <div class="legend"></div>
         </div>
       </div>
     </div>
   </div>
-
-  <div ng-show="showGraphDelete" class="modal_container panel panel-default">
-    <div class="panel-heading">
-      Remove Graph
-      <i ng-click="closeGraphDelete()" class="clone_widget_close pointer pull-right icon-cross"></i>
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        Are you sure you want to delete this graph?
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-primary add_widget_button" ng-click="closeGraphDelete()" title="Cancel">
-          Cancel
-        </button>
-        <button class="btn btn-primary add_widget_button" ng-click="removeGraph()" title="Delete Graph">
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
+  <widget-delete-modal></widget-delete-modal>
 </span>

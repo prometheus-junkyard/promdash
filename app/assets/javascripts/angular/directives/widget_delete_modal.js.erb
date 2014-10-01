@@ -1,0 +1,25 @@
+angular.module("Prometheus.directives").directive("widgetDeleteModal", ["ModalService", function(ModalService) {
+  return {
+    restrict: "E",
+    link: function(scope, element, attrs) {
+      scope.$on('closeModal', function() {
+        scope.showWidgetDelete = false;
+      });
+
+      scope.closeWidgetDelete = function() {
+        ModalService.closeModal();
+      };
+
+      scope.widgetDeleteModal = function() {
+        ModalService.toggleModal();
+        scope.showWidgetDelete = true;
+      };
+
+      scope.removeWidget = function() {
+        scope.$emit('removeWidget', scope.index);
+        scope.closeWidgetDelete();
+      };
+    },
+    templateUrl: "<%= asset_path('widget_delete_modal.html') %>"
+  };
+}]);

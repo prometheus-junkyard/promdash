@@ -154,12 +154,14 @@ $light-secondary-background: #f0f0f0;
 }
 
 .rickshaw_legend {
-  color: #555555;
-  padding: 0;
-  border-radius: 0;
-  width: 100%;
-  border-color: #DDDDDD;
   background: none;
+  border-color: #DDDDDD;
+  border-radius: 0;
+  color: #555555;
+  font-size: 10px;
+  margin: 3px 0 0 5px;
+  padding: 0;
+  width: 100%;
   ul {
     margin: 0;
   }
@@ -257,10 +259,6 @@ error-message {
   border-radius: 0;
 }
 
-.rickshaw_legend {
-  margin: 3px 0 0 5px;
-}
-
 .template_variables {
   margin: 10px 0 20px;
 }
@@ -287,6 +285,10 @@ error-message {
 
   .dygraph-axis-label {
     color: $dark-text;
+  }
+
+  .dimple-legend {
+    fill: $dark-text;
   }
 
   body, .fullscreen {
@@ -669,7 +671,14 @@ hr {
   background-color: $light-secondary-background;
 }
 // Over-ride bootstrap.
+
 .alignLeft {
   position: absolute;
   left: 0;
+}
+
+.pie_chart svg {
+  overflow: visible;
+  z-index: 1;
+  position: absolute;
 }

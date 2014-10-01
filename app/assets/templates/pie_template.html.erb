@@ -1,0 +1,102 @@
+<span ng-controller="PieCtrl">
+  <div class="widget_wrapper panel panel-default pull-left">
+    <error-message error-messages="errorMessages"></error-message>
+    <div class="js_widget_wrapper widget_title panel-heading" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
+      <span ng-show="dashboard"><a href="/{{dashboard.slug}}" class="dashboard_link pointer">{{dashboard.name}}</a> &mdash; </span>
+      {{title()}}
+
+      <div class="btn-group pull-right graph_config_menu">
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestInFlight}" class="icon-cycle"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Chart settings"><i class="icon-pie-chart"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="icon-list"></i></div>
+        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Chart"><i class="icon-link"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="widgetDeleteModal()" tooltip-append-to-body="true" tooltip="Remove chart"><i class="icon-trash"></i></div>
+      </div>
+
+    </div>
+
+    <div class="pull-left graph_control_tabbar" ng-show="showTab">
+      <!-- Chart control tab content panes -->
+      <!-- 1) Datasources -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'datasources'">
+        <div class="panel-heading">Datasources</div>
+        <div class="panel-body">
+          <expression
+            expr="graph.expression"
+            servers="servers"
+            axes="graph.axes"
+            servers-by-id="serversById"
+            legend-format-strings="graph.legendFormatStrings"
+            index="$index"></expression>
+        </div>
+      </div>
+
+      <!-- 2) Chart Settings -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'graph'">
+        <div class="panel-heading">Chart Settings</div>
+        <div class="panel-body">
+          <label>Chart Title:</label>
+          <input class="form-control" ng-model="graph.title">
+        </div>
+      </div>
+
+      <!-- 3) Palette Settings -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'palette'">
+        <div class="panel-heading">Palette Settings</div>
+        <div class="panel-body">Palette settings are not yet implemented.</div>
+      </div>
+
+      <!-- 4) Legend Settings -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'legend'">
+        <div class="panel-heading">Legend Settings</div>
+        <div class="panel-body">
+          <label>Show legend</label>
+          <br />
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="sometimes"> if 5 or fewer elements</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="always"> always</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio"
+              ng-model="graph.legendSetting"
+              value="never"> never</label>
+          </div>
+          <label>Legend format:</label>
+          <div class="legend_string_container">
+            <input class="form-control legend_string_input" ng-model="graph.legendFormatString">
+          </div>
+        </div>
+      </div>
+
+      <!-- 5) Static link to graph -->
+      <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
+        <div class="panel-heading">Link to this graph</div>
+        <div class="panel-body">
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="widgetLink">
+            <span class="input-group-btn">
+              <a class="btn btn-default" href="{{widgetLink}}" title="Open frame in new tab" target="_blank" ng-click="toggleTab('staticlink')">
+                <span class="glyphicon glyphicon-new-window"></span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-click="showTab = null">
+      <div pie-chart graph-settings="graph" aspect-ratio="aspectRatio" vars="vars">
+        <div class="graph_chart pie_chart"></div>
+      </div>
+    </div>
+  </div>
+  <widget-delete-modal></widget-delete-modal>
+</span>
