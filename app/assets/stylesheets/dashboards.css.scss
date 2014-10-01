@@ -667,7 +667,14 @@ hr {
   background-color: $light-secondary-background;
 }
 // Over-ride bootstrap.
+
 .alignLeft {
   position: absolute;
   left: 0;
+}
+
+.pie_chart svg {
+  overflow: visible;
+  z-index: 1;
+  position: absolute;
 }
