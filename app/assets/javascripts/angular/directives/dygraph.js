@@ -3,12 +3,12 @@ angular.module("Prometheus.directives").directive('dygraph', ["$location", "Widg
     scope: {
       graphSettings: '=',
       aspectRatio: '=',
-      graphData: '=',
       vars: '='
     },
     link: function(scope, element, attrs) {
       var dygraph = null;
       var $el = $(element[0]);
+      var graphData = [];
 
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
@@ -22,31 +22,39 @@ angular.module("Prometheus.directives").directive('dygraph', ["$location", "Widg
           dygraph = null;
         }
 
-        if (scope.graphData == null) {
-          return;
-        }
+        if (!graphData.length) return
 
         // var series = RickshawDataTransformer(scope.graphData, axisIdByExprId);
         var data, labels = ["date"];
-        scope.graphData.forEach(function(d) {
+        graphData.forEach(function(d) {
           // Set up the timestamps.
           data = d.data.Value[0].Values.map(function(ts) {
             return [ts.Timestamp];
           });
-          d.data.Value.forEach(function(m) {
+          d.data.Value.forEach(function(m, i) {
             labels.push(m.Metric.instance);
             m.Values.forEach(function(datum, i) {
-              // labels.push(joinProperties(m.Metric, "=").join(","));
               data[i].push(parseFloat(datum.Value))
-              // data.push([datum.Timestamp, parseFloat(datum.Value)]);
             });
           });
         });
 
+        var isStacked = false;
         dygraph = new Dygraph(
           graphEl,
           data,
           { // parse xValues as UNIX timestamps.
+            stackedGraph: isStacked,
+
+            highlightCircleSize: 2,
+            strokeWidth: 1,
+            strokeBorderWidth: isStacked ? null : 1,
+
+            highlightSeriesOpts: {
+              strokeWidth: 3,
+              strokeBorderWidth: 1,
+              highlightCircleSize: 5,
+            },
             axes: {
               x: {
                 axisLabelFormatter: function(x) {
@@ -54,13 +62,18 @@ angular.module("Prometheus.directives").directive('dygraph', ["$location", "Widg
                 }
               }
             },
-            labels: labels
+            labels: labels.slice()
           }
         );
-
-        // if (series.length === 0) {
-        //   return;
-        // }
+        var onclick = function(ev) {
+          if (dygraph.isSeriesLocked()) {
+            dygraph.clearSelection();
+          } else {
+            dygraph.setSelection(dygraph.getSelection(), dygraph.getHighlightSeries(), true);
+          }
+        };
+        dygraph.updateOptions({clickCallback: onclick}, true);
+        dygraph.setSelection(false, 's005');
       }
 
       function joinProperties(properties, separator) {
@@ -110,8 +123,10 @@ angular.module("Prometheus.directives").directive('dygraph', ["$location", "Widg
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
-      scope.$watch('graphData', redrawGraph, true);
-      scope.$on('redrawGraphs', function() {
+      scope.$on('redrawGraphs', function(e, data) {
+        if (data !== undefined) {
+          graphData = data;
+        }
         redrawGraph();
       });
     },

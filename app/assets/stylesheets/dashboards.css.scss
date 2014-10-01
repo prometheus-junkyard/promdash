@@ -682,3 +682,6 @@ hr {
   z-index: 1;
   position: absolute;
 }
+
+.dygraph-legend > span { display: none; }
+.dygraph-legend > span.highlight { display: inline; }

@@ -350,7 +350,6 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
-      scope.$watch('graphData', redrawGraph, true);
       scope.$on('redrawGraphs', function(e, data) {
         if (data !== undefined) {
           graphData = data;
