@@ -12,15 +12,15 @@ angular.module("Prometheus.directives").directive('dygraph', ["$location", "Widg
 
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
-        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
-        var graphEl = $el.find('.graph_chart').get(0);
-        $el.css('height', graphHeight);
-        $(graphEl).css('height', graphHeight);
-
         if (dygraph) {
           $el.html('<div class="graph_chart"><div class="legend"></div></div>');
           dygraph = null;
         }
+
+        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
+        var graphEl = $el.find('.graph_chart').get(0);
+        $el.css('height', graphHeight);
+        $(graphEl).css('height', graphHeight);
 
         if (!graphData.length) return
 
