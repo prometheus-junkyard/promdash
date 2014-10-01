@@ -52,11 +52,9 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     $scope.showFrameDelete = true;
   };
 
-  $scope.toggleTab = function(tab) {
+  $scope.toggleTab = function(ev, tab) {
     $scope.showTab = $scope.showTab == tab ? null : tab;
-    if ($scope.showTab) {
-      $timeout(CheckWidgetMenuAlignment(tab), 0);
-    }
+    $timeout(CheckWidgetMenuAlignment(ev.currentTarget, tab), 0);
   };
 
   function buildFrameURL(url) {
