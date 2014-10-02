@@ -143,7 +143,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
           // If the min and max are equal for a logarithmic scale, the series
           // data value ends up being placed at 0 instead of 1.
-          if (bound.min === bound.max) {
+          if (matchingAxis.scale === "log" && bound.min === bound.max) {
             bound.min = bound.min - 0.01;
           }
           YAxisUtilities.setLogScale(bound.min, bound.max);
