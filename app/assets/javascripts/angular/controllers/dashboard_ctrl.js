@@ -83,17 +83,19 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.exitFullscreen = function() {
-    $scope.$apply(function() {
-      $scope.fullscreen = false;
-    });
+    $scope.fullscreen = false;
+    $scope.nextCycleRedraw();
   };
 
   $document.keydown(function(ev) {
     if (ev.keyCode === 27) { // Escape keycode
-      $scope.exitFullscreen();
-      $scope.redrawGraphs();
+      if ($scope.fullscreen) {
+        $scope.exitFullscreen();
+      }
       $scope.$apply(function() {
         $scope.closeCloneControls();
+        $scope.$broadcast('closeTabs');
+        $scope.showDashboardSettings = false;
       });
     }
   });

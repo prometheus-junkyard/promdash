@@ -6,13 +6,15 @@ angular.module("Prometheus.services").factory('SharedWidgetSetup',
                                                 "WidgetLinkHelper",
                                                 "UrlHashEncoder",
                                                 "CheckWidgetMenuAlignment",
+                                                "WidgetTabService",
                                                 function($timeout,
                                                          VariableInterpolator,
                                                          ServersByIdObject,
                                                          ModalService,
                                                          WidgetLinkHelper,
                                                          UrlHashEncoder,
-                                                         CheckWidgetMenuAlignment) {
+                                                         CheckWidgetMenuAlignment,
+                                                         WidgetTabService) {
 
 return function($scope) {
   $scope.generateWidgetLink = function(event) {
@@ -42,9 +44,6 @@ return function($scope) {
     return VariableInterpolator($scope.graph.title, $scope.vars);
   };
 
-  $scope.toggleTab = function(ev, tab) {
-    $scope.showTab = $scope.showTab == tab ? null : tab;
-    $timeout(CheckWidgetMenuAlignment(ev.currentTarget, tab), 0);
-  };
+  WidgetTabService($scope);
 }
 }]);
