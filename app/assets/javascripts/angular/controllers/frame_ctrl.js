@@ -34,24 +34,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
       .highlightInput(event);
   };
 
-  $scope.removeFrame = function() {
-    $scope.$emit('removeWidget', $scope.index);
-    $scope.closeFrameDelete();
-  };
-
-  $scope.$on('closeModal', function() {
-    $scope.showFrameDelete = false;
-  });
-
-  $scope.closeFrameDelete = function() {
-    ModalService.closeModal();
-  };
-
-  $scope.frameDeleteModal = function() {
-    ModalService.toggleModal();
-    $scope.showFrameDelete = true;
-  };
-
   $scope.toggleTab = function(ev, tab) {
     $scope.showTab = $scope.showTab == tab ? null : tab;
     $timeout(CheckWidgetMenuAlignment(ev.currentTarget, tab), 0);
