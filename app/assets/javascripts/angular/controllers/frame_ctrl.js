@@ -6,6 +6,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
                                                     "CheckWidgetMenuAlignment",
+                                                    "WidgetTabService",
                                                     function($scope, $sce,
                                                              $timeout,
                                                              VariableInterpolator,
@@ -13,9 +14,11 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
-                                                             CheckWidgetMenuAlignment) {
+                                                             CheckWidgetMenuAlignment,
+                                                             WidgetTabService) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
+  WidgetTabService($scope);
 
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
@@ -32,11 +35,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
        }, event)
       .setLink($scope)
       .highlightInput(event);
-  };
-
-  $scope.toggleTab = function(ev, tab) {
-    $scope.showTab = $scope.showTab == tab ? null : tab;
-    $timeout(CheckWidgetMenuAlignment(ev.currentTarget, tab), 0);
   };
 
   function buildFrameURL(url) {
