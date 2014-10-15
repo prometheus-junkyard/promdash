@@ -39,7 +39,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
                 return "=\"" + $2 + "\"";
               });
             }).join(",");
-            e.ts = e.Metric["__name__"] + "{" + ts + "}";
+            e.ts = (e.Metric["__name__"] || '') + "{" + ts + "}";
           }
         });
 
@@ -52,7 +52,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         pies.radius = (graphHeight / 2) - 10
         pies.getTooltipText = function(e) {
           var data = tooltip[e.aggField[0]];
-          var tt = [data["__name__"] + ": " + e.pValue];
+          var tt = [(data["__name__"] || 'value') + ": " + e.pValue];
           return tt.concat(joinProperties(data, ": "));
         };
 
