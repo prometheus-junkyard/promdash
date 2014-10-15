@@ -28,8 +28,6 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
 
         pieData.forEach(function(e) {
           e.value = parseFloat(e.Value);
-          tooltip[e.Metric.instance] = e.Metric;
-          e.instance = e.Metric.instance;
 
           if (scope.graphSettings.legendFormatString) {
             e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.Metric);
@@ -41,6 +39,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
             }).join(",");
             e.ts = e.Metric["__name__"] + "{" + ts + "}";
           }
+          tooltip[e.ts] = e.Metric;
         });
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], graphWidth, graphHeight);
@@ -48,7 +47,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         pieGraph = new dimple.chart(svg, pieData);
         pieGraph.addMeasureAxis("p", "value");
 
-        var pies = pieGraph.addSeries(["instance", "ts"], dimple.plot.pie);
+        var pies = pieGraph.addSeries("ts", dimple.plot.pie);
         pies.radius = (graphHeight / 2) - 10
         pies.getTooltipText = function(e) {
           var data = tooltip[e.aggField[0]];
