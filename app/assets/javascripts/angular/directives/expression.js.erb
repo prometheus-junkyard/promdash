@@ -1,14 +1,17 @@
-angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", function($timeout, MetricNamesQuerier) {
+angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", "VariableInterpolator", function($timeout, MetricNamesQuerier, VariableInterpolator) {
   return {
     restrict: "E",
     scope: {
       axes: "=",
-      servers: "=",
-      serversById: "=",
-      legendFormatStrings: "=",
+      endTime: "=",
       expr: "=",
       index: "=",
-      type: "@"
+      legendFormatStrings: "=",
+      range: "=",
+      servers: "=",
+      serversById: "=",
+      type: "@",
+      vars: "="
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
@@ -16,6 +19,37 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
 
       scope.MetricNamesQuerier = MetricNamesQuerier;
       MetricNamesQuerier(scope.expr.server_id, server.url, scope);
+
+      scope.linkToPrometheus = function() {
+        if (!scope.expr.axis_id) {
+          return
+        }
+        var server = scope.serversById[scope.expr.server_id]['url'];
+        var stacked = "";
+        scope.axes.forEach(function(a) {
+          if (a.id === scope.expr.axis_id && a.renderer === "stack") {
+            stacked = "true";
+          }
+        });
+        var endTime = "";
+        if (scope.endTime) {
+          var d = new Date(scope.endTime);
+          endTime = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join("-") + " " + d.getUTCHours() + ":" + d.getUTCMinutes();
+        }
+
+        var expression = VariableInterpolator(scope.expr.expression, scope.vars);
+        var expr = {
+          expr: expression,
+          range_input: scope.range || "",
+          end_input: endTime,
+          step_input: "",
+          stacked: stacked,
+          tab: 0
+        }
+
+        var hash = escape(JSON.stringify([expr]));
+        return server + "graph#" + hash;
+      };
 
       scope.appendToExpression = function(expr, metricName) {
         var lastCursorPosition = el.selectionStart;

@@ -26,6 +26,9 @@
     <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
     <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="icon-minus"></i></button>
     <button class="btn btn-default" type="button" ng-click="removeExpression(index)"><i class="icon-cross"></i></button>
+    <a class="btn btn-default" target="_blank" href="{{linkToPrometheus()}}" tooltip-append-to-body="true" tooltip="Link to Graph in Prometheus">
+      <i class="glyphicon glyphicon-new-window"></i>
+    </a>
   </span>
 </div>
 <select class="form-control" type="text"
