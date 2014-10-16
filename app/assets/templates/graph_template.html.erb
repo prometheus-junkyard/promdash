@@ -26,12 +26,15 @@
         <div class="panel-body">
           <div ng-repeat="expr in graph.expressions">
             <expression
-              expr="expr"
-              servers="servers"
               axes="graph.axes"
-              servers-by-id="serversById"
+              end-time="graph.endTime"
+              expr="expr"
               legend-format-strings="graph.legendFormatStrings"
+              range="graph.range"
+              servers="servers"
+              servers-by-id="serversById"
               type="{{graph.type}}"
+              vars="vars"
               index="$index"></expression>
           </div>
           <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
