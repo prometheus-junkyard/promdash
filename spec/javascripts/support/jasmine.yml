@@ -6,6 +6,7 @@ src_dir: "app/assets/javascripts/"
 # list of file expressions to include as source files
 # relative path from src_dir
 src_files:
+ - "../../../spec/javascripts/files/*.js"
  - "application.{js.coffee,js,coffee}"
 
 # path to parent directory of spec_files
