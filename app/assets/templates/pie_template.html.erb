@@ -24,11 +24,15 @@
         <div class="panel-heading">Datasources</div>
         <div class="panel-body">
           <expression
-            expr="graph.expression"
-            servers="servers"
             axes="graph.axes"
-            servers-by-id="serversById"
+            end-time="graph.endTime"
+            expr="graph.expression"
             legend-format-strings="graph.legendFormatStrings"
+            range="graph.range"
+            servers="servers"
+            servers-by-id="serversById"
+            type="{{graph.type}}"
+            vars="vars"
             index="$index"></expression>
         </div>
       </div>

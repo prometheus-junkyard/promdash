@@ -21,16 +21,18 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       MetricNamesQuerier(scope.expr.server_id, server.url, scope);
 
       scope.linkToPrometheus = function() {
-        if (!scope.expr.axis_id) {
+        if (!scope.expr.axis_id && scope.type !== "pie") {
           return
         }
         var server = scope.serversById[scope.expr.server_id]['url'];
         var stacked = "";
-        scope.axes.forEach(function(a) {
-          if (a.id === scope.expr.axis_id && a.renderer === "stack") {
-            stacked = "true";
-          }
-        });
+        if (scope.type !== "pie") {
+          scope.axes.forEach(function(a) {
+            if (a.id === scope.expr.axis_id && a.renderer === "stack") {
+              stacked = "true";
+            }
+          });
+        }
         var endTime = "";
         if (scope.endTime) {
           var d = new Date(scope.endTime);
