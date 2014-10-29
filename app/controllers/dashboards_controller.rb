@@ -25,6 +25,15 @@ class DashboardsController < ApplicationController
     render 'new'
   end
 
+  def annotations
+    url = URI.parse(URI.escape("#{ENV["ANNOTATIONS_URL"]}?tags=#{params[:tags]}&until=#{params[:until]}&range=#{params[:range]}"))
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    render json: res.body
+  end
+
   # POST /dashboards
   # POST /dashboards.json
   def create

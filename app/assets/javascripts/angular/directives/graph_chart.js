@@ -9,6 +9,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       var rsGraph = null;
       var $el = $(element[0]);
       var graphData = [];
+      var annotationData = [];
 
       function setLegendString(series) {
         // TODO(stuartnelson3): Do something with this function. Put it somewhere or simplify it.
@@ -28,13 +29,33 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         });
       }
 
+      function annotate() {
+        if (!rsGraph || !annotationData.length) {
+          return;
+        }
+
+        var annotator = new Rickshaw.Graph.Annotate({
+          graph: rsGraph,
+          element: element[0].querySelector(".annotation")
+        });
+
+        annotationData.forEach(function(a) {
+          var d = (new Date(a.created_at)).getTime() / 1000;
+          annotator.add(d, a.message);
+        });
+
+        annotator.update();
+        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
+        $(annotator.elements.timeline).find(".annotation").height(graphHeight - 3);
+      }
+
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $el.css('height', graphHeight);
 
         if (rsGraph) {
-          $el.html('<div class="graph_chart"><div class="legend"></div></div>');
+          $el.html('<div class="annotation"></div><div class="graph_chart"><div class="legend"></div></div>');
           rsGraph = null;
         }
         var graphEl = $el.find('.graph_chart').get(0);
@@ -351,6 +372,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       scope.$watch('graphSettings.legendSetting', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
+      scope.$on('annotateGraph', function(e, data) {
+        annotationData = data;
+        annotate();
+      });
       scope.$on('redrawGraphs', function(e, data) {
         if (data !== undefined) {
           graphData = data;
