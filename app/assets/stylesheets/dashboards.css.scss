@@ -600,12 +600,7 @@ hr {
 }
 
 .expression_select {
-  margin: 5px 0;
-}
-
-.third_width {
-  display: inline-block;
-  width: 153px;
+  padding: 0;
 }
 
 .pointer {
@@ -695,4 +690,12 @@ hr {
   overflow: visible;
   z-index: 1;
   position: absolute;
+}
+
+.pad-right {
+  padding-right: 5px;
+}
+
+.form-inline .form-group {
+  margin-bottom: 5px;
 }

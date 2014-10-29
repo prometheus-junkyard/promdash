@@ -53,6 +53,10 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
         return server + "graph#" + hash;
       };
 
+      scope.setExpression = function(metricName) {
+        scope.expr.expression = metricName;
+      };
+
       scope.appendToExpression = function(expr, metricName) {
         var lastCursorPosition = el.selectionStart;
         expr.expression = insertSelection(metricName, el);
