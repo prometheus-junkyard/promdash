@@ -1,14 +1,18 @@
 angular.module("Prometheus.controllers").controller('GraphCtrl',
                                                     ["$scope",
+                                                      "$http",
                                                       "GraphRefresher",
                                                       "YAxisUtilities",
                                                       "SharedWidgetSetup",
                                                       "Palettes",
+                                                      "AnnotationRefresher",
                                                       function($scope,
+                                                               $http,
                                                                GraphRefresher,
                                                                YAxisUtilities,
                                                                SharedWidgetSetup,
-                                                               Palettes) {
+                                                               Palettes,
+                                                               AnnotationRefresher) {
   SharedWidgetSetup($scope);
 
   // TODO: Set these on graph creation so we don't have to keep doing these
@@ -107,6 +111,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     return function() {
       refreshFn().then(function(data) {
         $scope.$broadcast('redrawGraphs', data);
+        AnnotationRefresher($scope.graph, $scope);
       });
     };
   }($scope);

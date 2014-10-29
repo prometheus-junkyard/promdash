@@ -195,6 +195,14 @@ angular.module("Prometheus.controllers")
     }
   }, true);
 
+  $scope.$watch('globalConfig.tags', function() {
+    $scope.widgets.forEach(function(w) {
+      if (w.type === "graph") {
+        w.tags = $scope.globalConfig.tags;
+      }
+    });
+  }, true);
+
   if ($scope.widgets.length == 0) {
     $scope.addGraph();
   }

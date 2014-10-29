@@ -263,6 +263,20 @@ error-message {
   margin: 10px 0 20px;
 }
 
+.rickshaw_annotation_timeline {
+  height: 0;
+  border-top: none;
+  margin-top: 0;
+  position: relative;
+}
+
+.rickshaw_annotation_timeline .annotation {
+  background-color: #333;
+  top: 0;
+  width: 2px;
+  z-index: 1;
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;
@@ -314,6 +328,10 @@ error-message {
                           0 0 8px rgba(150, 85, 126, 0.6);
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
                   0 0 8px rgba(150, 85, 126, 0.6);
+    }
+
+    .rickshaw_annotation_timeline .annotation {
+      background-color: #fff;
     }
 
     .global_grouping {

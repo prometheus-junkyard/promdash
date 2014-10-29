@@ -10,6 +10,7 @@ PrometheusDashboard::Application.routes.draw do
   resources :servers
   resources :directories
 
+  get '/annotations', to: 'dashboards#annotations'
   get '/dashboards/:id/clone', to: 'dashboards#clone', as: :clone_dashboard
   get '/dashboards/:id/widgets', to: 'dashboards#widgets'
   get '/w/:slug', to: 'single_widget#show'

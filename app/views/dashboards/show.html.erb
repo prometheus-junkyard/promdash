@@ -89,6 +89,11 @@
           </label>
           <div class="checkbox">
             <label>
+              <input type="checkbox" ng-model="globalConfig.showTags"> Show annotation tags
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
               <input type="checkbox" ng-model="globalConfig.showVars"> Show template variables
             </label>
           </div>
@@ -112,6 +117,38 @@
       </button>
     </div>
     <span class="clearfix"></span>
+  </div>
+
+  <div class="global_grouping template_variables col-lg-12" ng-show="globalConfig.showTags">
+    <table>
+      <tr>
+        <th colspan="4">Annotation Tags</th>
+      </tr>
+
+      <tr ng-show="vars.length == 0">
+        <td colspan="4">
+          <button class="btn btn-primary" type="button" ng-click="addTag()">
+            <i class="icon-plus"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr ng-repeat="t in globalConfig.tags track by $index">
+        <td>
+          <input type="text" class="form-control" placeholder="Tag list" ng-model="t.name">
+        </td>
+        <td>
+          <button class="btn btn-default" type="button" ng-click="removeTag($index)">
+            <i class="icon-cross"></i>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-primary" type="button" ng-click="addTag()" ng-show="$last">
+            <i class="icon-plus"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
 
   <div class="global_grouping template_variables col-lg-12" ng-show="globalConfig.showVars">
