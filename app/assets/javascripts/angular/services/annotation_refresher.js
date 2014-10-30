@@ -14,7 +14,7 @@ angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", f
       tags.forEach(function(t) {
         $http.get('/annotations', {
           params: {
-            tags: t.join(","),
+            'tags[]': t,
             until: until,
             range: range
           }
