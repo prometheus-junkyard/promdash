@@ -26,7 +26,8 @@ class DashboardsController < ApplicationController
   end
 
   def annotations
-    url = URI.parse(URI.escape("#{ENV["ANNOTATIONS_URL"]}?tags=#{params[:tags]}&until=#{params[:until]}&range=#{params[:range]}"))
+    tags = params[:tags].map {|t| "tags[]=#{t}" }.join("&")
+    url = URI.parse(URI.escape("#{ENV["ANNOTATIONS_URL"]}?until=#{params[:until]}&range=#{params[:range]}&#{tags}"))
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port) {|http|
       http.request(req)
