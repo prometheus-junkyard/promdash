@@ -142,6 +142,7 @@ angular.module("Prometheus.controllers")
     $scope.widgets.push({
       type: "frame",
       title: "",
+      graphite: /^http:\/\/graphite/.test(url),
       url: url
     });
   };
