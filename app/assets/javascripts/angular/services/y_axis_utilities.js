@@ -1,14 +1,25 @@
 angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
   var logScale, linearScale;
+  // Extends a D3 scale to ignore "null" values.
+  function extendScale(scale) {
+    var extendedScale = function(y) {
+      if (y === null) {
+        return null;
+      }
+      return scale(y);
+    }
+    extendedScale.__proto__ = scale;
+    return extendedScale;
+  }
   return {
     setLogScale: function(min, max) {
-      return logScale = d3.scale.log().domain([min, max]);
+      return logScale = extendScale(d3.scale.log().domain([min, max]));
     },
     setLinearScale: function(min, max) {
       if (!logScale) {
         throw("Must set logScale first!");
       }
-      return linearScale = d3.scale.linear().domain([min, max]).range(logScale.range());
+      return linearScale = extendScale(d3.scale.linear().domain([min, max]).range(logScale.range()));
     },
     getScale: function(scale) {
       return scale === "log" ? logScale : linearScale;
