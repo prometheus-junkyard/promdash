@@ -1,3 +1,4 @@
+require 'open-uri'
 class DashboardsController < ApplicationController
   before_action :set_dashboard, only: [:edit, :destroy, :widgets, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :update]
@@ -27,12 +28,8 @@ class DashboardsController < ApplicationController
 
   def annotations
     tags = params[:tags].map {|t| "tags[]=#{t}" }.join("&")
-    url = URI.parse(URI.escape("#{ENV["ANNOTATIONS_URL"]}?until=#{params[:until]}&range=#{params[:range]}&#{tags}"))
-    req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port) {|http|
-      http.request(req)
-    }
-    render json: res.body
+    res = open(URI.escape("#{ENV["ANNOTATIONS_URL"]}?until=#{params[:until]}&range=#{params[:range]}&#{tags}"))
+    render json: res.read
   end
 
   # POST /dashboards
