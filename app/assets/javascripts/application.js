@@ -12,6 +12,7 @@
 // (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require mousetrap.min
 //= require jquery_ujs
 //= require bootstrap.min
 //= require bootstrap-datetimepicker

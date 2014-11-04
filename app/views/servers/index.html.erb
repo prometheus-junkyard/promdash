@@ -18,13 +18,13 @@
 
   <tbody>
     <% @servers.each do |server| %>
-      <tr>
+      <tr class="mousetrap_list">
         <td><%= server.name %></td>
-        <td><a href="<%= server.url %>"><%= server.url %></a></td>
+        <td><a class="mousetrap_open_link" href="<%= server.url %>"><%= server.url %></a></td>
         <td>
           <%= link_to 'Edit', edit_server_path(server) %>
           &nbsp;&nbsp;
-          <%= link_to 'Delete', server, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <%= link_to 'Delete', server, class: "mousetrap_delete_link", method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>

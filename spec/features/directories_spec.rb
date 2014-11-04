@@ -89,11 +89,11 @@ feature "Directory", js: true do
         end
       end
 
-      scenario "dashboards should be selected" do
+      scenario "unselected dashboard should appear as 'unassigned'" do
         all('[type=checkbox]').last.set false
         click_button("Update Directory")
-        within all('.directory_container').first do
-          expect(page).to_not have_content(Dashboard.last.name)
+        within all('.directory_container').last do
+          expect(page).to have_content(Dashboard.last.name)
         end
       end
     end

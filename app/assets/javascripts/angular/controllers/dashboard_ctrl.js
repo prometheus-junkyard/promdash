@@ -242,6 +242,12 @@ angular.module("Prometheus.controllers")
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
 
+  $scope.$watch(function() {
+    return $scope.globalConfig.numColumns;
+  }, function(newValue, oldValue) {
+    numCols = newValue;
+  });
+
   var searchVars = UrlVariablesDecoder()
   if (searchVars.fullscreen) {
     $scope.enableFullscreen();
