@@ -4,11 +4,11 @@
       {{getTitle()}}
       <div class="btn-group pull-right graph_config_menu" ng-show="showControls || showTab">
         <div class="btn btn-primary btn-sm" ng-click="refreshFrame()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_source')" tooltip-append-to-body="true" tooltip="Frame Source"><i class="icon-add-to-list"></i></div>
-        <div class="btn btn-primary btn-sm" ng-show="frame.graphite" ng-click="toggleTab('timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('frame_settings')" tooltip-append-to-body="true" tooltip="Frame Settings"><i class="icon-cog"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
-        <div class="btn btn-primary btn-sm" ng-click="frameDeleteModal()" tooltip-append-to-body="true" tooltip="Remove frame"><i class="icon-trash"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'frame_source')" tooltip-append-to-body="true" tooltip="Frame Source"><i class="icon-add-to-list"></i></div>
+        <div class="btn btn-primary btn-sm" ng-show="frame.graphite" ng-click="toggleTab($event, 'timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'frame_settings')" tooltip-append-to-body="true" tooltip="Frame Settings"><i class="icon-cog"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
+        <div class="btn btn-primary btn-sm" ng-click="widgetDeleteModal()" tooltip-append-to-body="true" tooltip="Remove frame"><i class="icon-trash"></i></div>
       </div>
     </div>
 
@@ -24,7 +24,10 @@
       </div>
 
       <!-- 2) Time Options -->
-      <widget-time-options ng-show="showTab == 'timerange'" range="frame.range" end-time="frame.endTime"></widget-time-options>
+      <widget-time-options
+        ng-show="showTab == 'timerange'"
+        range="frame.range"
+        end-time="frame.endTime"></widget-time-options>
 
       <!-- 3) Frame Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_settings'">
@@ -56,24 +59,5 @@
       <iframe ng-src="{{frameURL()}}" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>
     </div>
   </div>
-
-  <div ng-show="showFrameDelete" class="modal_container panel panel-default">
-    <div class="panel-heading">
-      Remove Graph
-      <i ng-click="closeFrameDelete()" class="clone_widget_close pointer pull-right icon-cross"></i>
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        Are you sure you want to delete this frame?
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-primary add_widget_button" ng-click="closeFrameDelete()" title="Cancel">
-          Cancel
-        </button>
-        <button class="btn btn-primary add_widget_button" ng-click="removeFrame()" title="Delete Frame">
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
+  <widget-delete-modal></widget-delete-modal>
 </span>

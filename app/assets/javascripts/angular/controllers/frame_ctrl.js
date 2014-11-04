@@ -1,6 +1,24 @@
-angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sce", "VariableInterpolator", "UrlHashEncoder", "InputHighlighter", "WidgetLinkHelper", "GraphiteTimeConverter", "ModalService", function($scope, $sce, VariableInterpolator, UrlHashEncoder, InputHighlighter, WidgetLinkHelper, GraphiteTimeConverter, ModalService) {
+angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
+                                                    "$sce", "$timeout",
+                                                    "VariableInterpolator",
+                                                    "UrlHashEncoder",
+                                                    "InputHighlighter",
+                                                    "WidgetLinkHelper",
+                                                    "GraphiteTimeConverter",
+                                                    "CheckWidgetMenuAlignment",
+                                                    "WidgetTabService",
+                                                    function($scope, $sce,
+                                                             $timeout,
+                                                             VariableInterpolator,
+                                                             UrlHashEncoder,
+                                                             InputHighlighter,
+                                                             WidgetLinkHelper,
+                                                             GraphiteTimeConverter,
+                                                             CheckWidgetMenuAlignment,
+                                                             WidgetTabService) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
+  WidgetTabService($scope);
 
   $scope.generateWidgetLink = function(event) {
     if ($scope.showTab !== 'staticlink') {
@@ -19,33 +37,14 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope", "$sc
       .highlightInput(event);
   };
 
-  $scope.removeFrame = function() {
-    $scope.$emit('removeWidget', $scope.index);
-    $scope.closeFrameDelete();
-  };
-
-  $scope.$on('closeModal', function() {
-    $scope.showFrameDelete = false;
-  });
-
-  $scope.closeFrameDelete = function() {
-    ModalService.closeModal();
-  };
-
-  $scope.frameDeleteModal = function() {
-    ModalService.toggleModal();
-    $scope.showFrameDelete = true;
-  };
-
-  $scope.toggleTab = function(tab) {
-    $scope.showTab = $scope.showTab == tab ? null : tab;
-  };
-
   function buildFrameURL(url) {
     var parser = document.createElement('a');
     parser.href = url;
     var queryStringComponents = parser.search.substring(1).split('&');
     if ($scope.frame.graphite) {
+      if (url.indexOf("until") === -1) {
+        queryStringComponents.push("until=now");
+      }
       queryStringComponents = queryStringComponents.map(function(e) {
         switch (0) {
         case e.indexOf('height='):

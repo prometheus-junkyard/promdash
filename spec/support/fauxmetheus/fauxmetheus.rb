@@ -3,7 +3,11 @@ require 'sinatra/base'
 class FauxMetheus < Sinatra::Base
 
   get '/api/query_range' do
-    json_response 200, 'prometheus_response.json'
+    json_response 200, 'prometheus_response_query_range.json'
+  end
+
+  get '/api/query' do
+    json_response 200, 'prometheus_response_query.json'
   end
 
   get '/api/metrics' do

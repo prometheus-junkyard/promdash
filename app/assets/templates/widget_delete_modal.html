@@ -1,0 +1,19 @@
+<div ng-show="showWidgetDelete" class="modal_container panel panel-default">
+  <div class="panel-heading">
+    Remove Graph
+    <i ng-click="closeWidgetDelete()" class="clone_widget_close pointer pull-right icon-cross"></i>
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      Are you sure you want to delete this graph?
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary add_widget_button" ng-click="closeWidgetDelete()" title="Cancel">
+        Cancel
+      </button>
+      <button class="btn btn-primary add_widget_button" ng-click="removeWidget()" title="Delete Graph">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

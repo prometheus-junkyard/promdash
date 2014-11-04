@@ -1,20 +1,47 @@
 angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
   var logScale, linearScale;
+  // Extends a D3 scale to ignore "null" values.
+  function extendScale(scale) {
+    var extendedScale = function(y) {
+      if (y === null) {
+        return null;
+      }
+      return scale(y);
+    }
+    extendedScale.__proto__ = scale;
+    return extendedScale;
+  }
   return {
     setLogScale: function(min, max) {
-      return logScale = d3.scale.log().domain([min, max]);
+      return logScale = extendScale(d3.scale.log().domain([min, max]));
     },
     setLinearScale: function(min, max) {
       if (!logScale) {
         throw("Must set logScale first!");
       }
-      return linearScale = d3.scale.linear().domain([min, max]).range(logScale.range());
+      return linearScale = extendScale(d3.scale.linear().domain([min, max]).range(logScale.range()));
     },
     getScale: function(scale) {
       return scale === "log" ? logScale : linearScale;
     },
     getTickFormat: function(format) {
-      return format === "kmbt" ? Rickshaw.Fixtures.Number.formatKMBT : null;
+      switch (format) {
+      case "kmbt":
+        return Rickshaw.Fixtures.Number.formatKMBT;
+      case "kmgtp1024":
+        return function(y) {
+          var n = Rickshaw.Fixtures.Number.formatBase1024KMGTP(y);
+          if (n && typeof n === "string") {
+            var s = n.slice(n.length - 1);
+            // Trim trailing digits from default return values.
+            return parseFloat(n).toFixed(2) + s;
+          } else {
+            return n;
+          }
+        }
+      default:
+        return null;
+      }
     },
     checkValidNumber: function(event) {
       var el = event.currentTarget;

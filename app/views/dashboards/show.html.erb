@@ -5,9 +5,12 @@
   servers = <%= @servers.to_json.html_safe %>;
 </script>
 
-<h1 class="col-lg-12"><%= page_title @dashboard.name %></h1>
-
 <div id="dashboard" ng-controller="DashboardCtrl">
+  <h1 class="col-lg-12"
+    ng-class="{fullscreen_title: fullscreenTitle && fullscreen}">
+    <%= page_title @dashboard.name %>
+  </h1>
+
   <div id="global_controls">
     <div class="global_grouping">
       <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
@@ -78,6 +81,17 @@
               ng-options="t.css as t.name for t in themes">
             </select>
           </label>
+          <label>Color Scheme:
+            <select class="form-control" type="text"
+              ng-model="globalConfig.palette"
+              ng-options="p for p in palettes">
+            </select>
+          </label>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="globalConfig.showTags"> Show annotation tags
+            </label>
+          </div>
           <div class="checkbox">
             <label>
               <input type="checkbox" ng-model="globalConfig.showVars"> Show template variables
@@ -103,6 +117,38 @@
       </button>
     </div>
     <span class="clearfix"></span>
+  </div>
+
+  <div class="global_grouping template_variables col-lg-12" ng-show="globalConfig.showTags">
+    <table>
+      <tr>
+        <th colspan="4">Annotation Tags</th>
+      </tr>
+
+      <tr ng-show="globalConfig.tags.length == 0">
+        <td colspan="4">
+          <button class="btn btn-primary" type="button" ng-click="addTag()">
+            <i class="icon-plus"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr ng-repeat="t in globalConfig.tags track by $index">
+        <td>
+          <input type="text" class="form-control" placeholder="Tag list" ng-model="t.name">
+        </td>
+        <td>
+          <button class="btn btn-default" type="button" ng-click="removeTag($index)">
+            <i class="icon-cross"></i>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-primary" type="button" ng-click="addTag()" ng-show="$last">
+            <i class="icon-plus"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
 
   <div class="global_grouping template_variables col-lg-12" ng-show="globalConfig.showVars">
@@ -141,7 +187,7 @@
     </table>
   </div>
 
-  <div ng-class="{fullscreen: fullscreen}">
+  <div ng-class="{fullscreen: fullscreen, fullscreen_title_bump: fullscreenTitle && fullscreen}">
     <ul ui-sortable="sortableOptions" ng-model="widgets" class="sortable-widgets">
       <li ng-repeat="widget in widgets" ng-class="[columnClass(), 'widget_column']">
         <span ng-switch="widget.type">
@@ -151,7 +197,14 @@
               servers="servers"
               aspect-ratio="globalConfig.aspectRatio"
               index="$index"
-              frame-height="frameHeight()"
+              vars="globalConfig.vars">
+          </span>
+          <span ng-switch-when="pie">
+            <pie
+              graph-settings="widget"
+              servers="servers"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
               vars="globalConfig.vars">
           </span>
           <span ng-switch-when="frame">
@@ -173,6 +226,9 @@
     <form class="form-inline">
       <div class="form-group">
         <button class="btn btn-primary add_widget_button" ng-click="addGraph()">Add Graph</button>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary add_widget_button" ng-click="addPie()">Add Pie Chart</button>
       </div>
       <div class="form-group">
         <button class="btn btn-primary add_widget_button" ng-click="addFrame()">Add Frame</button>

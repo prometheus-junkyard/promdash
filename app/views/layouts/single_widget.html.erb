@@ -6,6 +6,9 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Prometheus, yo." %>">
 
     <%= stylesheet_link_tag "application", :media => "all" %>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>

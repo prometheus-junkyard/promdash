@@ -1,24 +1,22 @@
-angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$http", "$window", "VariableInterpolator", "UrlHashEncoder", "GraphRefresher", "ServersByIdObject", "WidgetLinkHelper", "ModalService", "YAxisUtilities", function($scope, $http, $window, VariableInterpolator, UrlHashEncoder, GraphRefresher, ServersByIdObject, WidgetLinkHelper, ModalService, YAxisUtilities) {
-  $scope.generateWidgetLink = function(event) {
-    if ($scope.showTab !== 'staticlink') {
-      return;
-    }
-    var graphBlob = {};
-    graphBlob.widget = $scope.graph;
-    graphBlob.globalConfig = dashboardData.globalConfig;
-    WidgetLinkHelper
-      .createLink({
-         encoded_url: UrlHashEncoder(graphBlob),
-         graph_title: $scope.graph.title,
-         dashboard_name: dashboardName
-       }, event)
-      .setLink($scope)
-      .highlightInput(event);
-  };
+angular.module("Prometheus.controllers").controller('GraphCtrl',
+                                                    ["$scope",
+                                                      "$http",
+                                                      "GraphRefresher",
+                                                      "YAxisUtilities",
+                                                      "SharedWidgetSetup",
+                                                      "Palettes",
+                                                      "AnnotationRefresher",
+                                                      function($scope,
+                                                               $http,
+                                                               GraphRefresher,
+                                                               YAxisUtilities,
+                                                               SharedWidgetSetup,
+                                                               Palettes,
+                                                               AnnotationRefresher) {
+  SharedWidgetSetup($scope);
 
   // TODO: Set these on graph creation so we don't have to keep doing these
   // checks
-  $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
   $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
     {id: 1, name: ""}
   ];
@@ -28,18 +26,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     axis.renderer = axis.renderer || "line";
   });
 
-  $scope.serversById = ServersByIdObject($scope.servers);
   $scope.requestsInFlight = 0;
-  $scope.data = null;
-
-  $scope.removeGraph = function() {
-    $scope.$emit('removeWidget', $scope.index);
-    $scope.closeGraphDelete();
-  };
-
-  $scope.toggleTab = function(tab) {
-    $scope.showTab = $scope.showTab == tab ? null : tab;
-  };
+  $scope.palettes = Palettes;
 
   $scope.addExpression = function() {
     var serverId = 0;
@@ -90,6 +78,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.refreshGraph();
   };
 
+  $scope.$on('setPalette', function(ev, palette) {
+    $scope.graph.palette = palette;
+    $scope.refreshGraph();
+  });
+
   $scope.$on('setRange', function(ev, range) {
     $scope.graph.range = range;
     $scope.refreshGraph();
@@ -99,27 +92,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
     $scope.graph.endTime = endTime;
     $scope.refreshGraph();
   });
-
-  $scope.$on('refreshDashboard', function(ev) {
-    $scope.refreshGraph();
-  });
-
-  $scope.$on('closeModal', function() {
-    $scope.showGraphDelete = false;
-  });
-
-  $scope.closeGraphDelete = function() {
-    ModalService.closeModal();
-  };
-
-  $scope.graphDeleteModal = function() {
-    ModalService.toggleModal();
-    $scope.showGraphDelete = true;
-  };
-
-  $scope.title = function() {
-    return VariableInterpolator($scope.graph.title, $scope.vars);
-  };
 
   $scope.addLegendString = function() {
     var lsts = $scope.graph.legendFormatStrings;
@@ -134,7 +106,15 @@ angular.module("Prometheus.controllers").controller('GraphCtrl', ["$scope", "$ht
   $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
   $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
-  $scope.refreshGraph = GraphRefresher($scope);
+  $scope.refreshGraph = function(scope) {
+    var refreshFn = GraphRefresher(scope);
+    return function() {
+      refreshFn().then(function(data) {
+        $scope.$broadcast('redrawGraphs', data);
+        AnnotationRefresher($scope.graph, $scope);
+      });
+    };
+  }($scope);
 
   if ($scope.graph.axes.length == 0) {
     $scope.addAxis();

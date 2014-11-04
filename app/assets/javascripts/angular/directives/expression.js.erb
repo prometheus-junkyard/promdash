@@ -1,19 +1,61 @@
-angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", function($timeout, MetricNamesQuerier) {
+angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", "VariableInterpolator", function($timeout, MetricNamesQuerier, VariableInterpolator) {
   return {
     restrict: "E",
     scope: {
       axes: "=",
+      endTime: "=",
+      expr: "=",
+      index: "=",
+      legendFormatStrings: "=",
+      range: "=",
       servers: "=",
       serversById: "=",
-      legendFormatStrings: "=",
-      expr: "=",
-      index: "="
+      type: "@",
+      vars: "="
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
       var server = scope.serversById[scope.expr.server_id];
+
       scope.MetricNamesQuerier = MetricNamesQuerier;
       MetricNamesQuerier(scope.expr.server_id, server.url, scope);
+
+      scope.linkToPrometheus = function() {
+        if (!scope.expr.axis_id && scope.type !== "pie") {
+          return
+        }
+        var server = scope.serversById[scope.expr.server_id]['url'];
+        var stacked = "";
+        if (scope.type !== "pie") {
+          scope.axes.forEach(function(a) {
+            if (a.id === scope.expr.axis_id && a.renderer === "stack") {
+              stacked = "true";
+            }
+          });
+        }
+        var endTime = "";
+        if (scope.endTime) {
+          var d = new Date(scope.endTime);
+          endTime = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join("-") + " " + d.getUTCHours() + ":" + d.getUTCMinutes();
+        }
+
+        var expression = VariableInterpolator(scope.expr.expression, scope.vars);
+        var expr = {
+          expr: expression,
+          range_input: scope.range || "",
+          end_input: endTime,
+          step_input: "",
+          stacked: stacked,
+          tab: 0
+        }
+
+        var hash = escape(JSON.stringify([expr]));
+        return server + "graph#" + hash;
+      };
+
+      scope.setExpression = function(metricName) {
+        scope.expr.expression = metricName;
+      };
 
       scope.appendToExpression = function(expr, metricName) {
         var lastCursorPosition = el.selectionStart;
@@ -23,10 +65,6 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
           el.focus();
           el.setSelectionRange(lastCursorPosition, lastCursorPosition + metricName.length)
         }, 0);
-      };
-
-      scope.setExpression = function(expr, metricName) {
-        expr.expression = metricName;
       };
 
       function insertSelection(metricName, el) {

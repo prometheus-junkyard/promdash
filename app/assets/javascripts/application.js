@@ -12,16 +12,14 @@
 // (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery.min
-//= require jquery-ui.min
-//= require angular.min
 //= require mousetrap.min
 //= require jquery_ujs
 //= require bootstrap.min
 //= require bootstrap-datetimepicker
-//= require ui-bootstrap-custom-tpls-0.10.0.min
+//= require ui-bootstrap-tpls-0.11.0.min
 //= require d3.v3.js
 //= require rickshaw.min
+//= require dimple.v2.1.0.min
 //= require sortable.js
 //= require angular/app.js
 //= require_tree .

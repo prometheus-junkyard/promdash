@@ -11,6 +11,7 @@ angular.module("Prometheus.controllers")
             "SharedGraphBehavior",
             "InputHighlighter",
             "ModalService",
+            "Palettes",
             function($scope,
                      $window,
                      $http,
@@ -22,7 +23,8 @@ angular.module("Prometheus.controllers")
                      UrlVariablesDecoder,
                      SharedGraphBehavior,
                      InputHighlighter,
-                     ModalService) {
+                     ModalService,
+                     Palettes) {
 
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
@@ -43,6 +45,8 @@ angular.module("Prometheus.controllers")
   $scope.dashboardNames = [];
 
   SharedGraphBehavior($scope);
+  $scope.palettes = Palettes;
+  $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
 
   $scope.frameHeight = function() {
     return {
@@ -79,17 +83,19 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.exitFullscreen = function() {
-    $scope.$apply(function() {
-      $scope.fullscreen = false;
-    });
+    $scope.fullscreen = false;
+    $scope.nextCycleRedraw();
   };
 
   $document.keydown(function(ev) {
     if (ev.keyCode === 27) { // Escape keycode
-      $scope.exitFullscreen();
-      $scope.redrawGraphs();
+      if ($scope.fullscreen) {
+        $scope.exitFullscreen();
+      }
       $scope.$apply(function() {
         $scope.closeCloneControls();
+        $scope.$broadcast('closeTabs');
+        $scope.showDashboardSettings = false;
       });
     }
   });
@@ -135,13 +141,27 @@ angular.module("Prometheus.controllers")
     var url = prompt("Please enter the URL for the frame to display", "http://");
     $scope.widgets.push({
       type: "frame",
-      title: '',
+      title: "",
       url: url
     });
   };
 
   $scope.addGraph = function() {
     $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
+  };
+
+  $scope.addPie = function() {
+    var pie = {
+      title: "Title",
+      expression: {
+        id: 0,
+        server_id: 1,
+        expression: "",
+        legend_id: 1
+      },
+      type: "pie"
+    };
+    $scope.widgets.push(pie);
   };
 
   $scope.$watch('vars', function() {
@@ -173,6 +193,14 @@ angular.module("Prometheus.controllers")
         UrlConfigEncoder({globalConfig: $scope.globalConfig});
       }
     }
+  }, true);
+
+  $scope.$watch('globalConfig.tags', function() {
+    $scope.widgets.forEach(function(w) {
+      if (w.type === "graph") {
+        w.tags = $scope.globalConfig.tags;
+      }
+    });
   }, true);
 
   if ($scope.widgets.length == 0) {
@@ -217,6 +245,10 @@ angular.module("Prometheus.controllers")
   var searchVars = UrlVariablesDecoder()
   if (searchVars.fullscreen) {
     $scope.enableFullscreen();
+  }
+
+  if (searchVars.fullscreen_title) {
+    $scope.fullscreenTitle = true;
   }
 
   if (searchVars.range) {

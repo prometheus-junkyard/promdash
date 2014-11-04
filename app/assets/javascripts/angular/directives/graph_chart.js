@@ -3,12 +3,13 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
     scope: {
       graphSettings: '=',
       aspectRatio: '=',
-      graphData: '=',
       vars: '='
     },
     link: function(scope, element, attrs) {
       var rsGraph = null;
       var $el = $(element[0]);
+      var graphData = [];
+      var annotationData = [];
 
       function setLegendString(series) {
         // TODO(stuartnelson3): Do something with this function. Put it somewhere or simplify it.
@@ -28,22 +29,43 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         });
       }
 
+      function annotate() {
+        if (!rsGraph || !annotationData.length) {
+          return;
+        }
+
+        var annotator = new Rickshaw.Graph.Annotate({
+          graph: rsGraph,
+          element: element[0].querySelector(".annotation")
+        });
+
+        annotationData.forEach(function(a) {
+          var d = (new Date(a.created_at)).getTime() / 1000;
+          annotator.add(d, a.message);
+        });
+
+        annotator.update();
+        var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
+        $(annotator.elements.timeline).find(".annotation").height(graphHeight - 3);
+      }
+
       function redrawGraph() {
         // Graph height is being set irrespective of legend.
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $el.css('height', graphHeight);
 
         if (rsGraph) {
-          $el.html('<div class="graph_chart"><div class="legend"></div></div>');
+          $el.html('<div class="annotation"></div><div class="graph_chart"><div class="legend"></div></div>');
           rsGraph = null;
         }
         var graphEl = $el.find('.graph_chart').get(0);
 
-        if (scope.graphData == null) {
-          return;
-        }
+        var axisIdByExprId = {};
+        scope.graphSettings.expressions.forEach(function(expr) {
+          axisIdByExprId[expr.id] = expr.axis_id;
+        });
 
-        var series = RickshawDataTransformer(scope.graphData);
+        var series = RickshawDataTransformer(graphData, axisIdByExprId);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -80,6 +102,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           min: a2LimitFn(Math.min),
         };
 
+        var palette = new Rickshaw.Color.Palette({scheme: scope.graphSettings.palette});
         var yScales = {};
         var scaleId;
         var graphMax;
@@ -88,6 +111,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var matchingAxis = axes.filter(function(a) {
             return a.id === s.axis_id;
           })[0] || axes[0];
+
+          s.color = palette.color();
 
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
@@ -139,7 +164,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
           // If the min and max are equal for a logarithmic scale, the series
           // data value ends up being placed at 0 instead of 1.
-          if (bound.min === bound.max) {
+          if (matchingAxis.scale === "log" && bound.min === bound.max) {
             bound.min = bound.min - 0.01;
           }
           YAxisUtilities.setLogScale(bound.min, bound.max);
@@ -174,14 +199,34 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         setLegendString(series);
         setLegendPresence(series);
 
+        var endTime = (scope.graphSettings.endTime || (new Date()).getTime()) / 1000; // Convert to UNIX timestamp.
+        var duration = Prometheus.Graph.parseDuration(scope.graphSettings.range) || 3600; // 1h default.
+        var startTime = endTime - duration;
+        series.forEach(function(s) {
+          // Padding series with invisible "null" values at the configured x-axis boundaries ensures
+          // that graphs are displayed with a fixed x-axis range instead of snapping to the available
+          // time range in the data.
+          if (s.data[0].x > startTime) {
+            s.data.unshift({x: startTime, y: null});
+          }
+          if (s.data[s.data.length - 1].x < endTime) {
+            s.data.push({x: endTime, y: null});
+          }
+        });
+
         rsGraph = new Rickshaw.Graph({
           element: graphEl,
           renderer: 'multi',
           min: yMinForGraph,
-          max: scaleId ? yScales[scaleId](graphMax) : 1,
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
+
+        if (scaleId) {
+          rsGraph.max = yScales[scaleId](graphMax);
+        } else {
+          rsGraph.max = rsGraph.renderer.domain().y[1];
+        }
 
         var $legend = $el.find(".legend");
         var legend = createLegend(rsGraph, $legend[0]);
@@ -190,6 +235,9 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           graph: rsGraph,
           legend: legend
         });
+
+        // Disable drag-n-drop sorting of legend elements.
+        $(seriesToggle.legend.list).sortable('disable');
 
         // Set legend elements to maximum element width so they line up.
         var $legendElements = $legend.find(".line");
@@ -243,7 +291,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           formatter: function(series, x, y) {
             var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.labels["__name__"] + ": <strong>" + y + '</strong>';
+            var content = swatch + (series.labels["__name__"] || 'value') + ": <strong>" + y + '</strong>';
             return date + '<br>' + content + '<br>' + renderLabels(series.labels);
           },
           onRender: function() {
@@ -326,15 +374,27 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
       }
 
+      scope.$watch(function(scope) {
+        return scope.graphSettings.expressions.map(function(expr) {
+          return "" + expr.legend_id + expr.axis_id;
+        });
+      }, redrawGraph, true);
+      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
 
       scope.$watch('graphSettings.stacked', redrawGraph);
+      scope.$watch('graphSettings.palette', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.legendSetting', redrawGraph);
-      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
-      scope.$watch('graphSettings.expressions', redrawGraph, true);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
-      scope.$on('redrawGraphs', function() {
+      scope.$on('annotateGraph', function(e, data) {
+        annotationData = data;
+        annotate();
+      });
+      scope.$on('redrawGraphs', function(e, data) {
+        if (data !== undefined) {
+          graphData = data;
+        }
         redrawGraph();
       });
     },

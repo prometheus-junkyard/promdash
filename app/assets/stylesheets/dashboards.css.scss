@@ -23,6 +23,13 @@ $light-secondary-background: #f0f0f0;
   z-index: 1000;
 }
 
+.fullscreen_title {
+  position: absolute;
+  z-index: 1051;
+  top: 0;
+  left: 10px;
+}
+
 .fullscreen {
   position: absolute;
   top: 0;
@@ -31,6 +38,10 @@ $light-secondary-background: #f0f0f0;
   z-index: 1050; // Bootstrap's navbar is at 1030.
   background-color: #FFFFFF;
   padding: 3px;
+}
+
+.fullscreen_title_bump {
+  padding-top: 60px;
 }
 
 .modal_overlay {
@@ -143,12 +154,14 @@ $light-secondary-background: #f0f0f0;
 }
 
 .rickshaw_legend {
-  color: #555555;
-  padding: 0;
-  border-radius: 0;
-  width: 100%;
-  border-color: #DDDDDD;
   background: none;
+  border-color: #DDDDDD;
+  border-radius: 0;
+  color: #555555;
+  font-size: 10px;
+  margin: 3px 0 0 5px;
+  padding: 0;
+  width: 100%;
   ul {
     margin: 0;
   }
@@ -246,12 +259,22 @@ error-message {
   border-radius: 0;
 }
 
-.rickshaw_legend {
-  margin: 3px 0 0 5px;
-}
-
 .template_variables {
   margin: 10px 0 20px;
+}
+
+.rickshaw_annotation_timeline {
+  height: 0;
+  border-top: none;
+  margin-top: 0;
+  position: relative;
+}
+
+.rickshaw_annotation_timeline .annotation {
+  background-color: #333;
+  top: 0;
+  width: 2px;
+  z-index: 1;
 }
 
 .dark_theme {
@@ -272,6 +295,10 @@ error-message {
 
   a {
     color: $dark-accent;
+  }
+
+  .dimple-legend {
+    fill: $dark-text;
   }
 
   body, .fullscreen {
@@ -301,6 +328,10 @@ error-message {
                           0 0 8px rgba(150, 85, 126, 0.6);
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
                   0 0 8px rgba(150, 85, 126, 0.6);
+    }
+
+    .rickshaw_annotation_timeline .annotation {
+      background-color: #fff;
     }
 
     .global_grouping {
@@ -569,12 +600,7 @@ hr {
 }
 
 .expression_select {
-  margin: 5px 0;
-}
-
-.third_width {
-  display: inline-block;
-  width: 153px;
+  padding: 0;
 }
 
 .pointer {
@@ -656,4 +682,24 @@ hr {
 
 .panel-default > .panel-heading {
   background-color: $light-secondary-background;
+}
+// Over-ride bootstrap.
+
+.alignLeft {
+  position: absolute;
+  left: 0;
+}
+
+.pie_chart svg {
+  overflow: visible;
+  z-index: 1;
+  position: absolute;
+}
+
+.pad-right {
+  padding-right: 5px;
+}
+
+.form-inline .form-group {
+  margin-bottom: 5px;
 }

@@ -34,8 +34,9 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     }
 
     $scope.vars = [];
+    $scope.globalConfig.tags = $scope.globalConfig.tags || [];
     $scope.servers = servers;
-    $scope.showGridSettings = false;
+
     $scope.sortableOptions = {
       handle: ".widget_title",
     };
@@ -66,6 +67,10 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('setEndTime', $scope.globalConfig.endTime);
     });
 
+    $scope.$watch('globalConfig.palette', function() {
+      $scope.$broadcast('setPalette', $scope.globalConfig.palette);
+    });
+
     $scope.refreshDashboard = function() {
       $scope.$broadcast('refreshDashboard');
     };
@@ -73,12 +78,21 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.redrawGraphs = function() {
       $scope.$broadcast('redrawGraphs');
     };
+
     $scope.nextCycleRedraw = function() {
       $timeout(function() { $scope.redrawGraphs(); }, 0);
     }
 
     $scope.addVariable = function(name, value) {
       $scope.vars.push({name: name, value: value});
+    };
+
+    $scope.addTag = function() {
+      $scope.globalConfig.tags.push({});
+    };
+
+    $scope.removeTag = function(idx) {
+      $scope.globalConfig.tags.splice(idx, 1);
     };
 
     for (var o in $scope.globalConfig.vars) {
@@ -96,7 +110,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if ($scope.refreshTimer) {
         $timeout.cancel($scope.refreshTimer);
       }
-      if ($scope.globalConfig.refresh) {
+      if ($scope.globalConfig.refresh && !urlVars.until) {
         setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
       }
     });

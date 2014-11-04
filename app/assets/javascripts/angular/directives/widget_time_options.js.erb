@@ -6,6 +6,7 @@ angular.module("Prometheus.directives").directive('widgetTimeOptions', function(
       range: "=",
     },
     link: function(scope, element, attrs) {
+      element.addClass("graph_control_tabpane");
       scope.increaseRange = function() {
         scope.range = Prometheus.Graph.nextLongerRange(scope.range);
       };

@@ -1,3 +1,4 @@
+require 'open-uri'
 class DashboardsController < ApplicationController
   before_action :set_dashboard, only: [:edit, :destroy, :widgets, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :update]
@@ -23,6 +24,12 @@ class DashboardsController < ApplicationController
     @source_id = @dashboard.id
     @dashboard = @dashboard.make_clone
     render 'new'
+  end
+
+  def annotations
+    tags = params[:tags].map {|t| "tags[]=#{t}" }.join("&")
+    res = open(URI.escape("#{ENV["ANNOTATIONS_URL"]}?until=#{params[:until]}&range=#{params[:range]}&#{tags}"))
+    render json: res.read
   end
 
   # POST /dashboards

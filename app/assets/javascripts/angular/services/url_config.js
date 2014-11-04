@@ -4,7 +4,9 @@ angular.module("Prometheus.services").factory('UrlConfigDecoder', function($loca
     if (!hash) {
       return {};
     }
-    var configJSON = atob(hash);
+    // Decodes UTF-8.
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64.btoa#Unicode_Strings
+    var configJSON = unescape(decodeURIComponent(window.atob(hash)));
     var config = JSON.parse(configJSON);
     return config;
   };
@@ -17,7 +19,9 @@ angular.module("Prometheus.services").factory('UrlHashEncoder', ["UrlConfigDecod
       urlConfig[o] = config[o];
     }
     var configJSON = JSON.stringify(urlConfig);
-    return btoa(configJSON);
+    // Encodes UTF-8.
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64.btoa#Unicode_Strings
+    return window.btoa(encodeURIComponent(escape(configJSON)));
   };
 }]);
 
