@@ -25,7 +25,23 @@ angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
       return scale === "log" ? logScale : linearScale;
     },
     getTickFormat: function(format) {
-      return format === "kmbt" ? Rickshaw.Fixtures.Number.formatKMBT : null;
+      switch (format) {
+      case "kmbt":
+        return Rickshaw.Fixtures.Number.formatKMBT;
+      case "kmgtp1024":
+        return function(y) {
+          var n = Rickshaw.Fixtures.Number.formatBase1024KMGTP(y);
+          if (n && typeof n === "string") {
+            var s = n.slice(n.length - 1);
+            // Trim trailing digits from default return values.
+            return parseFloat(n).toFixed(2) + s;
+          } else {
+            return n;
+          }
+        }
+      default:
+        return null;
+      }
     },
     checkValidNumber: function(event) {
       var el = event.currentTarget;
