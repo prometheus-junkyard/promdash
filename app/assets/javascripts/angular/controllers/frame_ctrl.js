@@ -5,7 +5,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "InputHighlighter",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
-                                                    "CheckWidgetMenuAlignment",
                                                     "WidgetTabService",
                                                     function($scope, $sce,
                                                              $timeout,
@@ -14,7 +13,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
-                                                             CheckWidgetMenuAlignment,
                                                              WidgetTabService) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
