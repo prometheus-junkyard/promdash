@@ -18,7 +18,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           series.forEach(function(s) {
             if (s.exp_id === exp.id) {
               var lst = scope.graphSettings.legendFormatStrings.filter(function(lst) {
-                return lst.id === exp.legend_id;
+                return lst.id === exp.legendID;
               })[0];
               if (!(lst || {}).name) {
                 return;
@@ -60,12 +60,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         }
         var graphEl = $el.find('.graph_chart').get(0);
 
-        var axisIdByExprId = {};
+        var axisIDByExprID = {};
         scope.graphSettings.expressions.forEach(function(expr) {
-          axisIdByExprId[expr.id] = expr.axis_id;
+          axisIDByExprID[expr.id] = expr.axisID;
         });
 
-        var series = RickshawDataTransformer(graphData, axisIdByExprId);
+        var series = RickshawDataTransformer(graphData, axisIDByExprID);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -85,7 +85,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         var axesBounds = {};
 
         var a1series = series.filter(function(s) {
-          return s.axis_id === 1;
+          return s.axisID === 1;
         });
         var a1LimitFn = calculateBound(a1series);
         axesBounds[1] = {
@@ -94,7 +94,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         };
 
         var a2series = series.filter(function(s) {
-          return s.axis_id === 2;
+          return s.axisID === 2;
         });
         var a2LimitFn = calculateBound(a2series);
         axesBounds[2] = {
@@ -104,12 +104,12 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
         var palette = new Rickshaw.Color.Palette({scheme: scope.graphSettings.palette});
         var yScales = {};
-        var scaleId;
+        var scaleID;
         var graphMax;
         series.forEach(function(s) {
           var axes = scope.graphSettings.axes;
           var matchingAxis = axes.filter(function(a) {
-            return a.id === s.axis_id;
+            return a.id === s.axisID;
           })[0] || axes[0];
 
           s.color = palette.color();
@@ -133,7 +133,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
                   bound.max = maybeYMax;
                   graphMax = maybeYMax;
                 }
-                scaleId = s.axis_id;
+                scaleID = s.axisID;
                 break;
               case "<":
                 if (axesBounds[matchingAxis.id].max < maybeYMax) {
@@ -143,7 +143,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
                   bound.max = maybeYMax;
                   graphMax = maybeYMax;
                 }
-                scaleId = s.axis_id;
+                scaleID = s.axisID;
                 break;
               default:
                 // Do nothing.
@@ -151,7 +151,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           } else if (!isNaN(maybeYMax)) {
             bound.max = maybeYMax;
             graphMax = maybeYMax;
-            scaleId = s.axis_id;
+            scaleID = s.axisID;
           }
           if (!isNaN(enteredYMin)) {
             // min is used for the linear scale; all numbers are acceptable.
@@ -171,8 +171,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           YAxisUtilities.setLinearScale(min, bound.max);
 
           s.scale = YAxisUtilities.getScale(matchingAxis.scale);
-          yScales[s.axis_id] = s.scale;
-          delete s.axis_id;
+          yScales[s.axisID] = s.scale;
+          delete s.axisID;
 
           if (matchingAxis.renderer) {
             s.renderer = matchingAxis.renderer;
@@ -222,8 +222,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           series: series
         });
 
-        if (scaleId) {
-          rsGraph.max = yScales[scaleId](graphMax);
+        if (scaleID) {
+          rsGraph.max = yScales[scaleID](graphMax);
         } else {
           rsGraph.max = rsGraph.renderer.domain().y[1];
         }
@@ -341,8 +341,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
       function setLegendPresence(series) {
         $(element[0]).find(".legend").show();
-        if (scope.graphSettings.legendSetting === "never" ||
-            (scope.graphSettings.legendSetting === "sometimes" && series.length > 5)) {
+        if (scope.graphSettings.showLegend === "never" ||
+            (scope.graphSettings.showLegend === "sometimes" && series.length > 5)) {
           $(element[0]).find(".legend").hide();
           series.forEach(function(s) {
             s.noLegend = true;
@@ -376,7 +376,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
       scope.$watch(function(scope) {
         return scope.graphSettings.expressions.map(function(expr) {
-          return "" + expr.legend_id + expr.axis_id;
+          return "" + expr.legendID + expr.axisID;
         });
       }, redrawGraph, true);
       scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
@@ -384,7 +384,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.palette', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
-      scope.$watch('graphSettings.legendSetting', redrawGraph);
+      scope.$watch('graphSettings.showLegend', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
       scope.$on('annotateGraph', function(e, data) {

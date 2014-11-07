@@ -1,7 +1,7 @@
 angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "$sce", "$timeout",
                                                     "VariableInterpolator",
-                                                    "UrlHashEncoder",
+                                                    "URLHashEncoder",
                                                     "InputHighlighter",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
@@ -10,7 +10,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     function($scope, $sce,
                                                              $timeout,
                                                              VariableInterpolator,
-                                                             UrlHashEncoder,
+                                                             URLHashEncoder,
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
@@ -29,7 +29,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     graphBlob.globalConfig = dashboardData.globalConfig;
     WidgetLinkHelper
       .createLink({
-         encoded_url: UrlHashEncoder(graphBlob),
+         encoded_url: URLHashEncoder(graphBlob),
          graph_title: $scope.getTitle(),
          dashboard_name: dashboardName
        }, event)
@@ -92,7 +92,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     return $sce.trustAsResourceUrl(buildFrameURL(url));
   };
 
-  $scope.updateUrl = function() {
+  $scope.updateURL = function() {
     $scope.frame.url = $scope.urlInput;
   };
 

@@ -1,5 +1,17 @@
 require 'slug_maker'
 
+class DashboardJSONValidator < ActiveModel::Validator
+  def validate(record)
+    return unless record.dashboard_json
+    errors = JSON::Validator.fully_validate('dashboard_schema.json', record.dashboard_json, :validate_schema => true)
+    if !errors.empty?
+      errors.each do |e|
+        record.errors[:dashboard_json] << e
+      end
+    end
+  end
+end
+
 class Dashboard < ActiveRecord::Base
   belongs_to :directory
   has_many :shortened_urls
@@ -12,6 +24,7 @@ class Dashboard < ActiveRecord::Base
       with: /\A[a-z0-9\-]+\z/,
       message: "Only alphanumeric characters connected by hyphens are allowed."
     }
+  validates_with DashboardJSONValidator
 
   scope :alphabetical, -> { order("lower(name)") }
   scope :cloneable, -> { where("dashboard_json is not null").select :id, :name }

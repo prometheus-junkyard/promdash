@@ -1,8 +1,8 @@
-angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "UrlConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIdObject", "FullScreenAspectRatio", "ThemeManager", function($window, $timeout, $scope, $http, UrlConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIdObject, FullScreenAspectRatio, ThemeManager) {
-  var graphBlob = UrlConfigDecoder(blob);
+angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", function($window, $timeout, $scope, $http, URLConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIDObject, FullScreenAspectRatio, ThemeManager) {
+  var graphBlob = URLConfigDecoder(blob);
   $scope.widget = graphBlob.widget;
   $scope.servers = servers;
-  $scope.serversById = ServersByIdObject($scope.servers);
+  $scope.serversById = ServersByIDObject($scope.servers);
   $scope.globalConfig = graphBlob.globalConfig;
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
   ThemeManager.setTheme($scope.globalConfig.theme);

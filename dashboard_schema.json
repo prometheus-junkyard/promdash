@@ -1,0 +1,350 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "globalConfig",
+    "widgets"
+  ],
+  "properties": {
+    "globalConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        //"aspectRatio",
+        "endTime",
+        //"keepURLUpdated",
+        "numColumns",
+        //"palette",
+        //"range",
+        //"refresh",
+        //"showTags",
+        //"showVars",
+        //"tags",
+        "theme",
+        "vars"
+      ],
+      "properties": {
+        "aspectRatio": {
+          "type": "number"
+        },
+        "encodeEntireURL": {
+          "type": "boolean"
+        },
+        "endTime": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "keepURLUpdated": {
+          "type": "boolean"
+        },
+        "numColumns": {
+          "type": "integer"
+        },
+        "palette": {
+          "type": "string"
+        },
+        "range": {
+          "type": "string"
+        },
+        "refresh": {
+          "type": "string"
+        },
+        "showTags": {
+          "type": "boolean"
+        },
+        "showVars": {
+          "type": "boolean"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "theme": {
+          "type": "string"
+        },
+        "vars": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "widgets": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          // "graph" widget type.
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "axes",
+              "endTime",
+              "expressions",
+              //"interpolationMethod",
+              //"legendFormatStrings",
+              "showLegend",
+              //"palette",
+              "range",
+              //"tags",
+              "title",
+              "type"
+            ],
+            "properties": {
+              "axes": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "format",
+                    "id",
+                    "orientation",
+                    //"renderer",
+                    "scale"
+                    //"yMax",
+                    //"yMin"
+                  ],
+                  "properties": {
+                    "format": {
+                      "type": "string"
+                    },
+                    "id": { 
+                      "type": "integer"
+                    },
+                    "orientation": {
+                      "type": "string"
+                    },
+                    "renderer": {
+                      "type": "string"
+                    },
+                    "scale": {
+                      "type": "string"
+                    },
+                    "yMax": {
+                      "type": "string"
+                    },
+                    "yMin": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "endTime": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "expressions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "axisID",
+                    "expression",
+                    "id",
+                    "serverID"
+                  ],
+                  "properties": {
+                    "axisID": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 2
+                    },
+                    "expression": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "legendID": {
+                      "type": [
+                        // TODO: Check if we should standardize on either integers
+                        // or strings for legend IDs.
+                        "integer",
+                        "string",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "serverID": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              },
+              "interpolationMethod": {
+                "type": "string"
+              },
+              "legendFormatStrings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": [
+                        // TODO: Check if we should standardize on either integers
+                        // or strings for legend IDs.
+                        "integer",
+                        "string"
+                      ]
+                    }
+                  }
+                }
+              },
+              "showLegend": {
+                "type": "string"
+              },
+              "palette": {
+                "type": "string"
+              },
+              "range": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["graph"]
+              }
+            }
+          },
+          // "pie" widget type.
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "expression",
+              //"legendFormatString",
+              "showLegend",
+              "title",
+              "type"
+            ],
+            "properties": {
+              "expression": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "expression",
+                  "id",
+                  "legendID",
+                  "serverID"
+                ],
+                "properties": {
+                  "expression": {
+                    "type": "string"
+                  },
+                  // TODO: Can we get rid of this for the pie chart?
+                  "id": {
+                    "type": "integer",
+                    "enum": [0]
+                  },
+                  // TODO: Can we get rid of this for the pie chart?
+                  "legendID": {
+                    "type": "integer",
+                    "enum": [1]
+                  },
+                  "serverID": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "legendFormatString": {
+                "type": "string"
+              },
+              "showLegend": {
+                "type": "string",
+                "enum": [
+                  "sometimes",
+                  "always",
+                  "never"
+                ]
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["pie"]
+              }
+            }
+          },
+          // "frame" widget type.
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              //"endTime",
+              //"graphite",
+              //"range",
+              "title",
+              "type",
+              "url"
+            ],
+            "properties": {
+              "endTime": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "graphite": {
+                "type": "boolean"
+              },
+              "range": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["frame"]
+              },
+              "url": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

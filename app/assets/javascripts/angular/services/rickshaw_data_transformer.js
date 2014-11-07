@@ -19,7 +19,7 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
     return tsName;
   }
 
-  return function(data, axisIdByExprId) {
+  return function(data, axisIDByExprID) {
     var series = [];
     for (var i = 0; i < data.length; i++) {
       if (!data[i]) {
@@ -29,7 +29,7 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
       series = series.concat(data[i]['data'].Value.map(function(ts) {
         return {
           name: metricToTsName(ts.Metric),
-          axis_id: axisIdByExprId[data[i].exp_id],
+          axisID: axisIDByExprID[data[i].exp_id],
           exp_id: data[i].exp_id,
           labels: ts.Metric,
           data: ts.Values.map(function(value) {

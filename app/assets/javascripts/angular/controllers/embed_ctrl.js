@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$window", "$timeout", "WidgetHeightCalculator", "UrlConfigEncoder", "FullScreenAspectRatio", "SharedGraphBehavior", function($scope, $window, $timeout, WidgetHeightCalculator, UrlConfigEncoder, FullScreenAspectRatio, SharedGraphBehavior) {
+angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$window", "$timeout", "WidgetHeightCalculator", "URLConfigEncoder", "FullScreenAspectRatio", "SharedGraphBehavior", function($scope, $window, $timeout, WidgetHeightCalculator, URLConfigEncoder, FullScreenAspectRatio, SharedGraphBehavior) {
   $window.onresize = function() {
     $scope.$apply(function() {
       // Need to $apply to propagate aspectRatio change,

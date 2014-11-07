@@ -1,18 +1,18 @@
 angular.module("Prometheus.services").factory('SharedWidgetSetup',
                                               ["$timeout",
                                                 "VariableInterpolator",
-                                                "ServersByIdObject",
+                                                "ServersByIDObject",
                                                 "ModalService",
                                                 "WidgetLinkHelper",
-                                                "UrlHashEncoder",
+                                                "URLHashEncoder",
                                                 "CheckWidgetMenuAlignment",
                                                 "WidgetTabService",
                                                 function($timeout,
                                                          VariableInterpolator,
-                                                         ServersByIdObject,
+                                                         ServersByIDObject,
                                                          ModalService,
                                                          WidgetLinkHelper,
-                                                         UrlHashEncoder,
+                                                         URLHashEncoder,
                                                          CheckWidgetMenuAlignment,
                                                          WidgetTabService) {
 
@@ -26,15 +26,15 @@ return function($scope) {
     graphBlob.globalConfig = dashboardData.globalConfig;
     WidgetLinkHelper
       .createLink({
-         encoded_url: UrlHashEncoder(graphBlob),
+         encoded_url: URLHashEncoder(graphBlob),
          graph_title: $scope.graph.title,
          dashboard_name: dashboardName
        }, event)
       .setLink($scope)
       .highlightInput(event);
   };
-  $scope.serversById = ServersByIdObject($scope.servers);
-  $scope.graph.legendSetting = $scope.graph.legendSetting || "sometimes";
+  $scope.serversById = ServersByIDObject($scope.servers);
+  $scope.graph.showLegend = $scope.graph.showLegend || "sometimes";
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();
