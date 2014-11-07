@@ -10,7 +10,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   // Query for the data.
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
-    var server = $scope.serversById[exp['server_id'] || 1];
+    var server = $scope.serversById[exp['serverID'] || 1];
     $scope.requestInFlight = true;
     $http.get(server.url + "api/query", {
       params: {

@@ -2,11 +2,9 @@ require 'spec_helper'
 
 describe DashboardsController do
   before(:each) do
+    @sample_dashboard_json = File.read('./spec/support/sample_json/1_expression_dashboard_json')
     @dashboard = Dashboard.new_with_slug(name: "example dashboard")
-    @dashboard.dashboard_json = {'widgets' => [
-      {"title"=>"Graph 1"},
-      {"title"=>"Title"}
-    ]}.to_json
+    @dashboard.dashboard_json = @sample_dashboard_json
     @dashboard.save!
   end
 
@@ -26,7 +24,7 @@ describe DashboardsController do
     end
 
     it "clones the dashboard given a source_id" do
-      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: {some: "key"}.to_json)
+      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: @sample_dashboard_json)
       d.save!
       post :create, dashboard: { name: "dashboard clone"}, source_id: d.id
       expect(Dashboard.last.dashboard_json).to eq(d.dashboard_json)
@@ -34,10 +32,17 @@ describe DashboardsController do
 
     it "clones a dashboard and associates it with a directory" do
       directory = FactoryGirl.create :directory
-      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: {some: "key"}.to_json)
+      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: @sample_dashboard_json)
       d.save!
       post :create, dashboard: { name: "dashboard clone", directory_id: directory.id }, source_id: d.id
       expect(Dashboard.last.directory_id).to eq(directory.id)
+    end
+
+    it "fails to create a dashboard with invalid dashboard_json" do
+      expect {
+        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: {"widgets" => []} }
+        expect(response.status).to eq 422
+      }.not_to change{ Dashboard.count }
     end
   end
 
@@ -67,8 +72,9 @@ describe DashboardsController do
   context "getting widgets json" do
     it "dashboard_json exists" do
       get :widgets, id: @dashboard
-      widgets = { widgets: [{title: "Graph 1"}, {title: "Title"}]}
-      expect(response.body).to eq(widgets.to_json)
+      widgets_json = JSON.parse(@sample_dashboard_json)
+      widgets_json.delete('globalConfig')
+      expect(JSON.parse(response.body)).to eq(widgets_json)
     end
 
     it "dashboard_json is nil" do

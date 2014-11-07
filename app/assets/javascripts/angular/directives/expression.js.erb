@@ -15,20 +15,20 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
-      var server = scope.serversById[scope.expr.server_id];
+      var server = scope.serversById[scope.expr.serverID];
 
       scope.MetricNamesQuerier = MetricNamesQuerier;
-      MetricNamesQuerier(scope.expr.server_id, server.url, scope);
+      MetricNamesQuerier(scope.expr.serverID, server.url, scope);
 
       scope.linkToPrometheus = function() {
-        if (!scope.expr.axis_id && scope.type !== "pie") {
+        if (!scope.expr.axisID && scope.type !== "pie") {
           return
         }
-        var server = scope.serversById[scope.expr.server_id]['url'];
+        var server = scope.serversById[scope.expr.serverID]['url'];
         var stacked = "";
         if (scope.type !== "pie") {
           scope.axes.forEach(function(a) {
-            if (a.id === scope.expr.axis_id && a.renderer === "stack") {
+            if (a.id === scope.expr.axisID && a.renderer === "stack") {
               stacked = "true";
             }
           });

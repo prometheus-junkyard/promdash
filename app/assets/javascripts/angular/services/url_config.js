@@ -1,4 +1,4 @@
-angular.module("Prometheus.services").factory('UrlConfigDecoder', function($location) {
+angular.module("Prometheus.services").factory('URLConfigDecoder', function($location) {
   return function(defaultHash) {
     var hash = $location.hash() || defaultHash;
     if (!hash) {
@@ -12,9 +12,9 @@ angular.module("Prometheus.services").factory('UrlConfigDecoder', function($loca
   };
 });
 
-angular.module("Prometheus.services").factory('UrlHashEncoder', ["UrlConfigDecoder", function(UrlConfigDecoder) {
+angular.module("Prometheus.services").factory('URLHashEncoder', ["URLConfigDecoder", function(URLConfigDecoder) {
   return function(config) {
-    var urlConfig = UrlConfigDecoder();
+    var urlConfig = URLConfigDecoder();
     for (var o in config) {
       urlConfig[o] = config[o];
     }
@@ -25,13 +25,13 @@ angular.module("Prometheus.services").factory('UrlHashEncoder', ["UrlConfigDecod
   };
 }]);
 
-angular.module("Prometheus.services").factory('UrlConfigEncoder', ["$location", "UrlHashEncoder", function($location, UrlHashEncoder) {
+angular.module("Prometheus.services").factory('URLConfigEncoder', ["$location", "URLHashEncoder", function($location, URLHashEncoder) {
   return function(config) {
-    $location.hash(UrlHashEncoder(config));
+    $location.hash(URLHashEncoder(config));
   };
 }]);
 
-angular.module("Prometheus.services").factory('UrlVariablesDecoder', function($location) {
+angular.module("Prometheus.services").factory('URLVariablesDecoder', function($location) {
   return function() {
     return $location.search();
   };

@@ -6,7 +6,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
                                                         $q,
                                                         VariableInterpolator) {
   return function($scope) {
-    function loadGraphData(idx, expression, server, expressionId, allData) {
+    function loadGraphData(idx, expression, server, expressionID, allData) {
       var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
       return $http.get(server.url + 'api/query_range', {
         params: {
@@ -24,7 +24,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
             break;
           case 'matrix':
             allData[idx] = {
-              'exp_id': expressionId,
+              'exp_id': expressionID,
               'data': data
             };
             break;
@@ -45,7 +45,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       $scope.errorMessages = [];
       for (var i = 0; i < $scope.graph.expressions.length; i++) {
         var exp = $scope.graph.expressions[i];
-        var server = $scope.serversById[exp['server_id']];
+        var server = $scope.serversById[exp['serverID']];
         if (server == undefined) {
           console.log('No server selected for expression, skipping.');
           continue;

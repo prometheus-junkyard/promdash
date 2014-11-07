@@ -1,5 +1,5 @@
 //= require spec_helper
-var serversById = getService('ServersByIdObject');
+var serversById = getService('ServersByIDObject');
 describe('ThemeManager', function() {
   it('returns a server object keyed by id', function() {
     var server1 = {name:'server1', id:1}

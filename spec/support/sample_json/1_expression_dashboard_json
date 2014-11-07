@@ -6,18 +6,17 @@
    "vars":{}},
    "widgets":[
      {"title":"Title",
-      "stacked":false,
       "range":"1h",
       "endTime":null,
       "expressions":[
-        {"server_id":1,
+        {"serverID":1,
          "id":0,
-         "legend_id":1,
-         "axis_id":1,
+         "legendID":1,
+         "axisID":1,
          "expression":"prometheus_targetpool_duration_ms"}
       ],
       "type":"graph",
-      "legendSetting":"sometimes",
+      "showLegend":"sometimes",
       "interpolationMethod":"cardinal",
       "axes":[
         {"orientation":"left",

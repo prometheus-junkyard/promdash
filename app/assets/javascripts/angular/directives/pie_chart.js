@@ -56,8 +56,8 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         };
 
         var showLegend = !(
-          scope.graphSettings.legendSetting === "never" ||
-            (scope.graphSettings.legendSetting === "sometimes" && pieData.length > 5)
+          scope.graphSettings.showLegend === "never" ||
+            (scope.graphSettings.showLegend === "sometimes" && pieData.length > 5)
         );
         if (showLegend) {
           pieGraph.addLegend(10, 15, graphWidth - 20, graphHeight, "left");
@@ -76,7 +76,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           return tooltipText;
       }
 
-      scope.$watch('graphSettings.legendSetting', redrawGraph);
+      scope.$watch('graphSettings.showLegend', redrawGraph);
       scope.$watch('graphSettings.legendFormatString', redrawGraph);
       scope.$watch('data', redrawGraph, true);
       scope.$on('redrawGraphs', function(e, data) {

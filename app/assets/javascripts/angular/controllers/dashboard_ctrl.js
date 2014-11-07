@@ -6,8 +6,8 @@ angular.module("Prometheus.controllers")
             "$document",
             "$location",
             "WidgetHeightCalculator",
-            "UrlConfigEncoder",
-            "UrlVariablesDecoder",
+            "URLConfigEncoder",
+            "URLVariablesDecoder",
             "SharedGraphBehavior",
             "InputHighlighter",
             "ModalService",
@@ -19,8 +19,8 @@ angular.module("Prometheus.controllers")
                      $document,
                      $location,
                      WidgetHeightCalculator,
-                     UrlConfigEncoder,
-                     UrlVariablesDecoder,
+                     URLConfigEncoder,
+                     URLVariablesDecoder,
                      SharedGraphBehavior,
                      InputHighlighter,
                      ModalService,
@@ -62,10 +62,10 @@ angular.module("Prometheus.controllers")
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
       'dashboard': {
-        'dashboard_json': angular.toJson({
+        'dashboard_json': {
           'globalConfig': $scope.globalConfig,
           'widgets': $scope.widgets
-        })
+        }
       }
     }).error(function(data, status) {
       alert("Error saving dashboard.");
@@ -155,9 +155,9 @@ angular.module("Prometheus.controllers")
       title: "Title",
       expression: {
         id: 0,
-        server_id: 1,
+        serverID: 1,
         expression: "",
-        legend_id: 1
+        legendID: 1
       },
       type: "pie"
     };
@@ -175,22 +175,22 @@ angular.module("Prometheus.controllers")
     $scope.globalConfig.vars = vars;
   }, true);
 
-  $scope.syncEntireUrlEncode = function() {
-    if (!$scope.globalConfig.keepUrlUpdated) {
-      $scope.globalConfig.encodeEntireUrl = false;
+  $scope.syncEntireURLEncode = function() {
+    if (!$scope.globalConfig.keepURLUpdated) {
+      $scope.globalConfig.encodeEntireURL = false;
     }
   };
 
   $scope.$watch('globalConfig', function() {
-    if ($scope.globalConfig.keepUrlUpdated) {
+    if ($scope.globalConfig.keepURLUpdated) {
       if ($scope.globalConfig.range) {
         $location.search("range", $scope.globalConfig.range)
       }
       if ($scope.globalConfig.endTime) {
         $location.search("until", (new Date($scope.globalConfig.endTime)).toISOString())
       }
-      if ($scope.globalConfig.encodeEntireUrl) {
-        UrlConfigEncoder({globalConfig: $scope.globalConfig});
+      if ($scope.globalConfig.encodeEntireURL) {
+        URLConfigEncoder({globalConfig: $scope.globalConfig});
       }
     }
   }, true);
@@ -242,7 +242,7 @@ angular.module("Prometheus.controllers")
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
 
-  var searchVars = UrlVariablesDecoder()
+  var searchVars = URLVariablesDecoder()
   if (searchVars.fullscreen) {
     $scope.enableFullscreen();
   }

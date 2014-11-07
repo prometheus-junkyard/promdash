@@ -1,4 +1,4 @@
-angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "$timeout", "UrlConfigDecoder", "UrlVariablesDecoder", "ThemeManager", function($http, $timeout, UrlConfigDecoder, UrlVariablesDecoder, ThemeManager) {
+angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "$timeout", "URLConfigDecoder", "URLVariablesDecoder", "ThemeManager", function($http, $timeout, URLConfigDecoder, URLVariablesDecoder, ThemeManager) {
   function commonSetup($scope) {
     $scope.globalConfig = dashboardData.globalConfig || {
       numColumns: 2,
@@ -14,7 +14,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.themeChange();
 
     // If settings were passed in via the URL hash, merge them into globalConfig.
-    var urlConfig = UrlConfigDecoder();
+    var urlConfig = URLConfigDecoder();
     if (urlConfig.globalConfig) {
       for (var o in urlConfig.globalConfig) {
         $scope.globalConfig[o] = urlConfig.globalConfig[o];
@@ -23,7 +23,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     // If we have manual variable overrides in the hashbang search part of the
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.
-    var urlVars = UrlVariablesDecoder();
+    var urlVars = URLVariablesDecoder();
     var templateVarRe = /^var\.(.*)$/;
     for (var o in urlVars) {
       var matches = o.match(templateVarRe)

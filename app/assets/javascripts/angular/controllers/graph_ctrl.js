@@ -30,23 +30,23 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.palettes = Palettes;
 
   $scope.addExpression = function() {
-    var serverId = 0;
-    var axisId = 0;
+    var serverID = 0;
+    var axisID = 0;
     var id = 0;
     if ($scope.graph.expressions.length != 0) {
       var prev = $scope.graph.expressions[$scope.graph.expressions.length-1];
       id = prev['id'] + 1;
-      serverId = prev['server_id'];
-      axisId = prev['axis_id'];
+      serverID = prev['serverID'];
+      axisID = prev['axisID'];
     } else if ($scope.servers.length != 0) {
-      serverId = $scope.servers[0]['id'];
-      axisId = $scope.graph.axes[0]['id'];
+      serverID = $scope.servers[0]['id'];
+      axisID = $scope.graph.axes[0]['id'];
     }
 
     var exp = {
       'id': id,
-      'server_id': serverId,
-      'axis_id': axisId,
+      'serverID': serverID,
+      'axisID': axisID,
       'expression': ''
     };
     $scope.graph.expressions.push(exp);
@@ -66,8 +66,8 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     var len = axes.length;
 
     $scope.graph.expressions.forEach(function(expr) {
-      if (expr.axis_id === axes[idx].id) {
-        expr.axis_id = axes[0].id
+      if (expr.axisID === axes[idx].id) {
+        expr.axisID = axes[0].id
       }
     });
 
