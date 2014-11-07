@@ -200,7 +200,7 @@
           <div class="input-group">
             <input type="text" class="form-control" ng-model="widgetLink">
             <span class="input-group-btn">
-              <a class="btn btn-default" href="{{widgetLink}}" title="Open frame in new tab" target="_blank" ng-click="toggleTab('staticlink')">
+              <a class="btn btn-default" href="{{widgetLink}}" title="Open frame in new tab" target="_blank" ng-click="toggleTab($event, 'staticlink')">
                 <span class="glyphicon glyphicon-new-window"></span>
               </a>
             </span>
