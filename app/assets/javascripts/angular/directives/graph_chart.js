@@ -114,6 +114,15 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
           s.color = palette.color();
 
+          var statusCode;
+          if (scope.graphSettings.palette == "httpStatus" && s.name.match(/http/)) {
+            var m = s.name.match(/statusClass="(\d.{2})"/);
+            if (m[1]) {
+              statusCode = parseInt(m[1].replace(/x/g, "0"), 0);
+              s.color = palette.color(statusCode);
+            }
+          }
+
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
 
