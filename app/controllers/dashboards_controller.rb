@@ -1,9 +1,15 @@
 require 'open-uri'
+require 'server_transformer'
+
 class DashboardsController < ApplicationController
   protect_from_forgery with: :exception, except: :update
   before_action :set_dashboard, only: [:edit, :destroy, :widgets, :clone]
   before_action :set_dashboard_via_slug, only: [:show, :content, :update]
   before_action :set_directories, only: [:edit, :new, :clone]
+
+  rescue_from ServerNotFoundError do |exception|
+    render json: { :dashboard_json => [exception.message] }, status: :unprocessable_entity
+  end
 
   # GET /dashboards/1
   # GET /dashboards/1.json
@@ -103,9 +109,11 @@ class DashboardsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def dashboard_params
-    # We receive the "dashboard_json" column as an object, but need to turn it into JSON.
-    if params[:dashboard] && params[:dashboard][:dashboard_json]
-      params[:dashboard][:dashboard_json] = JSON.generate(params[:dashboard][:dashboard_json])
+    # We receive the "dashboard_json" column as an object, but need to do some
+    # preprocessing on it and then turn it into a JSON-serialized string.
+    if params[:dashboard] && dashboard_json = params[:dashboard][:dashboard_json]
+      ServerTransformer.transform(dashboard_json)
+      params[:dashboard][:dashboard_json] = JSON.generate(dashboard_json)
     end
     params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id)
   end
