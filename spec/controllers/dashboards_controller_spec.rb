@@ -44,6 +44,28 @@ describe DashboardsController do
         expect(response.status).to eq 422
       }.not_to change{ Dashboard.count }
     end
+
+    it "creates a dashboard given an existing server URL" do
+      Server.create(name: 'test-server', url: 'http://test-server:9090/')
+      dashboard_json = File.read('./spec/support/sample_json/server_by_url.json')
+      dashboard_obj = JSON.parse(dashboard_json)
+      expect {
+        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj }
+        expect(response.status).to eq 201
+      }.to change{ Dashboard.count }.by(1)
+      expect(Dashboard.last.dashboard_json).not_to match("serverURL")
+      expect(Dashboard.last.dashboard_json).to match("serverID")
+    end
+
+    it "fails to create a dashboard containing a non-existent server URL" do
+      dashboard_json = File.read('./spec/support/sample_json/server_by_url.json')
+      dashboard_obj = JSON.parse(dashboard_json)
+      expect {
+        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj }
+        expect(response.status).to eq 422
+        expect(response.body).to match("No server with URL http://test-server:9090/")
+      }.not_to change{ Dashboard.count }
+    end
   end
 
   it "#show" do
