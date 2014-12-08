@@ -1,8 +1,9 @@
-angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", function($http) {
+angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", "VariableInterpolator", function($http, VariableInterpolator) {
   return function(graph, scope) {
     var tags = graph.tags.map(function(e) {
       if (e.name) {
-        return e.name.split(",").map(function(s) { return s.trim(); });
+        var n = VariableInterpolator(e.name, scope.vars);
+        return n.split(",").map(function(s) { return s.trim(); });
       } else {
         return "";
       }
