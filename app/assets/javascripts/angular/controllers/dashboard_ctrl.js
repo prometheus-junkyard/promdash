@@ -175,23 +175,24 @@ angular.module("Prometheus.controllers")
     $scope.globalConfig.vars = vars;
   }, true);
 
-  $scope.syncEntireURLEncode = function() {
-    if (!$scope.globalConfig.keepURLUpdated) {
-      $scope.globalConfig.encodeEntireURL = false;
+  $scope.$watch("globalConfig", function(newValue, oldValue) {
+    if (newValue === oldValue) {
+      return
     }
-  };
-
-  $scope.$watch('globalConfig', function() {
-    if ($scope.globalConfig.keepURLUpdated) {
-      if ($scope.globalConfig.range) {
-        $location.search("range", $scope.globalConfig.range)
-      }
-      if ($scope.globalConfig.endTime) {
-        $location.search("until", (new Date($scope.globalConfig.endTime)).toISOString())
-      }
-      if ($scope.globalConfig.encodeEntireURL) {
-        URLConfigEncoder({globalConfig: $scope.globalConfig});
-      }
+    if (newValue.range) {
+      $location.search("range", newValue.range)
+    } else {
+      $location.search("range", null);
+    }
+    if (newValue.endTime) {
+      $location.search("until", (new Date(newValue.endTime)).toISOString())
+    } else {
+      $location.search("until", null);
+    }
+    if (newValue.encodeEntireURL) {
+      URLConfigEncoder({globalConfig: newValue});
+    } else {
+      $location.hash(null);
     }
   }, true);
 
