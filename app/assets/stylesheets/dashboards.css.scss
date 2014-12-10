@@ -277,6 +277,16 @@ error-message {
   z-index: 1;
 }
 
+.dropdown-menu > li > span {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.428571429;
+  color: #333333;
+  white-space: nowrap;
+}
+
 .dark_theme {
   $dark-background: #0A0A0A;
   $dark-border: #404040;
@@ -359,7 +369,7 @@ error-message {
     .dropdown-menu > .active > a {
       background-color: $dark-tertiary-background;
     }
-    .dropdown-menu li a {
+    .dropdown-menu li a, .dropdown-menu li span {
       color: $dark-text;
       &:hover {
         background-color: $dark-tertiary-background;
