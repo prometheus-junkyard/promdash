@@ -20,6 +20,9 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         $scope.globalConfig[o] = urlConfig.globalConfig[o];
       }
     }
+    if (urlConfig.widgets) {
+      $scope.widgets = urlConfig.widgets;
+    }
     // If we have manual variable overrides in the hashbang search part of the
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.

@@ -54,10 +54,7 @@ angular.module("Prometheus.controllers")
     }
   }
 
-  $scope.widgets = dashboardData.widgets || [];
-  var originalWidgets = angular.copy($scope.widgets);
-  var originalConfig = angular.copy($scope.globalConfig);
-
+  $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   $scope.saveDashboard = function() {
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
@@ -69,9 +66,6 @@ angular.module("Prometheus.controllers")
       }
     }).error(function(data, status) {
       alert("Error saving dashboard.");
-    }).success(function() {
-      originalConfig = angular.copy($scope.globalConfig);
-      originalWidgets = angular.copy($scope.widgets);
     }).finally(function() {
       $scope.saving = false;
     });
@@ -175,24 +169,30 @@ angular.module("Prometheus.controllers")
     $scope.globalConfig.vars = vars;
   }, true);
 
-  $scope.$watch("globalConfig", function(newValue, oldValue) {
-    if (newValue === oldValue) {
+  $scope.$watch("globalConfig", function(newConfig, oldConfig) {
+    if (newConfig === oldConfig) {
       return
     }
-    if (newValue.range) {
-      $location.search("range", newValue.range)
+    if (newConfig.range) {
+      $location.search("range", newConfig.range)
     } else {
       $location.search("range", null);
     }
-    if (newValue.endTime) {
-      $location.search("until", (new Date(newValue.endTime)).toISOString())
+    if (newConfig.endTime) {
+      $location.search("until", (new Date(newConfig.endTime)).toISOString())
     } else {
       $location.search("until", null);
     }
-    if (newValue.encodeEntireURL) {
-      URLConfigEncoder({globalConfig: newValue});
+    if (newConfig.encodeEntireURL) {
+      URLConfigEncoder({globalConfig: newConfig, widgets: $scope.widgets});
     } else {
       $location.hash(null);
+    }
+  }, true);
+
+  $scope.$watch("widgets", function(newWidgets, oldWidgets) {
+    if ($scope.globalConfig.encodeEntireURL) {
+      URLConfigEncoder({globalConfig: $scope.globalConfig, widgets: newWidgets});
     }
   }, true);
 
