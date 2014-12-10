@@ -54,10 +54,7 @@ angular.module("Prometheus.controllers")
     }
   }
 
-  $scope.widgets = dashboardData.widgets || [];
-  var originalWidgets = angular.copy($scope.widgets);
-  var originalConfig = angular.copy($scope.globalConfig);
-
+  $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   $scope.saveDashboard = function() {
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
@@ -69,9 +66,6 @@ angular.module("Prometheus.controllers")
       }
     }).error(function(data, status) {
       alert("Error saving dashboard.");
-    }).success(function() {
-      originalConfig = angular.copy($scope.globalConfig);
-      originalWidgets = angular.copy($scope.widgets);
     }).finally(function() {
       $scope.saving = false;
     });
@@ -175,23 +169,30 @@ angular.module("Prometheus.controllers")
     $scope.globalConfig.vars = vars;
   }, true);
 
-  $scope.syncEntireURLEncode = function() {
-    if (!$scope.globalConfig.keepURLUpdated) {
-      $scope.globalConfig.encodeEntireURL = false;
+  $scope.$watch("globalConfig", function(newConfig, oldConfig) {
+    if (newConfig === oldConfig) {
+      return
     }
-  };
+    if (newConfig.range) {
+      $location.search("range", newConfig.range)
+    } else {
+      $location.search("range", null);
+    }
+    if (newConfig.endTime) {
+      $location.search("until", (new Date(newConfig.endTime)).toISOString())
+    } else {
+      $location.search("until", null);
+    }
+    if (newConfig.encodeEntireURL) {
+      URLConfigEncoder({globalConfig: newConfig, widgets: $scope.widgets});
+    } else {
+      $location.hash(null);
+    }
+  }, true);
 
-  $scope.$watch('globalConfig', function() {
-    if ($scope.globalConfig.keepURLUpdated) {
-      if ($scope.globalConfig.range) {
-        $location.search("range", $scope.globalConfig.range)
-      }
-      if ($scope.globalConfig.endTime) {
-        $location.search("until", (new Date($scope.globalConfig.endTime)).toISOString())
-      }
-      if ($scope.globalConfig.encodeEntireURL) {
-        URLConfigEncoder({globalConfig: $scope.globalConfig});
-      }
+  $scope.$watch("widgets", function(newWidgets, oldWidgets) {
+    if ($scope.globalConfig.encodeEntireURL) {
+      URLConfigEncoder({globalConfig: $scope.globalConfig, widgets: newWidgets});
     }
   }, true);
 
