@@ -8,7 +8,10 @@ angular.module("Prometheus.services").factory('GraphRefresher',
   return function($scope) {
     function loadGraphData(idx, expression, server, expressionID, allData) {
       var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
-      return $http.get(server.url + 'api/query_range', {
+      var url = document.createElement('a');
+      url.href = server.url;
+      url.pathname = 'api/query_range'
+      return $http.get(url.href, {
         params: {
           expr: expression,
           range: rangeSeconds,
