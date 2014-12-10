@@ -12,7 +12,10 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
     var exp = $scope.graph.expression;
     var server = $scope.serversById[exp['serverID'] || 1];
     $scope.requestInFlight = true;
-    $http.get(server.url + "api/query", {
+    var url = document.createElement('a');
+    url.href = server.url;
+    url.pathname = 'api/query'
+    $http.get(url.href, {
       params: {
         expr: exp.expression
       }
