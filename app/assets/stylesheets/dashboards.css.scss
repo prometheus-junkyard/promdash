@@ -709,3 +709,13 @@ hr {
 .form-inline .form-group {
   margin-bottom: 5px;
 }
+
+.frame_query_string_key {
+  min-width: 100px;
+  padding: 8px 12px;
+  text-align: right;
+}
+
+.form-inline .form-control.frame_query_string_value {
+  width: 338px;
+}

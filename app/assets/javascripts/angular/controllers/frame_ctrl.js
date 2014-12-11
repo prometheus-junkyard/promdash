@@ -90,12 +90,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     return $sce.trustAsResourceUrl(buildFrameURL(url));
   };
 
-  $scope.updateURL = function() {
-    $scope.frame.url = $scope.urlInput;
-  };
-
-  $scope.urlInput = $scope.frame.url;
-
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;
   };
@@ -111,4 +105,42 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshFrame();
   });
+
+  $scope.generateFrameComponents = function() {
+    var parser = document.createElement("a");
+    parser.href = $scope.frame.url;
+    // [foo=bar, baz=quux]
+    var queryStringComponents = parser.search.substring(1).split("&");
+    // [{foo: bar}, {baz: quux}]
+    $scope.frameComponents = queryStringComponents.map(function(kv) {
+      var kvArr = kv.split("=");
+      return {
+        key: kvArr[0],
+        value: kvArr[1] === undefined ? undefined : decodeURIComponent(kvArr[1]),
+      };
+    });
+    console.log($scope.frameComponents);
+  }
+
+  $scope.generateFrameComponents();
+
+  $scope.skipComponent = function(key) {
+    return ["width", "height", "from", "until"].indexOf(key) > -1;
+  };
+
+  $scope.$watch("frameComponents", function(newValue, oldValue) {
+    if (angular.equals(newValue, oldValue)) {
+      return;
+    }
+    var parser = document.createElement("a");
+    parser.href = $scope.frame.url;
+    parser.search = "?" + $scope.frameComponents.map(function(o) {
+      if (o.value !== undefined) {
+        return o.key + "=" + encodeURIComponent(o.value);
+      } else {
+        return o.key;
+      }
+    }).join("&");
+    $scope.frame.url = parser.href;
+  }, true);
 }]);
