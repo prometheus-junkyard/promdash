@@ -20,7 +20,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
     {id: 1, name: ""}
   ];
-  $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "cardinal";
+  $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "linear";
   $scope.graph.axes = $scope.graph.axes || [];
   $scope.graph.axes.forEach(function(axis) {
     axis.renderer = axis.renderer || "line";
