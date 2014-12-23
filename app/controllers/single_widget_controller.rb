@@ -4,6 +4,7 @@ class SingleWidgetController < ApplicationController
   def show
     shortened_url = ShortenedUrl.find(params[:slug])
     shortened_url.update_last_accessed
+    @title = params[:slug].split("-")[1..-1].join(" ")
     @dashboard = shortened_url.dashboard
     @blob = shortened_url.encoded_url
     @servers = Server.all

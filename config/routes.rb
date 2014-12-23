@@ -13,7 +13,7 @@ PrometheusDashboard::Application.routes.draw do
   get '/annotations', to: 'dashboards#annotations'
   get '/dashboards/:id/clone', to: 'dashboards#clone', as: :clone_dashboard
   get '/dashboards/:id/widgets', to: 'dashboards#widgets'
-  get '/w/:slug', to: 'single_widget#show'
+  get '/w/:slug', to: 'single_widget#show', as: 'single_widget'
   post '/w', to: 'single_widget#create'
   get '/embed/:slug', to: 'embed#show'
   get '/:slug', to: 'dashboards#show', as: 'dashboard_slug'
