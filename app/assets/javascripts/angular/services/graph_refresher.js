@@ -6,8 +6,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
                                                         $q,
                                                         VariableInterpolator) {
   return function($scope) {
-    function loadGraphData(idx, expression, server, expressionID, allData) {
-      var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
+    function loadGraphData(idx, expression, server, expressionID, rangeSeconds, step, allData) {
       var url = document.createElement('a');
       url.href = server.url;
       url.pathname = 'api/query_range'
@@ -16,7 +15,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
           expr: expression,
           range: rangeSeconds,
           end: Math.floor($scope.graph.endTime / 1000),
-          step: Math.max(Math.floor(rangeSeconds / 250))
+          step: step >= 5 ? step : 5
         },
         cache: false
       }).success(function(data, status) {
@@ -41,7 +40,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       });
     }
 
-    return function() {
+    return function(rangeSeconds, step) {
       var deferred = $q.defer();
       var promises = [];
       var allData = [];
@@ -56,7 +55,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
         var expression = VariableInterpolator(exp.expression, $scope.vars);
         $scope.requestsInFlight = true;
         promises.push(
-          loadGraphData(i, expression, server, exp.id, allData)
+          loadGraphData(i, expression, server, exp.id, rangeSeconds, step, allData)
         );
       }
       $q.all(promises).then(function() {
