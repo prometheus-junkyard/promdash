@@ -7,6 +7,28 @@ feature "Dashboard", js: true do
     expect(page).to have_content("New dashboard")
   end
 
+  describe "page titles" do
+    before :each do
+      Server.create! name: "prometheus", url: "http://localhost:#{Capybara.server_port}/"
+    end
+
+    scenario "dashboard title" do
+      dashboard = FactoryGirl.create(:dashboard)
+      visit dashboard_slug_path dashboard.slug
+      expect(page).to have_title dashboard.name
+    end
+
+    scenario "single widget title" do
+      dashboard = FactoryGirl.create(:dashboard)
+      visit dashboard_slug_path dashboard.slug
+      open_tab 'Link to Graph'
+      widget_link = model_element 'widgetLink'
+      sleep 0.3
+      visit single_widget_path "#{dashboard.shortened_urls.last.id}-#{dashboard.slug}"
+      expect(page.title).to match /#{dashboard.slug.gsub("-", " ")}/
+    end
+  end
+
   scenario "creating the dashboard" do
     directory = FactoryGirl.create :directory
     visit new_dashboard_path
