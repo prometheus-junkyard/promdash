@@ -109,9 +109,13 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.refreshGraph = function(scope) {
     var refreshFn = GraphRefresher(scope);
     return function() {
-      refreshFn().then(function(data) {
-        $scope.$broadcast('redrawGraphs', data);
-        AnnotationRefresher($scope.graph, $scope);
+      var scalingFactor = $(".widget_wrapper").outerWidth() / 800;
+      var rangeSeconds = Prometheus.Graph.parseDuration(scope.graph.range);
+      // bigger denominator == smaller step == more data
+      var step = Math.floor(rangeSeconds / (250 * scalingFactor))
+      refreshFn(rangeSeconds, step).then(function(data) {
+        scope.$broadcast('redrawGraphs', data);
+        AnnotationRefresher(scope.graph, scope);
       });
     };
   }($scope);
