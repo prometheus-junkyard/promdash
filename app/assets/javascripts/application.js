@@ -16,6 +16,7 @@
 //= require bootstrap.min
 //= require bootstrap-datetimepicker
 //= require ui-bootstrap-tpls-0.11.0.min
+//= require ui-slider
 //= require d3.v3.js
 //= require rickshaw.min
 //= require dimple.v2.1.0.min

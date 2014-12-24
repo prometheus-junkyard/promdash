@@ -74,6 +74,10 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('setPalette', $scope.globalConfig.palette);
     });
 
+    $scope.$watch('globalConfig.resolution', function() {
+      $scope.$broadcast('setResolution', $scope.globalConfig.resolution);
+    });
+
     $scope.refreshDashboard = function() {
       $scope.$broadcast('refreshDashboard');
     };

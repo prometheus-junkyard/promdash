@@ -47,6 +47,7 @@ angular.module("Prometheus.controllers")
   SharedGraphBehavior($scope);
   $scope.palettes = Palettes;
   $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
+  $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
 
   $scope.frameHeight = function() {
     return {

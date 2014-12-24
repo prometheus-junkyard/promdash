@@ -22,6 +22,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   ];
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "linear";
   $scope.graph.axes = $scope.graph.axes || [];
+  $scope.graph.resolution = $scope.graph.resolution || 4;
   $scope.graph.axes.forEach(function(axis) {
     axis.renderer = axis.renderer || "line";
   });
@@ -83,6 +84,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     $scope.refreshGraph();
   });
 
+  $scope.$on('setResolution', function(ev, resolution) {
+    $scope.graph.resolution = resolution;
+    $scope.refreshGraph();
+  });
+
   $scope.$on('setRange', function(ev, range) {
     $scope.graph.range = range;
     $scope.refreshGraph();
@@ -109,10 +115,13 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.refreshGraph = function(scope) {
     var refreshFn = GraphRefresher(scope);
     return function() {
-      var scalingFactor = $(".widget_wrapper").outerWidth() / 800;
+      if ($scope.graph.resolution === 1) {
+        $scope.graph.resolution = 0.5;
+      }
+      var scalingFactor = $(".widget_wrapper").outerWidth() * $scope.graph.resolution / 10;
       var rangeSeconds = Prometheus.Graph.parseDuration(scope.graph.range);
       // bigger denominator == smaller step == more data
-      var step = Math.floor(rangeSeconds / (250 * scalingFactor))
+      var step = Math.floor(rangeSeconds / scalingFactor)
       refreshFn(rangeSeconds, step).then(function(data) {
         scope.$broadcast('redrawGraphs', data);
         AnnotationRefresher(scope.graph, scope);

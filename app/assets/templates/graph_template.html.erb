@@ -51,16 +51,32 @@
           <label>Graph Title:</label>
           <input class="form-control" ng-model="graph.title">
           <br/>
-          <div class="col-xs-12">
-            <label>Interpolation:</label>
-            <div class="radio">
-              <label class="graph_settings_image cardinal"><input type="radio" ng-model="graph.interpolationMethod" value="cardinal"> cardinal</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <label>Interpolation:</label>
+              <div class="radio">
+                <label class="graph_settings_image cardinal"><input type="radio" ng-model="graph.interpolationMethod" value="cardinal"> cardinal</label>
+              </div>
+              <div class="radio">
+                <label class="graph_settings_image linear"><input type="radio" ng-model="graph.interpolationMethod" value="linear"> linear</label>
+              </div>
+              <div class="radio">
+                <label class="graph_settings_image step"><input type="radio" ng-model="graph.interpolationMethod" value="step-after"> step</label>
+              </div>
             </div>
-            <div class="radio">
-              <label class="graph_settings_image linear"><input type="radio" ng-model="graph.interpolationMethod" value="linear"> linear</label>
-            </div>
-            <div class="radio">
-              <label class="graph_settings_image step"><input type="radio" ng-model="graph.interpolationMethod" value="step-after"> step</label>
+            <div class="col-xs-6">
+              <label>Resolution:
+                <div class="resolution">
+                  <div ui-slider="" min="1" max="5" ng-model="graph.resolution"
+                    class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
+                    <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                  </div>
+                  <div>
+                    <span class="pull-left"><i class="icon-minus"></i></span>
+                    <span class="pull-right"><i class="icon-plus"></i></span>
+                  </div>
+                </div>
+              </label>
             </div>
           </div>
 

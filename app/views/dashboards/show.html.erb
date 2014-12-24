@@ -87,6 +87,18 @@
               ng-options="p for p in palettes">
             </select>
           </label>
+          <label>Resolution:
+            <div class="resolution">
+              <div ui-slider="" min="1" max="5" ng-model="globalConfig.resolution"
+                class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
+                <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+              </div>
+              <div>
+                <span class="pull-left"><i class="icon-minus"></i></span>
+                <span class="pull-right"><i class="icon-plus"></i></span>
+              </div>
+            </div>
+          </label>
           <div class="checkbox">
             <label>
               <input type="checkbox" ng-model="globalConfig.showTags"> Show annotation tags
