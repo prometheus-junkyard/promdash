@@ -54,7 +54,14 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $el.css('height', graphHeight);
 
+        var disabledSeries = {};
         if (rsGraph) {
+          // Create a unique name using the series labels to store legend state for newly drawn graph.
+          rsGraph.series.forEach(function(s) {
+            if (s.disabled) {
+              disabledSeries[s.uniqName] = true;
+            }
+          });
           $el.html('<div class="annotation"></div><div class="graph_chart"><div class="legend"></div></div>');
           rsGraph = null;
         }
@@ -221,6 +228,16 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
+
+        // Maintain enabled/disabled state between graph updates.
+        if (Object.keys(disabledSeries).length) {
+          for (var i = 0; i < rsGraph.series.length; i++) {
+            var s = rsGraph.series[i];
+            if (disabledSeries[s.uniqName]) {
+              s.disabled = true;
+            }
+          }
+        }
 
         if (scaleID) {
           rsGraph.max = yScales[scaleID](graphMax);
