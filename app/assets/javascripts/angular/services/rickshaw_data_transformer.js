@@ -27,8 +27,11 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
       }
 
       series = series.concat(data[i]['data'].Value.map(function(ts) {
+        var name = metricToTsName(ts.Metric)
         return {
-          name: metricToTsName(ts.Metric),
+          name: name,
+          // uniqName is added to be kept as a unique, unmodified identifier for a series.
+          uniqName: name,
           axisID: axisIDByExprID[data[i].exp_id],
           exp_id: data[i].exp_id,
           labels: ts.Metric,
