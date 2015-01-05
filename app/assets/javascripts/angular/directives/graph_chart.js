@@ -224,8 +224,6 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
 
         if (scaleID) {
           rsGraph.max = yScales[scaleID](graphMax);
-        } else {
-          rsGraph.max = rsGraph.renderer.domain().y[1];
         }
 
         var $legend = $el.find(".legend");
