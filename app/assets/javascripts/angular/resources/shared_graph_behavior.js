@@ -1,4 +1,4 @@
-angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "$timeout", "URLConfigDecoder", "URLVariablesDecoder", "ThemeManager", function($http, $timeout, URLConfigDecoder, URLVariablesDecoder, ThemeManager) {
+angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "$timeout", "$location", "URLConfigDecoder", "URLVariablesDecoder", "ThemeManager", function($http, $timeout, $location, URLConfigDecoder, URLVariablesDecoder, ThemeManager) {
   function commonSetup($scope) {
     $scope.globalConfig = dashboardData.globalConfig || {
       numColumns: 2,
@@ -113,9 +113,20 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if ($scope.refreshTimer) {
         $timeout.cancel($scope.refreshTimer);
       }
-      if ($scope.globalConfig.refresh && !urlVars.until) {
+      if ($scope.globalConfig.refresh) {
         setupRefreshTimer(Prometheus.Graph.parseDuration($scope.globalConfig.refresh));
       }
+    });
+
+    $scope.$watch(function() {
+      return $location.search().until;
+    }, function(until) {
+      if (until) {
+        $scope.globalConfig.refresh = '';
+        $(".js-refresh").addClass("disabled");
+        return
+      }
+      $(".js-refresh").removeClass("disabled");
     });
   }
 
