@@ -14,30 +14,30 @@
   <div id="global_controls">
     <div class="global_grouping">
       <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
-        <i class="icon-minus"></i>
+        <i class="fa fa-minus"></i>
       </button>
       <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range">
       <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
-        <i class="icon-plus"></i>
+        <i class="fa fa-plus"></i>
       </button>
     </div>
 
     <div class="global_grouping">
       <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
-        <i class="icon-fb"></i>
+        <i class="fa fa-backward"></i>
       </button>
       <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
       <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
-        <i class="icon-ff"></i>
+        <i class="fa fa-forward"></i>
       </button>
     </div>
 
     <div class="global_grouping">
-      <button type="button" class="btn btn-default" ng-click="refreshDashboard()" title="Refresh dashboard"><i class="icon-cycle"></i></button>
+      <button type="button" class="btn btn-default" ng-click="refreshDashboard()" title="Refresh dashboard"><i class="fa fa-refresh"></i></button>
       <button type="button" class="btn btn-default dropdown-toggle js-refresh" data-toggle="dropdown">
         <span ng-if="globalConfig.refresh">every {{globalConfig.refresh}}</span>
         <span ng-if="!globalConfig.refresh">never</span>
-        <span class="caret"></span>
+        <i class="fa fa-caret-down"></i>
       </button>
       <ul class="dropdown-menu">
         <li><span class="pointer" ng-click="globalConfig.refresh = ''">never</span></li>
@@ -52,10 +52,10 @@
     <div class="global_grouping">
       <div>
         <button class="btn btn-default" ng-click="showDashboardSettings = !showDashboardSettings" title="Dashboard Settings">
-          <span class="glyphicon glyphicon-cog"></span>
+          <i class="fa fa-cog"></i>
         </button>
         <button class="btn btn-default" ng-click="enableFullscreen()" title="Fullscreen mode">
-          <span class="glyphicon glyphicon-fullscreen"></span>
+          <i class="fa fa-arrows-alt"></i>
         </button>
       </div>
       <div class="dashboard_settings panel panel-default" ng-show="showDashboardSettings">
@@ -94,8 +94,8 @@
                 <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
               </div>
               <div>
-                <span class="pull-left"><i class="icon-minus"></i></span>
-                <span class="pull-right"><i class="icon-plus"></i></span>
+                <span class="pull-left"><i class="fa fa-minus"></i></span>
+                <span class="pull-right"><i class="fa fa-plus"></i></span>
               </div>
             </div>
           </label>
@@ -135,7 +135,7 @@
       <tr ng-show="globalConfig.tags.length == 0">
         <td colspan="4">
           <button class="btn btn-primary" type="button" ng-click="addTag()">
-            <i class="icon-plus"></i>
+            <i class="fa fa-plus"></i>
           </button>
         </td>
       </tr>
@@ -146,12 +146,12 @@
         </td>
         <td>
           <button class="btn btn-default" type="button" ng-click="removeTag($index)">
-            <i class="icon-cross"></i>
+            <i class="fa fa-close"></i>
           </button>
         </td>
         <td>
           <button class="btn btn-primary" type="button" ng-click="addTag()" ng-show="$last">
-            <i class="icon-plus"></i>
+            <i class="fa fa-plus"></i>
           </button>
         </td>
       </tr>
@@ -167,7 +167,7 @@
       <tr ng-show="vars.length == 0">
         <td colspan="4">
           <button class="btn btn-primary" type="button" ng-click="addVariable()">
-            <i class="icon-plus"></i>
+            <i class="fa fa-plus"></i>
           </button>
         </td>
       </tr>
@@ -182,12 +182,12 @@
         </td>
         <td>
           <button class="btn btn-default" type="button" ng-click="removeVariable($index)">
-            <i class="icon-cross"></i>
+            <i class="fa fa-close"></i>
           </button>
         </td>
         <td>
           <button class="btn btn-primary" type="button" ng-click="addVariable()" ng-show="$last">
-            <i class="icon-plus"></i>
+            <i class="fa fa-plus"></i>
           </button>
         </td>
       </tr>
@@ -252,7 +252,7 @@
   <div class="modal_container panel panel-default" ng-show="showCloneControls">
     <div class="panel-heading">
       Clone Graph
-      <i ng-click="closeCloneControls()" class="clone_widget_close pointer pull-right icon-cross"></i>
+      <i ng-click="closeCloneControls()" class="clone_widget_close pointer pull-right fa fa-close"></i>
     </div>
     <div class="panel-body">
       <div class="form-group">

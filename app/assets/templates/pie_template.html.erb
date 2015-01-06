@@ -6,13 +6,13 @@
       {{title()}}
 
       <div class="btn-group pull-right graph_config_menu">
-        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestInFlight}" class="icon-cycle"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Chart settings"><i class="icon-pie-chart"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="icon-list"></i></div>
-        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Chart"><i class="icon-link"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="widgetDeleteModal()" tooltip-append-to-body="true" tooltip="Remove chart"><i class="icon-trash"></i></div>
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{'fa-spin':requestInFlight}" class="fa fa-refresh"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="fa fa-database"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Chart settings"><i class="fa fa-pie-chart"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="fa fa-paint-brush"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="fa fa-bars"></i></div>
+        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Chart"><i class="fa fa-link fa-rotate-90"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="widgetDeleteModal()" tooltip-append-to-body="true" tooltip="Remove chart"><i class="fa fa-trash"></i></div>
       </div>
 
     </div>
@@ -88,7 +88,7 @@
             <input type="text" class="form-control" ng-model="widgetLink">
             <span class="input-group-btn">
               <a class="btn btn-default" href="{{widgetLink}}" title="Open frame in new tab" target="_blank" ng-click="toggleTab('staticlink')">
-                <span class="glyphicon glyphicon-new-window"></span>
+                <i class="fa fa-external-link-square"></i>
               </a>
             </span>
           </div>

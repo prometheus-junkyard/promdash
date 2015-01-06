@@ -31,11 +31,11 @@
     typeahead-wait-ms="100"
     placeholder="Enter expression" />
   <span class="input-group-btn">
-    <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="icon-plus"></i></button>
-    <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="icon-minus"></i></button>
-    <button class="btn btn-default" type="button" ng-click="removeExpression(index)"><i class="icon-cross"></i></button>
+    <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="fa fa-plus"></i></button>
+    <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="fa fa-minus"></i></button>
+    <button class="btn btn-default" type="button" ng-click="removeExpression(index)"><i class="fa fa-close"></i></button>
     <a class="btn btn-default" target="_blank" href="{{linkToPrometheus()}}" tooltip-append-to-body="true" tooltip="Link to Graph in Prometheus">
-      <i class="glyphicon glyphicon-new-window"></i>
+      <i class="fa fa-external-link-square"></i>
     </a>
   </span>
 </div>
