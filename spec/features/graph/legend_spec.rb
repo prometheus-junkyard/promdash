@@ -15,7 +15,17 @@ feature "Graph legend", js: true do
         expect(page).to have_content "prometheus_targetpool_duration_ms"
       end
     end
+
+    it "maintains legend state after update" do
+      expect(all('.rickshaw_legend .line.disabled').count).to eq 0
+      legend_elements = all('.rickshaw_legend .action')
+      legend_elements.first.click
+      expect(all('.rickshaw_legend .line.disabled').count).to eq 1
+      open_tab 'Refresh'
+      expect(all('.rickshaw_legend .line.disabled').count).to eq 1
+    end
   end
+
 
   describe "two legend strings" do
     before(:each) do
