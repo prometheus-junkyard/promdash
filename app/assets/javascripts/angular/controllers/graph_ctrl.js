@@ -115,10 +115,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.refreshGraph = function(scope) {
     var refreshFn = GraphRefresher(scope);
     return function() {
-      if ($scope.graph.resolution === 1) {
-        $scope.graph.resolution = 0.5;
+      var r = $scope.graph.resolution;
+      if (r === 1) {
+        r = 0.5;
       }
-      var scalingFactor = $(".widget_wrapper").outerWidth() * $scope.graph.resolution / 10;
+      var scalingFactor = $(".widget_wrapper").outerWidth() * r / 10;
       var rangeSeconds = Prometheus.Graph.parseDuration(scope.graph.range);
       // bigger denominator == smaller step == more data
       var step = Math.floor(rangeSeconds / scalingFactor)

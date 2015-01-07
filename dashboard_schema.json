@@ -32,7 +32,7 @@
           "type": "boolean"
         },
         "resolution": {
-          "type": "integer"
+          "enum": [1, 2, 3, 4, 5]
         },
         "endTime": {
           "type": [
@@ -199,7 +199,7 @@
                 "type": "string"
               },
               "resolution": {
-                "type": "integer"
+                "enum": [1, 2, 3, 4, 5]
               },
               "legendFormatStrings": {
                 "type": "array",
