@@ -27,7 +27,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     axis.renderer = axis.renderer || "line";
   });
 
-  $scope.requestsInFlight = 0;
+  $scope.requestsInFlight = false;
   $scope.palettes = Palettes;
 
   $scope.addExpression = function() {
