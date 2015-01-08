@@ -137,12 +137,21 @@ angular.module("Prometheus.controllers")
     $scope.widgets.push({
       type: "frame",
       title: "",
+      range: $scope.globalConfig.range,
+      endTime: $scope.globalConfig.endTime,
       url: url
     });
   };
 
   $scope.addGraph = function() {
-    $scope.widgets.push(Prometheus.Graph.getGraphDefaults());
+    $scope.widgets.push({
+      title: 'Title',
+      range: $scope.globalConfig.range,
+      endTime: $scope.globalConfig.endTime,
+      expressions: [],
+      tags: [],
+      type: 'graph'
+    });
   };
 
   $scope.addPie = function() {
