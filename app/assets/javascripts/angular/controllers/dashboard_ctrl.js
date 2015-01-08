@@ -235,7 +235,7 @@ angular.module("Prometheus.controllers")
   $http.get('/directories.json').then(function(payload) {
     $scope.directoryNames = payload.data.directories;
     $scope.directoryForClone = payload.data.directories.filter(function(d) {
-      return d.name == dashboardName;
+      return d.name == directoryName;
     })[0] || payload.data.directories[0];
     $scope.queryDirectory();
   });
