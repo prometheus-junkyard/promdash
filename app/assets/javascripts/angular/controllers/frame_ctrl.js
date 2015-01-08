@@ -38,38 +38,35 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
   function buildFrameURL(url) {
     var parser = document.createElement('a');
     parser.href = url;
-    var queryStringComponents = parser.search.substring(1).split('&');
     if ($scope.frame.graphite) {
-      if (url.indexOf("until") === -1) {
-        queryStringComponents.push("until=now");
-      }
-      queryStringComponents = queryStringComponents.map(function(e) {
-        switch (0) {
-        case e.indexOf('height='):
-          return setDimension(e, $scope.frameHeight().height);
-        case e.indexOf('width='):
-          var width = $scope.frameHeight().height / $scope.aspectRatio;
-          return setDimension(e, width);
-        case e.indexOf('from='):
-          if (!$scope.frame.range) {
-            return e;
-          }
-          return setDimension(e, GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime));
-        case e.indexOf('until='):
-          return setDimension(e, GraphiteTimeConverter.graphiteUntil($scope.frame.endTime));
-        }
-        return e;
-      });
-      queryStringComponents.push("bgcolor=%23191919");
+      return parseGraphiteURL(parser);
     }
-    parser.search = '?' + queryStringComponents.join('&') + '&decache=' + $scope.refreshCounter;
+    parser.search = parser.search + '&decache=' + $scope.refreshCounter;
     return parser.href;
   }
 
-  function setDimension(dimensionKeyValue, dimensionValue) {
-    var split = dimensionKeyValue.split("=");
-    split[1] = dimensionValue;
-    return split.join("=");
+  function parseGraphiteURL(parser) {
+      var queryStringComponents = parser.search.substring(1).split('&');
+      var fields = {};
+      var targets = [];
+      queryStringComponents.forEach(function(f) {
+        var s = f.split('=');
+        // If there are more than 1 target in the query string, they get overridden.
+        // So we can't put them in the fields object.
+        if (s[0] !== 'target') {
+          fields[s.shift()] = s.join('=');
+        } else {
+          targets.push(f);
+        }
+      });
+
+      fields['height'] = $scope.frameHeight().height;
+      fields['width'] = $scope.frameHeight().height / $scope.aspectRatio;
+      fields['from'] = GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime);
+      fields['until'] = GraphiteTimeConverter.graphiteUntil($scope.frame.endTime);
+      fields['bgcolor'] = '%23191919'
+      parser.search = '?' + decodeURI($.param(fields)) + '&' + targets.join('&') + '&decache=' + $scope.refreshCounter;
+      return parser.href;
   }
 
   $scope.getTitle = function() {
