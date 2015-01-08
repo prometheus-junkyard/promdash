@@ -70,17 +70,6 @@ Prometheus.Graph = {
     return Math.floor(date.getTime() + (range * 1000 / 2));
   },
 
-  getGraphDefaults: function() {
-    return {
-      title: "Title",
-      range: "1h",
-      endTime: null,
-      expressions: [],
-      tags: [],
-      type: "graph"
-    };
-  },
-
   getAxisDefaults: function() {
     return {
       orientation: 'left',
