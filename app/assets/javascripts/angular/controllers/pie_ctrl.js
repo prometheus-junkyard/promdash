@@ -11,6 +11,9 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
     var server = $scope.serversById[exp['serverID'] || 1];
+    if (server === undefined) {
+      return;
+    }
     $scope.requestInFlight = true;
     var url = document.createElement('a');
     url.href = server.url;

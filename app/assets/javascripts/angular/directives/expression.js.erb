@@ -15,16 +15,22 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
-      var server = scope.serversById[scope.expr.serverID];
-
-      scope.MetricNamesQuerier = MetricNamesQuerier;
-      MetricNamesQuerier(scope.expr.serverID, server.url, scope);
+      scope.updateMetricNames = function() {
+        var server = scope.serversById[scope.expr.serverID];
+        if (server === undefined) {
+          return;
+        }
+        MetricNamesQuerier(scope.expr.serverID, server.url, scope);
+      };
 
       scope.linkToPrometheus = function() {
         if (!scope.expr.axisID && scope.type !== "pie") {
-          return
+          return;
         }
-        var server = scope.serversById[scope.expr.serverID]['url'];
+        var server = scope.serversById[scope.expr.serverID];
+        if (server === undefined) {
+          return;
+        }
         var stacked = "";
         if (scope.type !== "pie") {
           scope.axes.forEach(function(a) {
@@ -50,7 +56,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
         }
 
         var hash = escape(JSON.stringify([expr]));
-        return server + "graph#" + hash;
+        return server.url + "graph#" + hash;
       };
 
       scope.setExpression = function(metricName) {
@@ -75,6 +81,9 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       scope.removeExpression = function() {
         scope.$emit('removeExpression', scope.index);
       };
+
+      // Do initial population of metric names.
+      scope.updateMetricNames();
     },
     templateUrl: "<%= asset_path('expression_template.html') %>"
   };
