@@ -4,7 +4,7 @@
     <select class="form-control"
       ng-model="expr.serverID"
       ng-options="s.id as s.name for s in servers"
-      ng-change="MetricNamesQuerier(expr.serverID, serversById[expr.serverID]['url'], this)">
+      ng-change="updateMetricNames()">
       <option value="">- Select Server -</option>
     </select>
   </div>
@@ -34,7 +34,7 @@
     <button class="btn btn-default" type="button" ng-click="showMetrics = true" ng-hide="showMetrics"><i class="fa fa-plus"></i></button>
     <button class="btn btn-default" type="button" ng-click="showMetrics = false" ng-show="showMetrics"><i class="fa fa-minus"></i></button>
     <button class="btn btn-default" type="button" ng-click="removeExpression(index)"><i class="fa fa-close"></i></button>
-    <a class="btn btn-default" target="_blank" href="{{linkToPrometheus()}}" tooltip-append-to-body="true" tooltip="Link to Graph in Prometheus">
+    <a class="btn btn-default" ng-class="{disabled: !linkToPrometheus()}" target="_blank" href="{{linkToPrometheus()}}" tooltip-append-to-body="true" tooltip="Link to Graph in Prometheus">
       <i class="fa fa-external-link-square"></i>
     </a>
   </span>
