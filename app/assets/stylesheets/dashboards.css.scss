@@ -353,6 +353,12 @@ error-message {
       .caret {
         border-top-color: $dark-inactive-icon;
       }
+      .until_clear {
+        color: $dark-inactive-icon;
+        &:hover {
+          color: $dark-text;
+        }
+      }
       .btn {
         color: $dark-inactive-icon;
         &:hover {
@@ -727,4 +733,22 @@ hr {
 .resolution {
   margin: 10px 0 0;
   width: 174px;
+}
+
+.until_container {
+  position: relative;
+}
+
+ .until_clear {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  &.global {
+    right: 14px;
+  }
+ }
+
+ .until_container:hover .until_clear {
+  display: block;
 }

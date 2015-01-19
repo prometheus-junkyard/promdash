@@ -26,7 +26,14 @@
       <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
         <i class="icon-fb"></i>
       </button>
-      <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
+      <span class="until_container">
+        <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
+        <span class="until_clear global pointer"
+          ng-click="globalConfig.endTime = null"
+          tooltip-append-to-body="true" tooltip="Clear">
+          <i class="glyphicon glyphicon-remove"></i>
+        </span>
+      </span>
       <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
         <i class="icon-ff"></i>
       </button>
