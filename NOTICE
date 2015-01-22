@@ -1,0 +1,43 @@
+Prometheus Dashboard Builder
+Copyright 2013-2015 The Prometheus Authors
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+
+The following components are included in this product:
+
+Bootstrap
+http://getbootstrap.com
+Copyright 2011-2014 Twitter, Inc.
+Licensed under the MIT License
+
+bootstrap-datetimepicker.js
+http://www.eyecon.ro/bootstrap-datepicker
+Copyright 2012 Stefan Petre
+Licensed under the Apache License, Version 2.0
+
+Rickshaw
+https://github.com/shutterstock/rickshaw
+Copyright 2011-2014 by Shutterstock Images, LLC
+See https://github.com/shutterstock/rickshaw/blob/master/LICENSE for license details
+
+D3.js
+http://d3js.org/
+Copyright 2010-2014, Michael Bostock
+See https://github.com/mbostock/d3/blob/master/LICENSE for license details
+
+jQuery UI Slider plugin wrapper
+https://github.com/angular-ui/ui-slider
+Copyright 2012 the AngularUI Team, http://angular-ui.github.com
+Licensed under the MIT License
+
+angular-ui-bootstrap
+http://angular-ui.github.io/bootstrap/
+Copyright 2012-2014 the AngularUI Team, https://github.com/organizations/angular-ui/teams/291112
+Licensed under the MIT License
+
+Dimple
+https://github.com/PMSI-AlignAlytics/dimple
+Copyright 2014 PMSI-AlignAlytics
+Licensed under the MIT License
