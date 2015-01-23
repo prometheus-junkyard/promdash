@@ -252,28 +252,4 @@ angular.module("Prometheus.controllers")
   $scope.copyWidget = function() {
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
-
-  var searchVars = URLVariablesDecoder()
-  if (searchVars.fullscreen) {
-    $scope.enableFullscreen();
-  }
-
-  if (searchVars.fullscreen_title) {
-    $scope.fullscreenTitle = true;
-  }
-
-  if (searchVars.range) {
-    $scope.globalConfig.range = searchVars.range;
-    $scope.widgets.forEach(function(w) {
-      w.range = searchVars.range;
-    });
-  }
-
-  if (searchVars.until) {
-    var date = Date.parse(searchVars.until);
-    $scope.globalConfig.endTime = date;
-    $scope.widgets.forEach(function(w) {
-      w.endTime = date;
-    });
-  }
 }]);
