@@ -97,7 +97,7 @@
               //"legendFormatStrings",
               "showLegend",
               //"palette",
-              "range",
+              //"range",
               //"tags",
               "title",
               "type"
