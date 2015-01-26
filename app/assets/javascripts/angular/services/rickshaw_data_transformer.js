@@ -26,19 +26,19 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
         continue;
       }
 
-      series = series.concat(data[i]['data'].Value.map(function(ts) {
-        var name = metricToTsName(ts.Metric)
+      series = series.concat((data[i]['data'].Value || data[i]['data'].value).map(function(ts) {
+        var name = metricToTsName(ts.Metric || ts.metric)
         return {
           name: name,
           // uniqName is added to be kept as a unique, unmodified identifier for a series.
           uniqName: name,
           axisID: axisIDByExprID[data[i].exp_id],
           exp_id: data[i].exp_id,
-          labels: ts.Metric,
-          data: ts.Values.map(function(value) {
+          labels: ts.Metric || ts.metric,
+          data: (ts.Values || ts.values).map(function(value) {
             return {
-              x: value.Timestamp,
-              y: parseValue(value.Value)
+              x: value.Timestamp || value[0],
+              y: parseValue(value.Value || value[1])
             }
           })
         };

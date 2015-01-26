@@ -27,19 +27,19 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         }
 
         pieData.forEach(function(e) {
-          e.value = parseFloat(e.Value);
+          e.value = parseFloat(e.Value || e.value);
 
           if (scope.graphSettings.legendFormatString) {
-            e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.Metric);
+            e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.Metric || e.metric);
           } else {
-            var ts = joinProperties(e.Metric, "=").map(function(t) {
+            var ts = joinProperties(e.Metric || e.metric, "=").map(function(t) {
               return t.replace(/=(.+)/, function($1, $2) {
                 return "=\"" + $2 + "\"";
               });
             }).join(",");
-            e.ts = (e.Metric["__name__"] || '') + "{" + ts + "}";
+            e.ts = ((e.Metric || e.metric)["__name__"] || '') + "{" + ts + "}";
           }
-          tooltip[e.ts] = e.Metric;
+          tooltip[e.ts] = e.Metric || e.metric;
         });
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], graphWidth, graphHeight);
