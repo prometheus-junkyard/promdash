@@ -22,6 +22,10 @@ angular.module("Prometheus.directives").directive('widgetTimeOptions', function(
       scope.decreaseEndTime = function() {
         scope.endTime = Prometheus.Graph.earlierEndTime(scope.endTime, scope.range);
       };
+
+      scope.clearEndTime = function() {
+        scope.endTime = null;
+      };
     },
     templateUrl: "<%= asset_path('widget_time_options_template.html') %>"
   };

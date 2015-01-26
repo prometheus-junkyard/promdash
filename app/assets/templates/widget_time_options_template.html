@@ -26,7 +26,15 @@
             <i class="icon-fb"></i>
           </button>
         </span>
-        <input type="text" class="form-control" datetime-picker datetime="endTime" data-format="yyyy-MM-dd" placeholder="Until">
+        <span class="until_container">
+          <input type="text" class="form-control" datetime-picker datetime="endTime" data-format="yyyy-MM-dd" placeholder="Until">
+          <span class="until_clear pointer"
+            ng-click="clearEndTime()"
+            ng-show="endTime"
+            tooltip-append-to-body="true" tooltip="Clear">
+            <i class="glyphicon glyphicon-remove"></i>
+          </span>
+        </span>
         <span class="input-group-btn">
           <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
             <i class="icon-ff"></i>
