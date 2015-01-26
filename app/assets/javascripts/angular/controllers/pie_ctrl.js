@@ -23,7 +23,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
         expr: exp.expression
       }
     }).then(function(payload) {
-      $scope.$broadcast('redrawGraphs', payload.data.Value);
+      $scope.$broadcast('redrawGraphs', payload.data.Value || payload.data.value);
     }, function(data, status, b) {
       var errMsg = "Expression " + exp.expression  + ": Server returned status " + status + ".";
       $scope.errorMessages.push(errMsg);
