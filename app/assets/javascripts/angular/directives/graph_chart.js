@@ -388,8 +388,11 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         if (!rsGraph) {
           return;
         }
+        scope.graphSettings.disabledSeries = {};
         rsGraph.series.forEach(function(s) {
-          scope.graphSettings.disabledSeries[s.uniqName] = s.disabled ? true : false;
+          if (s.disabled) {
+            scope.graphSettings.disabledSeries[s.uniqName] = true;
+          }
         });
       }
 
