@@ -1,6 +1,7 @@
 angular.module("Prometheus.controllers").controller('GraphCtrl',
                                                     ["$scope",
                                                       "$http",
+                                                      "$timeout",
                                                       "GraphRefresher",
                                                       "YAxisUtilities",
                                                       "SharedWidgetSetup",
@@ -8,6 +9,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
                                                       "AnnotationRefresher",
                                                       function($scope,
                                                                $http,
+                                                               $timeout,
                                                                GraphRefresher,
                                                                YAxisUtilities,
                                                                SharedWidgetSetup,
@@ -91,12 +93,12 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.$on('setRange', function(ev, range) {
     $scope.graph.range = range;
-    $scope.refreshGraph();
+    $scope.refreshGraph(500);
   });
 
   $scope.$on('setEndTime', function(ev, endTime) {
     $scope.graph.endTime = endTime;
-    $scope.refreshGraph();
+    $scope.refreshGraph(500);
   });
 
   $scope.addLegendString = function() {
@@ -112,9 +114,10 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
   $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
+  var debounce;
   $scope.refreshGraph = function(scope) {
     var refreshFn = GraphRefresher(scope);
-    return function() {
+    return function(timeout) {
       var r = $scope.graph.resolution;
       if (r === 1) {
         r = 0.5;
@@ -123,10 +126,15 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       var rangeSeconds = Prometheus.Graph.parseDuration(scope.graph.range);
       // bigger denominator == smaller step == more data
       var step = Math.floor(rangeSeconds / scalingFactor)
-      refreshFn(rangeSeconds, step).then(function(data) {
-        scope.$broadcast('redrawGraphs', data);
-        AnnotationRefresher(scope.graph, scope);
-      });
+
+      // Cancels the reload request if it exists.
+      $timeout.cancel(debounce);
+      debounce = $timeout(function() {
+        refreshFn(rangeSeconds, step).then(function(data) {
+          scope.$broadcast('redrawGraphs', data);
+          AnnotationRefresher(scope.graph, scope);
+        });
+      }, timeout);
     };
   }($scope);
 
