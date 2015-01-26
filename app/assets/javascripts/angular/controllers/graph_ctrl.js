@@ -23,6 +23,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     {id: 1, name: ""}
   ];
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "linear";
+  $scope.graph.disabledSeries = $scope.graph.disabledSeries || {};
   $scope.graph.axes = $scope.graph.axes || [];
   $scope.graph.resolution = $scope.graph.resolution || 4;
   $scope.graph.axes.forEach(function(axis) {

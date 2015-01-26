@@ -144,6 +144,9 @@
                   }
                 }
               },
+              "disabledSeries": {
+                "type": "object"
+              },
               "endTime": {
                 "type": [
                   "integer",

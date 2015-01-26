@@ -11,6 +11,8 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
       var graphData = [];
       var annotationData = [];
 
+      element.on("click", ".legend .line", storeLegendState);
+
       function setLegendString(series) {
         // TODO(stuartnelson3): Do something with this function. Put it somewhere or simplify it.
         var expressions = scope.graphSettings.expressions;
@@ -54,14 +56,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         var graphHeight = WidgetHeightCalculator(element[0], scope.aspectRatio);
         $el.css('height', graphHeight);
 
-        var disabledSeries = {};
         if (rsGraph) {
-          // Create a unique name using the series labels to store legend state for newly drawn graph.
-          rsGraph.series.forEach(function(s) {
-            if (s.disabled) {
-              disabledSeries[s.uniqName] = true;
-            }
-          });
           $el.html('<div class="annotation"></div><div class="graph_chart"><div class="legend"></div></div>');
           rsGraph = null;
         }
@@ -230,10 +225,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         });
 
         // Maintain enabled/disabled state between graph updates.
-        if (Object.keys(disabledSeries).length) {
+        if (Object.keys(scope.graphSettings.disabledSeries).length) {
           for (var i = 0; i < rsGraph.series.length; i++) {
             var s = rsGraph.series[i];
-            if (disabledSeries[s.uniqName]) {
+            if (scope.graphSettings.disabledSeries[s.uniqName]) {
               s.disabled = true;
             }
           }
@@ -387,6 +382,15 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           }
         }
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
+      }
+
+      function storeLegendState() {
+        if (!rsGraph) {
+          return;
+        }
+        rsGraph.series.forEach(function(s) {
+          scope.graphSettings.disabledSeries[s.uniqName] = s.disabled ? true : false;
+        });
       }
 
       scope.$watch(function(scope) {
