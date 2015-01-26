@@ -23,7 +23,20 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
         expr: exp.expression
       }
     }).then(function(payload) {
-      $scope.$broadcast('redrawGraphs', payload.data.Value || payload.data.value);
+      var data = payload.data;
+      switch(data.Type || data.type) {
+        case 'error':
+          var errMsg = "Expression " + exp.expression + ": " + (data.Value || data.value);
+          $scope.errorMessages.push(errMsg);
+          break;
+        case 'vector':
+          $scope.$broadcast('redrawGraphs', data.Value || data.value);
+          $scope.errorMessages = [];
+          break;
+        default:
+          var errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" cannot be graphed."';
+          $scope.errorMessages.push(errMsg);
+      }
     }, function(data, status, b) {
       var errMsg = "Expression " + exp.expression  + ": Server returned status " + status + ".";
       $scope.errorMessages.push(errMsg);
@@ -32,9 +45,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
     });
   };
 
-  if ($scope.graph.expression.expression) {
-    $scope.refreshGraph();
-  }
+  $scope.refreshGraph();
 
   if (location.pathname.match(/^\/w\//)) { // On a widget page.
     $scope.widgetPage = true;
