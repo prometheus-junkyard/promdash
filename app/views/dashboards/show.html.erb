@@ -29,6 +29,7 @@
       <span class="until_container">
         <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
         <span class="until_clear global pointer"
+          ng-show="globalConfig.endTime"
           ng-click="globalConfig.endTime = null"
           tooltip-append-to-body="true" tooltip="Clear">
           <i class="glyphicon glyphicon-remove"></i>
