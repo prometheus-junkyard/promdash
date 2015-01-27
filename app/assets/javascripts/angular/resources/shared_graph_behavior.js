@@ -34,8 +34,11 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         var matches = o.match(templateVarRe)
         if (matches) {
           var templateVar = matches[1]
-          $scope.vars.push({name: templateVar, value: urlVars[o]});
+          $scope.globalConfig.vars[templateVar] = urlVars[o];
         }
+      }
+      for (var o in $scope.globalConfig.vars) {
+        $scope.addVariable(o, $scope.globalConfig.vars[o]);
       }
       if (urlVars.fullscreen) {
         $scope.enableFullscreen();
