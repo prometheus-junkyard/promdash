@@ -95,6 +95,10 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     $scope.frame.range = range;
   });
 
+  $scope.$on('setRangeNoRefresh', function(ev, range) {
+    $scope.frame.range = range;
+  });
+
   $scope.$on('setEndTime', function(ev, endTime) {
     $scope.frame.endTime = endTime;
   });

@@ -58,6 +58,10 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('setRange', $scope.globalConfig.range);
     };
 
+    $scope.setRangeNoRefresh = function() {
+      $scope.$broadcast('setRangeNoRefresh', $scope.globalConfig.range);
+    };
+
     $scope.increaseEndTime = function() {
       $scope.globalConfig.endTime = Prometheus.Graph.laterEndTime($scope.globalConfig.endTime, $scope.globalConfig.range);
     };
@@ -76,6 +80,17 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
 
     $scope.$watch('globalConfig.resolution', function() {
       $scope.$broadcast('setResolution', $scope.globalConfig.resolution);
+    });
+
+    $scope.$on('timeRangeRescale', function(ev, newTimeSettings) {
+      $scope.globalConfig.range = Prometheus.Graph.durationToString(newTimeSettings.range);
+      // TODO(stuart): setRangeNoRefresh should be removed once changes to global
+      // settings are debounced, removing the request created for updating both endTime
+      // and range.
+      $scope.setRangeNoRefresh();
+      $scope.$apply(function() {
+        $scope.globalConfig.endTime = newTimeSettings.endTime;
+      })
     });
 
     $scope.refreshDashboard = function() {

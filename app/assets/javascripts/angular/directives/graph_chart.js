@@ -1,4 +1,4 @@
-angular.module("Prometheus.directives").directive('graphChart', ["$location", "WidgetHeightCalculator", "VariableInterpolator", "RickshawDataTransformer", "YAxisUtilities", function($location, WidgetHeightCalculator, VariableInterpolator, RickshawDataTransformer, YAxisUtilities) {
+angular.module("Prometheus.directives").directive('graphChart', ["$location", "$rootScope", "WidgetHeightCalculator", "VariableInterpolator", "RickshawDataTransformer", "YAxisUtilities", function($location, $rootScope, WidgetHeightCalculator, VariableInterpolator, RickshawDataTransformer, YAxisUtilities) {
   return {
     scope: {
       graphSettings: '=',
@@ -271,6 +271,19 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         });
         rsGraph.series.legend = legend;
         rsGraph.render();
+
+        new Rickshaw.Graph.DragZoom({
+          graph: rsGraph,
+          opacity: 0.5,
+          fill: 'steelblue',
+          minimumTimeSelection: 15, // 15 seconds.
+          callback: function(args) {
+            $rootScope.$broadcast('timeRangeRescale', {
+              range: args.range,
+              endTime: args.endTime * 1000
+            });
+          }
+        });
 
         var xAxis = new Rickshaw.Graph.Axis.Time({
           graph: rsGraph

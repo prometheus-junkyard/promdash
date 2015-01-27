@@ -17,6 +17,24 @@ Prometheus.Graph = {
     's': 1
   },
 
+  durationToString: function(seconds) {
+    var factors = {
+      "y": 60 * 60 * 24 * 365,
+      "d": 60 * 60 * 24,
+      "h": 60 * 60,
+      "m": 60,
+      "s": 1
+    }
+    var unit = "s"
+    for (var i in factors) {
+      if (seconds % factors[i] === 0) {
+        unit = i;
+        break
+      }
+    }
+    return seconds/factors[unit] + unit
+  },
+
   parseDuration: function(durationText) {
     if (!durationText) {
       return 60;
