@@ -123,15 +123,15 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       if (r === 1) {
         r = 0.5;
       }
+      var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
+      var endTime = Math.floor($scope.graph.endTime / 1000);
       var scalingFactor = $(".widget_wrapper").outerWidth() * r / 10;
-      var rangeSeconds = Prometheus.Graph.parseDuration(scope.graph.range);
       // bigger denominator == smaller step == more data
       var step = Math.floor(rangeSeconds / scalingFactor)
-
       // Cancels the reload request if it exists.
       $timeout.cancel(debounce);
       debounce = $timeout(function() {
-        refreshFn(rangeSeconds, step).then(function(data) {
+        refreshFn(endTime, rangeSeconds, step).then(function(data) {
           scope.$broadcast('redrawGraphs', data);
           AnnotationRefresher(scope.graph, scope);
         });
