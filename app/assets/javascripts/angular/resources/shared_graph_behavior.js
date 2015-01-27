@@ -26,17 +26,45 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     // If we have manual variable overrides in the hashbang search part of the
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.
-    var urlVars = URLVariablesDecoder();
-    var templateVarRe = /^var\.(.*)$/;
-    for (var o in urlVars) {
-      var matches = o.match(templateVarRe)
-      if (matches) {
-        var templateVar = matches[1]
-        $scope.globalConfig.vars[templateVar] = urlVars[o];
+    function decodeURLVars() {
+      $scope.vars = [];
+      var urlVars = URLVariablesDecoder();
+      var templateVarRe = /^var\.(.*)$/;
+      for (var o in urlVars) {
+        var matches = o.match(templateVarRe)
+        if (matches) {
+          var templateVar = matches[1]
+          $scope.globalConfig.vars[templateVar] = urlVars[o];
+        }
+      }
+      for (var o in $scope.globalConfig.vars) {
+        $scope.addVariable(o, $scope.globalConfig.vars[o]);
+      }
+      if (urlVars.fullscreen) {
+        $scope.enableFullscreen();
+      }
+
+      if (urlVars.fullscreen_title) {
+        $scope.fullscreenTitle = true;
+      }
+
+      if (urlVars.range) {
+        $scope.globalConfig.range = urlVars.range;
+        $scope.setRange()
+      }
+
+      if (urlVars.until) {
+        var date = Date.parse(urlVars.until);
+        $scope.globalConfig.endTime = date;
       }
     }
 
-    $scope.vars = [];
+    $scope.$watch(function() {
+      return $location.url();
+    }, function() {
+      decodeURLVars();
+    });
+
     $scope.globalConfig.tags = $scope.globalConfig.tags || [];
     $scope.servers = servers;
 
@@ -116,10 +144,6 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.removeTag = function(idx) {
       $scope.globalConfig.tags.splice(idx, 1);
     };
-
-    for (var o in $scope.globalConfig.vars) {
-      $scope.addVariable(o, $scope.globalConfig.vars[o]);
-    }
 
     function setupRefreshTimer(delay) {
       $scope.refreshTimer = $timeout(function() {
