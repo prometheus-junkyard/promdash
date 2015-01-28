@@ -6,6 +6,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
                                                     "WidgetTabService",
+                                                    "WidgetHeightCalculator",
                                                     function($scope, $sce,
                                                              $timeout,
                                                              VariableInterpolator,
@@ -13,7 +14,8 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
-                                                             WidgetTabService) {
+                                                             WidgetTabService,
+                                                             WidgetHeightCalculator) {
   // Appended to frame source URL to trigger refresh.
   $scope.refreshCounter = 0;
   WidgetTabService($scope);
@@ -86,6 +88,12 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     var url = VariableInterpolator($scope.frame.url, $scope.vars);
     return $sce.trustAsResourceUrl(buildFrameURL(url));
   };
+
+  $scope.frameHeight = function() {
+    return {
+      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.aspectRatio)
+    }
+  }
 
   $scope.refreshFrame = function() {
     $scope.refreshCounter++;

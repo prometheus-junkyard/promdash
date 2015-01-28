@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$window", "$timeout", "WidgetHeightCalculator", "URLConfigEncoder", "FullScreenAspectRatio", "SharedGraphBehavior", function($scope, $window, $timeout, WidgetHeightCalculator, URLConfigEncoder, FullScreenAspectRatio, SharedGraphBehavior) {
+angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$window", "$timeout", "URLConfigEncoder", "FullScreenAspectRatio", "SharedGraphBehavior", function($scope, $window, $timeout, URLConfigEncoder, FullScreenAspectRatio, SharedGraphBehavior) {
   $window.onresize = function() {
     $scope.$apply(function() {
       // Need to $apply to propagate aspectRatio change,
@@ -13,12 +13,6 @@ angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$win
   SharedGraphBehavior($scope);
 
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
-  $scope.frameHeight = function() {
-    return {
-      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.globalConfig.aspectRatio)
-    }
-  };
-
   $scope.widgets = dashboardData.widgets || [];
 
   $scope.widgetClass = function(i) {
