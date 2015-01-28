@@ -39,10 +39,6 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
     this.svg.on("mousedown", onMousedown);
     this.svg.on("touchstart", onMousedown);
 
-    function pointAsDate(e) {
-      return Math.floor(self.graph.x.invert(e.offsetX));
-    }
-
     function onMouseup(datum, index) {
       drag.stopDt = pointAsDate(d3.event);
       var windowAfterDrag = [
@@ -65,28 +61,13 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
       self.callback({range: range, endTime: endTime});
     }
 
-    function reset(el) {
-      var s = d3.select(el)
-      s.on("mousemove", null);
-      d3.select(document).on("mouseup", null);
-      s.on("touchmove", null);
-      d3.select(document).on("touchend", null);
-      d3.select(document).on("touchcancel", null);
-      drag = {};
-      rectangle.remove();
-    }
-
-    function compareNumbers(a, b) {
-      return a - b;
-    }
-
     function onMousemove() {
-      var offset = drag.stopPX = d3.event.offsetX;
+      var offset = drag.stopPX = (d3.event.offsetX || d3.event.layerX);
       if (offset > (self.svgWidth - 1) || offset < 1) {
         return;
       }
 
-      var limits = [drag.startPX, d3.event.offsetX].sort(compareNumbers);
+      var limits = [drag.startPX, offset].sort(compareNumbers);
       var selectionWidth = limits[1]-limits[0];
       if (isNaN(selectionWidth)) {
         return reset(this);
@@ -103,10 +84,10 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
                     .attr("y", 0)
                     .attr("height", "100%");
 
+      d3.event.preventDefault ? d3.event.preventDefault() : d3.event.returnValue = false;
       drag.target = d3.event.target;
       drag.startDt = pointAsDate(d3.event);
-      drag.startPX = d3.event.offsetX;
-      d3.event.preventDefault ? d3.event.preventDefault() : d3.event.returnValue = false;
+      drag.startPX = d3.event.offsetX || d3.event.layerX;
       el.on("mousemove", onMousemove);
       d3.select(document).on("mouseup", onMouseup);
       d3.select(document).on("keyup", function() {
@@ -117,6 +98,25 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
       el.on("touchmove", onMousemove);
       d3.select(document).on("touchend", onMouseup);
       d3.select(document).on("touchcancel", onMouseup);
+    }
+
+    function reset(el) {
+      var s = d3.select(el)
+      s.on("mousemove", null);
+      d3.select(document).on("mouseup", null);
+      s.on("touchmove", null);
+      d3.select(document).on("touchend", null);
+      d3.select(document).on("touchcancel", null);
+      drag = {};
+      rectangle.remove();
+    }
+
+    function compareNumbers(a, b) {
+      return a - b;
+    }
+
+    function pointAsDate(e) {
+      return Math.floor(self.graph.x.invert(e.offsetX || e.layerX));
     }
   }
 })
