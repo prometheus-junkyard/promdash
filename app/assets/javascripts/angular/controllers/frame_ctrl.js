@@ -51,6 +51,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
       var queryStringComponents = parser.search.substring(1).split('&');
       var fields = {};
       var targets = [];
+      var FRAME_CONTAINER_PADDING = 10;
       queryStringComponents.forEach(function(f) {
         var s = f.split('=');
         // If there are more than 1 target in the query string, they get overridden.
@@ -63,7 +64,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
       });
 
       fields['height'] = $scope.frameHeight().height;
-      fields['width'] = $scope.frameHeight().height / $scope.aspectRatio;
+      fields['width'] = ($scope.frameHeight().height / $scope.aspectRatio) - FRAME_CONTAINER_PADDING;
       fields['from'] = GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime);
       fields['until'] = GraphiteTimeConverter.graphiteUntil($scope.frame.endTime);
       fields['bgcolor'] = '%23191919'
