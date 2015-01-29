@@ -12,6 +12,9 @@
 // (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery.min
+//= require jquery-ui.min
+//= require angular.min
 //= require jquery_ujs
 //= require bootstrap.min
 //= require bootstrap-datetimepicker
