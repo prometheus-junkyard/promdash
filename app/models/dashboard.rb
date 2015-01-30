@@ -36,6 +36,13 @@ class Dashboard < ActiveRecord::Base
     dashboard
   end
 
+  def self.new_permalink(params)
+    params[:name] = "#{params[:name]} #{Time.now.utc.to_s}"
+    d = new_with_slug(params)
+    d.permalink = true
+    d
+  end
+
   def make_clone
     clone = dup
     clone.name = "#{name} clone"

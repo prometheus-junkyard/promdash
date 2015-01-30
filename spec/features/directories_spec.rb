@@ -15,6 +15,12 @@ feature "Directory", js: true do
       expect(page).to have_content(/unassigned dashboards/i)
     end
 
+    scenario "permalink dashboards don't appear" do
+      d = FactoryGirl.create :dashboard, :permalink
+      visit directories_path
+      expect(page).to have_no_content(/#{d.name}/i)
+    end
+
     scenario "with assigned dashboards" do
       FactoryGirl.create :directory, dashboard_ids: Dashboard.pluck(:id)
       visit current_path

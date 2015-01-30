@@ -8,7 +8,7 @@ class DirectoriesController < ApplicationController
       format.html { render 'index' }
       format.json do
         @directories = @directories.select {|d| d.dashboards.present? }
-        if Dashboard.unassigned.present?
+        if Dashboard.where(permalink: false).unassigned.present?
           @directories << Dashboard.new(name: 'Unassigned dashboards')
         end
         render json: @directories
@@ -83,7 +83,7 @@ class DirectoriesController < ApplicationController
   end
 
   def set_unassigned_dashboards
-    @unassigned_dashboards = Dashboard.unassigned.alphabetical
+    @unassigned_dashboards = Dashboard.where(permalink: false).unassigned.alphabetical
   end
 
   def directory_params

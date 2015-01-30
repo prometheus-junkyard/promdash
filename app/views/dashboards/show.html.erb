@@ -65,7 +65,32 @@
         <button class="btn btn-default" ng-click="enableFullscreen()" title="Fullscreen mode">
           <span class="glyphicon glyphicon-fullscreen"></span>
         </button>
+        <% unless @dashboard.permalink %>
+          <button class="btn btn-default" ng-click="generatePermalink()"
+            tooltip-append-to-body="true" tooltip="Create permalink to current dashboard state">
+            <span ng-show="!generatingPermalink" class="glyphicon glyphicon-link"></span>
+            <span ng-show="generatingPermalink" class="glyphicon glyphicon-refresh spin"></span>
+          </button>
+        <% end %>
       </div>
+      <% unless @dashboard.permalink %>
+        <div class="dashboard_settings panel panel-default" ng-show="showPermalink">
+          <div class="panel-heading">Dashboard Permalink</div>
+          <div class="panel-body">
+            <div class="input-group">
+              <input type="text" class="form-control" ng-model="permalink">
+              <span class="input-group-btn">
+                <a class="btn btn-default" href="{{permalink}}"
+                  tooltip-append-to-body="true"
+                  tooltip="Open dashboard permalink in new tab" target="_blank"
+                  ng-click="showPermalink = false">
+                  <span class="glyphicon glyphicon-new-window"></span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
       <div class="dashboard_settings panel panel-default" ng-show="showDashboardSettings">
         <div class="panel-heading">Dashboard Settings</div>
         <div class="panel-body">
@@ -117,20 +142,17 @@
               <input type="checkbox" ng-model="globalConfig.showVars"> Show template variables
             </label>
           </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" ng-model="globalConfig.encodeEntireURL"> Encode entire dashboard in URL
-            </label>
-          </div>
         </div>
       </div>
     </div>
-    <div class="global_grouping">
-      <button class="btn btn-default" ng-click="saveDashboard()" ng-disabled="saving">
-        <span ng-show="saving">Saving...</span>
-        <span ng-show="!saving">Save Changes</span>
-      </button>
-    </div>
+    <% unless @dashboard.permalink %>
+      <div class="global_grouping">
+        <button class="btn btn-default" ng-click="saveDashboard()" ng-disabled="saving">
+          <span ng-show="saving">Saving...</span>
+          <span ng-show="!saving">Save Changes</span>
+        </button>
+      </div>
+    <% end %>
     <span class="clearfix"></span>
   </div>
 

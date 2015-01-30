@@ -23,6 +23,14 @@ describe DashboardsController do
       expect(response).to redirect_to(dashboard_slug_path(d.slug))
     end
 
+    it "creates a new permalink dashboard" do
+      d = Dashboard.new_with_slug(name: "static dash")
+      expect {
+        post :permalink, dashboard: { name: d.name }
+      }.to change{ Dashboard.count }.by(1)
+      expect(Dashboard.last.permalink).to eq(true)
+    end
+
     it "clones the dashboard given a source_id" do
       d = Dashboard.new_with_slug(name: "example dash", dashboard_json: @sample_dashboard_json)
       d.save!

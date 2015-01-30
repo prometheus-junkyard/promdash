@@ -6,7 +6,7 @@
       {{title()}}
 
       <div class="btn-group pull-right graph_config_menu">
-        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="glyphicon glyphicon-refresh"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Graph and axis settings"><i class="icon-line-graph"></i></div>
