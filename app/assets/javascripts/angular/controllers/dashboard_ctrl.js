@@ -42,12 +42,12 @@ angular.module("Prometheus.controllers")
   ];
   $scope.dashboardNames = [];
 
+  $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   SharedGraphBehavior($scope);
   $scope.palettes = Palettes;
   $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
   $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
 
-  $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   $scope.saveDashboard = function() {
     $scope.saving = true;
     $http.put(window.location.pathname + '.json', {
