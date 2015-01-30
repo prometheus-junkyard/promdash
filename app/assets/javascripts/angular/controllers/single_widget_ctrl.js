@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", function($window, $timeout, $scope, $http, URLConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIDObject, FullScreenAspectRatio, ThemeManager) {
+angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", "SharedGraphBehavior", function($window, $timeout, $scope, $http, URLConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIDObject, FullScreenAspectRatio, ThemeManager, SharedGraphBehavior) {
   var graphBlob = URLConfigDecoder(blob);
   $scope.widget = graphBlob.widget;
   $scope.servers = servers;
@@ -6,6 +6,7 @@ angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$windo
   $scope.globalConfig = graphBlob.globalConfig;
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
   ThemeManager.setTheme($scope.globalConfig.theme);
+  SharedGraphBehavior($scope);
 
   // Widget should always fill screen, whether graph or frame.
   $scope.frameHeight = function() {
