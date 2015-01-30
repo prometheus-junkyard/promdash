@@ -5,7 +5,6 @@ angular.module("Prometheus.controllers")
             "$timeout",
             "$document",
             "$location",
-            "WidgetHeightCalculator",
             "URLConfigEncoder",
             "URLVariablesDecoder",
             "SharedGraphBehavior",
@@ -18,7 +17,6 @@ angular.module("Prometheus.controllers")
                      $timeout,
                      $document,
                      $location,
-                     WidgetHeightCalculator,
                      URLConfigEncoder,
                      URLVariablesDecoder,
                      SharedGraphBehavior,
@@ -48,12 +46,6 @@ angular.module("Prometheus.controllers")
   $scope.palettes = Palettes;
   $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
   $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
-
-  $scope.frameHeight = function() {
-    return {
-      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.globalConfig.aspectRatio)
-    }
-  }
 
   $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   $scope.saveDashboard = function() {

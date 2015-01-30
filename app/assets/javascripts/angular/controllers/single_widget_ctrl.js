@@ -1,4 +1,4 @@
-angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "VariableInterpolator", "GraphRefresher", "WidgetHeightCalculator", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", "SharedGraphBehavior", function($window, $timeout, $scope, $http, URLConfigDecoder, VariableInterpolator, GraphRefresher, WidgetHeightCalculator, ServersByIDObject, FullScreenAspectRatio, ThemeManager, SharedGraphBehavior) {
+angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "VariableInterpolator", "GraphRefresher", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", function($window, $timeout, $scope, $http, URLConfigDecoder, VariableInterpolator, GraphRefresher, ServersByIDObject, FullScreenAspectRatio, ThemeManager) {
   var graphBlob = URLConfigDecoder(blob);
   $scope.widget = graphBlob.widget;
   $scope.servers = servers;
@@ -7,13 +7,6 @@ angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$windo
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
   ThemeManager.setTheme($scope.globalConfig.theme);
   SharedGraphBehavior($scope);
-
-  // Widget should always fill screen, whether graph or frame.
-  $scope.frameHeight = function() {
-    return {
-      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.globalConfig.aspectRatio)
-    }
-  }
 
   $window.onresize = function() {
     $scope.$apply(function() {
