@@ -96,7 +96,6 @@ angular.module("Prometheus.controllers")
   });
 
   $scope.toggleGridSettings = function(tab) {
-    $scope.showGridSettings
     if ($scope.showGridSettings == tab) {
       $scope.showTab = null;
     } else {
