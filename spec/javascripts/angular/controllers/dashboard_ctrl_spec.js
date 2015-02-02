@@ -7,6 +7,29 @@ describe('DashboardCtrl', function() {
   }));
 
   describe('visual toggles', function() {
+    describe('clone modal', function() {
+      beforeEach(function() {
+        $controller('DashboardCtrl', { $scope: $scope });
+      });
+
+      it('starts closed', function() {
+        expect($scope.showCloneControls).toEqual(false);
+      });
+
+      it('opens the controls', function() {
+        $scope.showCloneMenu();
+        expect($scope.showCloneControls).toEqual(true);
+      });
+
+      it('can close the modal', function() {
+        expect($scope.showCloneControls).toEqual(false);
+        $scope.showCloneMenu();
+        expect($scope.showCloneControls).toEqual(true);
+        $scope.closeCloneControls();
+        expect($scope.showCloneControls).toEqual(false);
+      });
+    });
+
     describe('fullscreen', function() {
       beforeEach(function() {
         $controller('DashboardCtrl', { $scope: $scope });

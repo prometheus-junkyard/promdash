@@ -28,6 +28,7 @@ angular.module("Prometheus.controllers")
     $scope.$broadcast('redrawGraphs');
   }
 
+  $scope.showCloneControls = false;
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.aspectRatios = [
