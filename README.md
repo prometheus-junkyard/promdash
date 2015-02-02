@@ -10,7 +10,7 @@ Dashboard builder for Prometheus.
     bundle exec rake
 
     # Javascript tests.
-    bundle exec rake spec:javascript
+    RAILS_ENV=test bundle exec rake spec:javascript
 
 ## Deployment
 
