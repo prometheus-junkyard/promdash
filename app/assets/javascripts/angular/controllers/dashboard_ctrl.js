@@ -28,6 +28,7 @@ angular.module("Prometheus.controllers")
     $scope.$broadcast('redrawGraphs');
   }
 
+  $scope.showCloneControls = false;
   $scope.fullscreen = false;
   $scope.saving = false;
   $scope.aspectRatios = [
@@ -96,7 +97,6 @@ angular.module("Prometheus.controllers")
   });
 
   $scope.toggleGridSettings = function(tab) {
-    $scope.showGridSettings
     if ($scope.showGridSettings == tab) {
       $scope.showTab = null;
     } else {
