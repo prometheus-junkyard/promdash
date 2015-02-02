@@ -199,6 +199,7 @@ DEPENDENCIES
   mysql2
   pry
   rails (= 4.1.7)
+  rake
   rspec-rails (~> 3.0.0.beta2)
   sass-rails (~> 4.0.4)
   sdoc

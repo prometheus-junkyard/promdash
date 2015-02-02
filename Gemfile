@@ -26,6 +26,7 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'capybara', "~> 2.3.0"
+  gem 'rake' # for .travis.yml
 end
 
 # Use SCSS for stylesheets
