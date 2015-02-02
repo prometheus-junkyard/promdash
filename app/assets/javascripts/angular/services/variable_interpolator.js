@@ -4,7 +4,7 @@ angular.module("Prometheus.services").factory('VariableInterpolator', ["$rootSco
   // Match single interpolated values.
   var singleInterpolation = /{{\s?(\w+)\s?}}/g;
   // Match piped interpolated values.
-  var pipedInterpolation = /{{\s?\w+\s?(\|\s?\w+(:('|\")?([\sa-zA-Z0-9(\[?=:!^\])]+)?('|\")?){0,}\s?){1,}}}/g;
+  var pipedInterpolation = /{{\s?\w+\s?(\|\s?\w+(:('|\")?([\sa-zA-Z0-9-(\[?=:!^\])]+)?('|\")?){0,}\s?){1,}}}/g;
   function knownFilters() {
     return ["regex", "toPercent", "toPercentile", "hostname"];
   }

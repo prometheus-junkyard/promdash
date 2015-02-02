@@ -8,7 +8,8 @@ describe('VariableInterpolator', function() {
     this.availableFields = {
       name: "field name",
       quantile: "0.75",
-      server: "http://localhost:8080/metrics"
+      server: "http://localhost:8080/metrics",
+      job: "prometheus-stream",
     };
   });
 
@@ -40,5 +41,12 @@ describe('VariableInterpolator', function() {
   it("filter function and single interpolation play nice", function() {
     var formatStr = "{{quantile | toPercent}} for {{server | hostname}}";
     expect(variableInterpolator(formatStr, this.availableFields)).toEqual("75% for localhost:8080");
+  });
+
+  describe("regex", function() {
+    it("replace", function() {
+      var formatStr = '{{job | regex:"prometheus-":""}}'
+      expect(variableInterpolator(formatStr, this.availableFields)).toEqual("stream");
+    });
   });
 });
