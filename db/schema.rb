@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107013708) do
+ActiveRecord::Schema.define(version: 20150126150102) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20141107013708) do
     t.datetime "updated_at"
     t.string   "slug"
     t.integer  "directory_id"
+    t.boolean  "permalink",      default: false
   end
 
   add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id", using: :btree

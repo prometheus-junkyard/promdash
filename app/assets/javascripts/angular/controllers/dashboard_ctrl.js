@@ -28,6 +28,24 @@ angular.module("Prometheus.controllers")
     $scope.$broadcast('redrawGraphs');
   }
 
+  $scope.generatePermalink = function(event) {
+    if ($scope.generatingPermalink || $scope.showPermalink) {
+      $scope.showPermalink = false;
+      return;
+    }
+    $scope.generatingPermalink = true;
+    $http.post($window.location.origin + "/permalink", buildDashboardJSON()).then(function(payload) {
+      $scope.showPermalink = true;
+      $scope.permalink = $window.location.origin + payload.data.url;
+      var input = $("[ng-model=permalink]")[0];
+      InputHighlighter(input);
+    }, function() {
+      alert("Failed to create dashboard permalink");
+    }).finally(function() {
+      $scope.generatingPermalink = false;
+    });
+  };
+
   $scope.showCloneControls = false;
   $scope.fullscreen = false;
   $scope.saving = false;
@@ -51,14 +69,7 @@ angular.module("Prometheus.controllers")
 
   $scope.saveDashboard = function() {
     $scope.saving = true;
-    $http.put(window.location.pathname + '.json', {
-      'dashboard': {
-        'dashboard_json': {
-          'globalConfig': $scope.globalConfig,
-          'widgets': $scope.widgets
-        }
-      }
-    }).error(function(data, status) {
+    $http.put($window.location.pathname + '.json', buildDashboardJSON()).error(function(data, status) {
       alert("Error saving dashboard.");
     }).finally(function() {
       $scope.saving = false;
@@ -84,6 +95,7 @@ angular.module("Prometheus.controllers")
         $scope.closeCloneControls();
         $scope.$broadcast('closeTabs');
         $scope.showDashboardSettings = false;
+        $scope.showPermalink = false;
       });
     }
   });
@@ -185,17 +197,6 @@ angular.module("Prometheus.controllers")
     } else {
       $location.search("until", null);
     }
-    if (newConfig.encodeEntireURL) {
-      URLConfigEncoder({globalConfig: newConfig, widgets: $scope.widgets});
-    } else {
-      $location.hash(null);
-    }
-  }, true);
-
-  $scope.$watch("widgets", function(newWidgets, oldWidgets) {
-    if ($scope.globalConfig.encodeEntireURL) {
-      URLConfigEncoder({globalConfig: $scope.globalConfig, widgets: newWidgets});
-    }
   }, true);
 
   $scope.$watch('globalConfig.tags', function() {
@@ -244,4 +245,16 @@ angular.module("Prometheus.controllers")
   $scope.copyWidget = function() {
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
+
+  function buildDashboardJSON() {
+    return {
+      'dashboard': {
+        'name': dashboardName,
+        'dashboard_json': {
+          'globalConfig': $scope.globalConfig,
+          'widgets': $scope.widgets
+        }
+      }
+    };
+  }
 }]);

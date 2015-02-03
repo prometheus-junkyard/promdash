@@ -29,6 +29,25 @@ feature "Dashboard", js: true do
     end
   end
 
+  describe "permalink dashboards" do
+    scenario "creating a permalink dashboard" do
+      dashboard = FactoryGirl.create(:dashboard)
+      visit dashboard_slug_path dashboard.slug
+      expect {
+        find('#global_controls .glyphicon-link').click
+        expect(page).to have_content('Dashboard Permalink')
+      }.to change { Dashboard.count }.by(1)
+      expect(Dashboard.last.permalink).to eq(true)
+    end
+
+    scenario "visiting a permalink dashboard" do
+      dashboard = FactoryGirl.create(:dashboard, :permalink)
+      visit dashboard_slug_path dashboard.slug
+      expect(page).to have_no_css('#global_controls .glyphicon-link')
+      expect(page).to have_no_content('Save Changes')
+    end
+  end
+
   scenario "creating the dashboard" do
     directory = FactoryGirl.create :directory
     visit new_dashboard_path

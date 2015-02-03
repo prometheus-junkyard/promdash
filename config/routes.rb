@@ -15,6 +15,8 @@ PrometheusDashboard::Application.routes.draw do
   get '/dashboards/:id/widgets', to: 'dashboards#widgets'
   get '/w/:slug', to: 'single_widget#show', as: 'single_widget'
   post '/w', to: 'single_widget#create'
+  get '/permalink/:id', to: 'dashboards#show'
+  post '/permalink', to: 'dashboards#permalink'
   get '/embed/:slug', to: 'embed#show'
   get '/:slug', to: 'dashboards#show', as: 'dashboard_slug'
   match '/:slug', to: 'dashboards#update', as: 'dashboard_slug_put', via: [:put, :patch]

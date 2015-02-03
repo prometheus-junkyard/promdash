@@ -10,6 +10,13 @@ FactoryGirl.define do
       SlugMaker.slug(name)
     end
 
+    trait :permalink do
+      permalink true
+      sequence :name do |n|
+        "Permalink dashboard #{n}"
+      end
+    end
+
     dashboard_json File.read('./spec/support/sample_json/1_expression_dashboard_json')
 
     trait :two_expressions do

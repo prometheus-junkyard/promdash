@@ -44,6 +44,18 @@ class DashboardsController < ApplicationController
     render json: res.read
   end
 
+  def permalink
+    @dashboard = Dashboard.new_permalink(dashboard_params)
+    if @dashboard.save
+      payload = {
+        url: "/permalink/" + SlugMaker.slug("#{@dashboard.id} #{@dashboard.slug}")
+      }
+      render json: payload, status: :created
+    else
+      render json: @dashboard.errors, status: :unprocessable_entity
+    end
+  end
+
   # POST /dashboards
   # POST /dashboards.json
   def create

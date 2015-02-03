@@ -18,6 +18,10 @@ describe Dashboard do
       d = Dashboard.new_with_slug(name: "dashboard")
       expect(d).to_not be_valid
     end
+    it "makes permalink dashboards" do
+      d = Dashboard.new_permalink(name: "static dashboard")
+      expect(d).to be_valid
+    end
   end
 
   context "scopes" do
