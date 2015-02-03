@@ -1,14 +1,24 @@
 describe('EmbedCtrl', function() {
   var $controller;
   var $scope;
-  beforeEach(inject(function(_$controller_, $rootScope){
+  var fullscreenAspectRatio;
+  beforeEach(inject(function(_$controller_, $rootScope, _FullScreenAspectRatio_){
     $controller = _$controller_;
     $scope = $rootScope.$new(true);
+    fullscreenAspectRatio = _FullScreenAspectRatio_;
   }));
+
+  beforeEach(function() {
+    $controller('EmbedCtrl', { $scope: $scope });
+  });
+
+  it('sets the aspect ratio to that of the full screen', function() {
+    var r = fullscreenAspectRatio();
+    expect($scope.globalConfig.aspectRatio).toEqual(r);
+  });
 
   describe('active widget', function() {
     it('default', function() {
-      $controller('EmbedCtrl', { $scope: $scope });
       expect($scope.activeWidget).toEqual(0);
       expect($scope.widgetClass(0)).toEqual('active_widget');
       for (var i = 1; i < 5; i++) {
@@ -17,7 +27,6 @@ describe('EmbedCtrl', function() {
     });
 
     it('increments the active widget', function() {
-      $controller('EmbedCtrl', { $scope: $scope });
       $scope.widgets = [
         'fake',
         'fake',

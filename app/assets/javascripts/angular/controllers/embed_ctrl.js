@@ -10,7 +10,7 @@ angular.module("Prometheus.controllers").controller('EmbedCtrl',["$scope", "$win
     });
   };
 
-  SharedGraphBehavior($scope);
+  SharedGraphBehavior($scope, dashboardData.globalConfig);
 
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
   $scope.widgets = dashboardData.widgets || [];

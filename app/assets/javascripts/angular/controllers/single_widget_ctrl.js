@@ -4,9 +4,10 @@ angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$windo
   $scope.servers = servers;
   $scope.serversById = ServersByIDObject($scope.servers);
   $scope.globalConfig = graphBlob.globalConfig || {};
+  $scope.globalConfig.theme = $scope.globalConfig.theme || 'dark_theme';
   $scope.globalConfig.aspectRatio = FullScreenAspectRatio();
   ThemeManager.setTheme($scope.globalConfig.theme);
-  SharedGraphBehavior($scope);
+  SharedGraphBehavior($scope, $scope.globalConfig);
 
   $window.onresize = function() {
     $scope.$apply(function() {

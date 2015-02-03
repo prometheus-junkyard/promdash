@@ -1,6 +1,6 @@
 angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "$timeout", "$location", "URLConfigDecoder", "URLVariablesDecoder", "ThemeManager", function($http, $timeout, $location, URLConfigDecoder, URLVariablesDecoder, ThemeManager) {
-  function commonSetup($scope) {
-    $scope.globalConfig = dashboardData.globalConfig || {
+  function commonSetup($scope, config) {
+    $scope.globalConfig = config || {
       numColumns: 2,
       aspectRatio: 0.75,
       theme: "dark_theme",
@@ -20,6 +20,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $scope.originalEndTime = $scope.globalConfig.endTime;
     function decodeURLVars() {
       $scope.vars = [];
+      $scope.widgets = $scope.widgets || [];
       var urlVars = URLVariablesDecoder();
       var templateVarRe = /^var\.(.*)$/;
       for (var o in urlVars) {
@@ -162,9 +163,8 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     });
   }
 
-  var sharedGraphBehavior = function($scope) {
-    this.$scope = $scope;
-    commonSetup($scope);
+  var sharedGraphBehavior = function($scope, config) {
+    commonSetup($scope, config);
   };
 
   return sharedGraphBehavior;
