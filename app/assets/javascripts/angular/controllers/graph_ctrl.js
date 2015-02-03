@@ -92,10 +92,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     $scope.refreshGraph();
   });
 
-  $scope.$on('setRangeNoRefresh', function(ev, range) {
-    $scope.graph.range = range;
-  });
-
   $scope.$on('setRange', function(ev, range) {
     $scope.graph.range = range;
     $scope.refreshGraph(500);

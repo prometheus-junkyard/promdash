@@ -6,7 +6,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
                                                     "WidgetTabService",
-                                                    "WidgetHeightCalculator",
                                                     function($scope, $sce,
                                                              $timeout,
                                                              VariableInterpolator,
@@ -14,10 +13,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
-                                                             WidgetTabService,
-                                                             WidgetHeightCalculator) {
-  // Appended to frame source URL to trigger refresh.
-  $scope.refreshCounter = 0;
+                                                             WidgetTabService) {
   WidgetTabService($scope);
 
   $scope.generateWidgetLink = function(event) {
@@ -37,41 +33,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
       .highlightInput(event);
   };
 
-  function buildFrameURL(url) {
-    var parser = document.createElement('a');
-    parser.href = url;
-    if ($scope.frame.graphite) {
-      return parseGraphiteURL(parser);
-    }
-    parser.search = parser.search + '&decache=' + $scope.refreshCounter;
-    return parser.href;
-  }
-
-  function parseGraphiteURL(parser) {
-      var queryStringComponents = parser.search.substring(1).split('&');
-      var fields = {};
-      var targets = [];
-      var FRAME_CONTAINER_PADDING = 10;
-      queryStringComponents.forEach(function(f) {
-        var s = f.split('=');
-        // If there are more than 1 target in the query string, they get overridden.
-        // So we can't put them in the fields object.
-        if (s[0] !== 'target') {
-          fields[s.shift()] = s.join('=');
-        } else {
-          targets.push(f);
-        }
-      });
-
-      fields['height'] = $scope.frameHeight().height;
-      fields['width'] = ($scope.frameHeight().height / $scope.aspectRatio) - FRAME_CONTAINER_PADDING;
-      fields['from'] = GraphiteTimeConverter.graphiteFrom($scope.frame.range, $scope.frame.endTime);
-      fields['until'] = GraphiteTimeConverter.graphiteUntil($scope.frame.endTime);
-      fields['bgcolor'] = '%23191919'
-      parser.search = '?' + decodeURI($.param(fields)) + '&' + targets.join('&') + '&decache=' + $scope.refreshCounter;
-      return parser.href;
-  }
-
   $scope.getTitle = function() {
     if ($scope.frame.title) {
       return VariableInterpolator($scope.frame.title, $scope.vars);
@@ -85,35 +46,12 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     }
   };
 
-  $scope.frameURL = function() {
-    var url = VariableInterpolator($scope.frame.url, $scope.vars);
-    return $sce.trustAsResourceUrl(buildFrameURL(url));
-  };
-
-  $scope.frameHeight = function() {
-    return {
-      height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], $scope.aspectRatio)
-    }
-  }
-
-  $scope.refreshFrame = function() {
-    $scope.refreshCounter++;
-  };
-
   $scope.$on('setRange', function(ev, range) {
-    $scope.frame.range = range;
-  });
-
-  $scope.$on('setRangeNoRefresh', function(ev, range) {
     $scope.frame.range = range;
   });
 
   $scope.$on('setEndTime', function(ev, endTime) {
     $scope.frame.endTime = endTime;
-  });
-
-  $scope.$on('refreshDashboard', function(ev) {
-    $scope.refreshFrame();
   });
 
   $scope.generateFrameComponents = function() {
