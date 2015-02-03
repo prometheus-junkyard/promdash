@@ -13,10 +13,8 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
     link: function(scope, element, attrs) {
       // Appended to frame source URL to trigger refresh.
       scope.refreshCounter = 0;
-      scope.frameHeight = function() {
-        return {
-          height: WidgetHeightCalculator(angular.element(".js_widget_wrapper")[0], scope.aspectRatio)
-        }
+      function frameHeight() {
+        return WidgetHeightCalculator(element.find(".js_widget_wrapper")[0], scope.aspectRatio);
       }
 
       var a = ['frame.url', 'frame.range', 'frame.endTime', 'refreshCounter'];
@@ -38,7 +36,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
         var url = VariableInterpolator(scope.frame.url, scope.vars);
         var trustedURL = $sce.trustAsResourceUrl(buildFrameURL(url));
         var frame = element.find('.frame_container')
-        frame.height(scope.frameHeight().height);
+        frame.height(frameHeight());
         frame.html('<iframe src="'+ trustedURL +'" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>');
       }
 
@@ -67,8 +65,9 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
           }
         });
 
-        fields['height'] = scope.frameHeight().height;
-        fields['width'] = (scope.frameHeight().height / scope.aspectRatio) - FRAME_CONTAINER_PADDING;
+        var height = frameHeight();
+        fields['height'] = height;
+        fields['width'] = (height / scope.aspectRatio) - FRAME_CONTAINER_PADDING;
         fields['from'] = GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime);
         fields['until'] = GraphiteTimeConverter.graphiteUntil(scope.frame.endTime);
         fields['bgcolor'] = FRAME_BACKGROUND_COLOR;
