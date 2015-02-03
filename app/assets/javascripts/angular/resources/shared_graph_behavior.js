@@ -156,7 +156,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if (until) {
         $scope.globalConfig.refresh = '';
         $(".js-refresh").addClass("disabled");
-        return
+        return;
       }
       $(".js-refresh").removeClass("disabled");
     });
