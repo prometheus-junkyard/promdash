@@ -16,6 +16,8 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     // If we have manual variable overrides in the hashbang search part of the
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.
+    $scope.originalRange = $scope.globalConfig.range;
+    $scope.originalEndTime = $scope.globalConfig.endTime;
     function decodeURLVars() {
       $scope.vars = [];
       var urlVars = URLVariablesDecoder();
@@ -38,21 +40,20 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         $scope.fullscreenTitle = true;
       }
 
-      if (urlVars.range) {
-        $scope.globalConfig.range = urlVars.range;
-        $scope.widgets.forEach(function(w) {
-          w.range = urlVars.range;
-        });
-        $scope.setRange()
-      }
+      $scope.globalConfig.range = urlVars.range || $scope.originalRange;
+      $scope.widgets.forEach(function(w) {
+        w.range = $scope.globalConfig.range;
+      });
+      $scope.setRange();
 
+      var date = $scope.originalEndTime;
       if (urlVars.until) {
-        var date = Date.parse(urlVars.until);
-        $scope.widgets.forEach(function(w) {
-          w.endTime = date;
-        });
-        $scope.globalConfig.endTime = date;
+        date = Date.parse(urlVars.until);
       }
+      $scope.globalConfig.endTime = date;
+      $scope.widgets.forEach(function(w) {
+        w.endTime = $scope.globalConfig.endTime;
+      });
     }
 
     $scope.$watch(function() {
@@ -82,10 +83,6 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('setRange', $scope.globalConfig.range);
     };
 
-    $scope.setRangeNoRefresh = function() {
-      $scope.$broadcast('setRangeNoRefresh', $scope.globalConfig.range);
-    };
-
     $scope.increaseEndTime = function() {
       $scope.globalConfig.endTime = Prometheus.Graph.laterEndTime($scope.globalConfig.endTime, $scope.globalConfig.range);
     };
@@ -107,14 +104,10 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     });
 
     $scope.$on('timeRangeRescale', function(ev, newTimeSettings) {
-      $scope.globalConfig.range = Prometheus.Graph.durationToString(newTimeSettings.range);
-      // TODO(stuart): setRangeNoRefresh should be removed once changes to global
-      // settings are debounced, removing the request created for updating both endTime
-      // and range.
-      $scope.setRangeNoRefresh();
       $scope.$apply(function() {
+        $scope.globalConfig.range = Prometheus.Graph.durationToString(newTimeSettings.range);
         $scope.globalConfig.endTime = newTimeSettings.endTime;
-      })
+      });
     });
 
     $scope.refreshDashboard = function() {

@@ -86,8 +86,19 @@ angular.module("Prometheus.controllers")
     $scope.nextCycleRedraw();
   };
 
+  $window.history.replaceState({initial: true}, $("title").text(), $window.location.href);
   $document.keydown(function(ev) {
-    if (ev.keyCode === 27) { // Escape keycode
+    var Z_KEY = 90;
+    var ESC_KEY = 27;
+    var validElement = ["INPUT", "TEXTAREA"].indexOf(document.activeElement.tagName) === -1;
+    if (ev.keyCode === Z_KEY && validElement) {
+      if (($window.history.state || {}).initial) {
+        return;
+      }
+      $window.history.back();
+      return;
+    }
+    if (ev.keyCode === ESC_KEY) {
       if ($scope.fullscreen) {
         $scope.exitFullscreen();
       }
