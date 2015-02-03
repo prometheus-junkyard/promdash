@@ -110,6 +110,22 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       });
     });
 
+    $scope.$watch("globalConfig", function(newConfig, oldConfig) {
+      if (newConfig === oldConfig) {
+        return
+      }
+      if (newConfig.range) {
+        $location.search("range", newConfig.range)
+      } else {
+        $location.search("range", null);
+      }
+      if (newConfig.endTime) {
+        $location.search("until", (new Date(newConfig.endTime)).toISOString())
+      } else {
+        $location.search("until", null);
+      }
+    }, true);
+
     $scope.refreshDashboard = function() {
       $scope.$broadcast('refreshDashboard');
     };
