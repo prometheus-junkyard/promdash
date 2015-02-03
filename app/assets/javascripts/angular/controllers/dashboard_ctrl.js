@@ -205,22 +205,6 @@ angular.module("Prometheus.controllers")
     $scope.globalConfig.vars = vars;
   }, true);
 
-  $scope.$watch("globalConfig", function(newConfig, oldConfig) {
-    if (newConfig === oldConfig) {
-      return
-    }
-    if (newConfig.range) {
-      $location.search("range", newConfig.range)
-    } else {
-      $location.search("range", null);
-    }
-    if (newConfig.endTime) {
-      $location.search("until", (new Date(newConfig.endTime)).toISOString())
-    } else {
-      $location.search("until", null);
-    }
-  }, true);
-
   $scope.$watch('globalConfig.tags', function() {
     $scope.widgets.forEach(function(w) {
       if (w.type === "graph") {
