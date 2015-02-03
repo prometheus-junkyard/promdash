@@ -1,15 +1,4 @@
 //= require spec_helper
-dashboardData = {};
-dashboardData.globalConfig = {
-  numColumns: 2,
-  aspectRatio: 0.75,
-  theme: 'dark_theme',
-  endTime: null,
-  vars: {},
-  widgets: [
-    {}, {}, {}
-  ],
-};
 describe('SharedGraphBehavior', function() {
   var sgb;
   var $scope;
