@@ -16,8 +16,6 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     // If we have manual variable overrides in the hashbang search part of the
     // URL (http://docs.angularjs.org/img/guide/hashbang_vs_regular_url.jpg),
     // merge them into the globalConfig's template vars.
-    $scope.originalRange = $scope.globalConfig.range;
-    $scope.originalEndTime = $scope.globalConfig.endTime;
     function decodeURLVars() {
       $scope.vars = [];
       $scope.widgets = $scope.widgets || [];
@@ -41,20 +39,21 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         $scope.fullscreenTitle = true;
       }
 
-      $scope.globalConfig.range = urlVars.range || $scope.originalRange;
-      $scope.widgets.forEach(function(w) {
-        w.range = $scope.globalConfig.range;
-      });
-      $scope.setRange();
-
-      var date = $scope.originalEndTime;
-      if (urlVars.until) {
-        date = Date.parse(urlVars.until);
+      if (urlVars.range) {
+        $scope.globalConfig.range = urlVars.range;
+        $scope.widgets.forEach(function(w) {
+          w.range = urlVars.range;
+        });
+        $scope.setRange()
       }
-      $scope.globalConfig.endTime = date;
-      $scope.widgets.forEach(function(w) {
-        w.endTime = $scope.globalConfig.endTime;
-      });
+
+      if (urlVars.until) {
+        var date = Date.parse(urlVars.until);
+        $scope.widgets.forEach(function(w) {
+          w.endTime = date;
+        });
+        $scope.globalConfig.endTime = date;
+      }
     }
 
     $scope.$watch(function() {
@@ -157,7 +156,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if (until) {
         $scope.globalConfig.refresh = '';
         $(".js-refresh").addClass("disabled");
-        return
+        return;
       }
       $(".js-refresh").removeClass("disabled");
     });

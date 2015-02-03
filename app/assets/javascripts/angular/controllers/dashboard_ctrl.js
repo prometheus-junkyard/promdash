@@ -87,11 +87,22 @@ angular.module("Prometheus.controllers")
   };
 
   $window.history.replaceState({initial: true}, $("title").text(), $window.location.href);
+  $scope.originalEndTime = $scope.globalConfig.endTime;
+  $scope.originalRange = $scope.globalConfig.range;
   $document.keydown(function(ev) {
     var Z_KEY = 90;
     var ESC_KEY = 27;
     var validElement = ["INPUT", "TEXTAREA"].indexOf(document.activeElement.tagName) === -1;
     if (ev.keyCode === Z_KEY && validElement) {
+      $timeout(function() {
+        // If we have reached the initial load state, sets the
+        // globalConfig to its original state to cause a graph
+        // refresh.
+        if ($.isEmptyObject($location.search())) {
+          $scope.globalConfig.endTime = $scope.originalEndTime;
+          $scope.globalConfig.range = $scope.originalRange;
+        }
+      });
       if (($window.history.state || {}).initial) {
         return;
       }

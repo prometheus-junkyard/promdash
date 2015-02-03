@@ -31,8 +31,8 @@ angular.module("Prometheus.services").factory('URLConfigEncoder', ["$location", 
   };
 }]);
 
-angular.module("Prometheus.services").factory('URLVariablesDecoder', function($location) {
+angular.module("Prometheus.services").factory('URLVariablesDecoder', ['$location', function($location) {
   return function() {
     return $location.search();
   };
-});
+}]);
