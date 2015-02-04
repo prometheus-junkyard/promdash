@@ -19,7 +19,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
 
       var a = ['frame.url', 'frame.range', 'frame.endTime', 'refreshCounter'];
       a.forEach(function(w) {
-        scope.$watch(w, regenFrame)
+        scope.$watch(w, regenFrame);
       });
       ['refreshDashboard', 'redrawGraphs'].forEach(function(m) {
         scope.$on(m, regenFrame);
@@ -35,7 +35,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
       function regenFrame() {
         var url = VariableInterpolator(scope.frame.url, scope.vars);
         var trustedURL = $sce.trustAsResourceUrl(buildFrameURL(url));
-        var frame = element.find('.frame_container')
+        var frame = element.find('.frame_container');
         frame.height(frameHeight());
         frame.html('<iframe src="'+ trustedURL +'" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>');
       }
@@ -66,11 +66,11 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
         });
 
         var height = frameHeight();
-        fields['height'] = height;
-        fields['width'] = (height / scope.aspectRatio) - FRAME_CONTAINER_PADDING;
-        fields['from'] = GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime);
-        fields['until'] = GraphiteTimeConverter.graphiteUntil(scope.frame.endTime);
-        fields['bgcolor'] = FRAME_BACKGROUND_COLOR;
+        fields.height = height;
+        fields.width = (height / scope.aspectRatio) - FRAME_CONTAINER_PADDING;
+        fields.from = GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime);
+        fields.until = GraphiteTimeConverter.graphiteUntil(scope.frame.endTime);
+        fields.bgcolor = FRAME_BACKGROUND_COLOR;
         parser.search = '?' + decodeURI($.param(fields)) + '&' + targets.join('&') + '&decache=' + scope.refreshCounter;
         return parser.href;
       }
