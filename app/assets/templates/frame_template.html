@@ -1,6 +1,6 @@
 <span ng-controller="FrameCtrl">
-  <div class="js_widget_wrapper widget_wrapper panel panel-default pull-left">
-    <div class="widget_title panel-heading" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
+  <div class="widget_wrapper panel panel-default pull-left">
+    <div class="js_widget_wrapper widget_title panel-heading" ng-mouseenter="showControls = true" ng-mouseleave="showControls = false">
       {{getTitle()}}
       <div class="btn-group pull-right graph_config_menu" ng-show="showControls || showTab">
         <div class="btn btn-primary btn-sm" ng-click="refreshFrame()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="glyphicon glyphicon-refresh"></i></div>
