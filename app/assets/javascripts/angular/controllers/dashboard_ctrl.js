@@ -3,7 +3,6 @@ angular.module("Prometheus.controllers")
             "$window",
             "$http",
             "$timeout",
-            "$document",
             "$location",
             "URLConfigEncoder",
             "URLVariablesDecoder",
@@ -15,7 +14,6 @@ angular.module("Prometheus.controllers")
                      $window,
                      $http,
                      $timeout,
-                     $document,
                      $location,
                      URLConfigEncoder,
                      URLVariablesDecoder,
@@ -85,42 +83,6 @@ angular.module("Prometheus.controllers")
     $scope.fullscreen = false;
     $scope.nextCycleRedraw();
   };
-
-  $window.history.replaceState({initial: true}, $("title").text(), $window.location.href);
-  $scope.originalEndTime = $scope.globalConfig.endTime;
-  $scope.originalRange = $scope.globalConfig.range;
-  $document.keydown(function(ev) {
-    var Z_KEY = 90;
-    var ESC_KEY = 27;
-    var validElement = ["INPUT", "TEXTAREA"].indexOf(document.activeElement.tagName) === -1;
-    if (ev.keyCode === Z_KEY && validElement) {
-      $timeout(function() {
-        // If we have reached the initial load state, sets the
-        // globalConfig to its original state to cause a graph
-        // refresh.
-        if ($.isEmptyObject($location.search())) {
-          $scope.globalConfig.endTime = $scope.originalEndTime;
-          $scope.globalConfig.range = $scope.originalRange;
-        }
-      });
-      if (($window.history.state || {}).initial) {
-        return;
-      }
-      $window.history.back();
-      return;
-    }
-    if (ev.keyCode === ESC_KEY) {
-      if ($scope.fullscreen) {
-        $scope.exitFullscreen();
-      }
-      $scope.$apply(function() {
-        $scope.closeCloneControls();
-        $scope.$broadcast('closeTabs');
-        $scope.showDashboardSettings = false;
-        $scope.showPermalink = false;
-      });
-    }
-  });
 
   $scope.closeCloneControls = function() {
     ModalService.closeModal();
