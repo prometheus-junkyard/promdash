@@ -24,15 +24,15 @@ Prometheus.Graph = {
       "h": 60 * 60,
       "m": 60,
       "s": 1
-    }
-    var unit = "s"
+    };
+    var unit = "s";
     for (var i in factors) {
       if (seconds % factors[i] === 0) {
         unit = i;
-        break
+        break;
       }
     }
-    return seconds/factors[unit] + unit
+    return seconds/factors[unit] + unit;
   },
 
   parseDuration: function(durationText) {
@@ -41,7 +41,9 @@ Prometheus.Graph = {
     }
     var rangeRE = new RegExp('^([0-9]+)([ywdhms]+)$');
     var matches = durationText.match(rangeRE);
-    if (!matches) { return };
+    if (!matches) {
+      return;
+    }
     if (matches.length != 3) {
       return 60;
     }

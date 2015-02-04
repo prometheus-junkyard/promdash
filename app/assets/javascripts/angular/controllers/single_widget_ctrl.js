@@ -18,5 +18,5 @@ angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$windo
         $scope.$broadcast('redrawGraphs');
       });
     });
-  }
+  };
 }]);

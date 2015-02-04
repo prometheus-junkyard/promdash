@@ -37,21 +37,21 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     var serverID = 0;
     var axisID = 0;
     var id = 0;
-    if ($scope.graph.expressions.length != 0) {
+    if ($scope.graph.expressions.length !== 0) {
       var prev = $scope.graph.expressions[$scope.graph.expressions.length-1];
-      id = prev['id'] + 1;
-      serverID = prev['serverID'];
-      axisID = prev['axisID'];
-    } else if ($scope.servers.length != 0) {
-      serverID = $scope.servers[0]['id'];
-      axisID = $scope.graph.axes[0]['id'];
+      id = prev.id + 1;
+      serverID = prev.serverID;
+      axisID = prev.axisID;
+    } else if ($scope.servers.length !== 0) {
+      serverID = $scope.servers[0].id;
+      axisID = $scope.graph.axes[0].id;
     }
 
     var exp = {
-      'id': id,
-      'serverID': serverID,
-      'axisID': axisID,
-      'expression': ''
+      id: id,
+      serverID: serverID,
+      axisID: axisID,
+      expression: ''
     };
     $scope.graph.expressions.push(exp);
   };
@@ -62,7 +62,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.addAxis = function() {
     var len = $scope.graph.axes.push(Prometheus.Graph.getAxisDefaults());
-    $scope.graph.axes[len-1]['id'] = len;
+    $scope.graph.axes[len-1].id = len;
   };
 
   $scope.removeAxis = function(idx) {
@@ -71,13 +71,13 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
     $scope.graph.expressions.forEach(function(expr) {
       if (expr.axisID === axes[idx].id) {
-        expr.axisID = axes[0].id
+        expr.axisID = axes[0].id;
       }
     });
 
     axes.splice(idx, 1);
     for (var i = 0; i < len-1; i++) {
-      axes[i]['id'] = i + 1;
+      axes[i].id = i + 1;
     }
     $scope.refreshGraph();
   };
@@ -104,7 +104,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.addLegendString = function() {
     var lsts = $scope.graph.legendFormatStrings;
-    var id = (new Date).getTime().toString(16);
+    var id = (new Date()).getTime().toString(16);
     lsts.push({id: id, name: ""});
   };
 
@@ -127,7 +127,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       var endTime = Math.floor($scope.graph.endTime / 1000);
       var scalingFactor = $(".widget_wrapper").outerWidth() * r / 10;
       // bigger denominator == smaller step == more data
-      var step = Math.floor(rangeSeconds / scalingFactor)
+      var step = Math.floor(rangeSeconds / scalingFactor);
       // Cancels the reload request if it exists.
       $timeout.cancel(debounce);
       debounce = $timeout(function() {
@@ -139,7 +139,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     };
   }($scope);
 
-  if ($scope.graph.axes.length == 0) {
+  if ($scope.graph.axes.length === 0) {
     $scope.addAxis();
   }
 

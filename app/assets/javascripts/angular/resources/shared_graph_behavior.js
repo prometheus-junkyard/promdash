@@ -22,9 +22,9 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       var urlVars = URLVariablesDecoder();
       var templateVarRe = /^var\.(.*)$/;
       for (var o in urlVars) {
-        var matches = o.match(templateVarRe)
+        var matches = o.match(templateVarRe);
         if (matches) {
-          var templateVar = matches[1]
+          var templateVar = matches[1];
           $scope.globalConfig.vars[templateVar] = urlVars[o];
         }
       }
@@ -44,7 +44,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
         $scope.widgets.forEach(function(w) {
           w.range = urlVars.range;
         });
-        $scope.setRange()
+        $scope.setRange();
       }
 
       if (urlVars.until) {
@@ -112,15 +112,15 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
 
     $scope.$watch("globalConfig", function(newConfig, oldConfig) {
       if (newConfig === oldConfig) {
-        return
+        return;
       }
       if (newConfig.range) {
-        $location.search("range", newConfig.range)
+        $location.search("range", newConfig.range);
       } else {
         $location.search("range", null);
       }
       if (newConfig.endTime) {
-        $location.search("until", (new Date(newConfig.endTime)).toISOString())
+        $location.search("until", (new Date(newConfig.endTime)).toISOString());
       } else {
         $location.search("until", null);
       }
@@ -136,7 +136,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
 
     $scope.nextCycleRedraw = function() {
       $timeout(function() { $scope.redrawGraphs(); }, 0);
-    }
+    };
 
     $scope.addVariable = function(name, value) {
       $scope.vars.push({name: name, value: value});

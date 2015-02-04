@@ -84,7 +84,11 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
                     .attr("y", 0)
                     .attr("height", "100%");
 
-      d3.event.preventDefault ? d3.event.preventDefault() : d3.event.returnValue = false;
+      if(d3.event.preventDefault) {
+        d3.event.preventDefault();
+      } else {
+        d3.event.returnValue = false;
+      }
       drag.target = d3.event.target;
       drag.startDt = pointAsDate(d3.event);
       drag.startPX = d3.event.offsetX || d3.event.layerX;
@@ -101,7 +105,7 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
     }
 
     function reset(el) {
-      var s = d3.select(el)
+      var s = d3.select(el);
       s.on("mousemove", null);
       d3.select(document).on("mouseup", null);
       s.on("touchmove", null);
@@ -119,4 +123,4 @@ Rickshaw.Graph.DragZoom = Rickshaw.Class.create({
       return Math.floor(self.graph.x.invert(e.offsetX || e.layerX));
     }
   }
-})
+});

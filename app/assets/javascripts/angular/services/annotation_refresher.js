@@ -7,7 +7,7 @@ angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", "
       } else {
         return "";
       }
-    })
+    });
     if (tags.length) {
       var range = Prometheus.Graph.parseDuration(graph.range);
       var until = Math.floor(graph.endTime || Date.now()) / 1000;

@@ -28,5 +28,5 @@ angular.module("Prometheus.services").factory('GraphiteTimeConverter', function(
         return timestampToGraphiteTime(endTime);
       }
     }
-  }
+  };
 });

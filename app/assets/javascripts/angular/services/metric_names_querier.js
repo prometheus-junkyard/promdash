@@ -8,7 +8,7 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", fu
     }
     var url = document.createElement('a');
     url.href = serverURL;
-    url.pathname = 'api/metrics'
+    url.pathname = 'api/metrics';
     $http.get(url.href).success(function(metricNames) {
       metricNamesCache[serverID] = metricNames;
       scope.metricNames = metricNames;
@@ -16,5 +16,5 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", fu
     }).error(function() {
       console.log("Error loading available metrics!");
     });
-  }
+  };
 }]);

@@ -8,9 +8,9 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
   }
 
   function metricToTsName(labels) {
-    var tsName = (labels["__name__"] || '') + "{";
+    var tsName = (labels.__name__ || '') + "{";
     var labelStrings = [];
-    for (label in labels) {
+    for (var label in labels) {
       if (label != "__name__") {
         labelStrings.push(label + "=\"" + labels[label] + "\"");
       }
@@ -26,8 +26,8 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
         continue;
       }
 
-      series = series.concat((data[i]['data'].Value || data[i]['data'].value).map(function(ts) {
-        var name = metricToTsName(ts.Metric || ts.metric)
+      series = series.concat((data[i].data.Value || data[i].data.value).map(function(ts) {
+        var name = metricToTsName(ts.Metric || ts.metric);
         return {
           name: name,
           // uniqName is added to be kept as a unique, unmodified identifier for a series.
@@ -39,7 +39,7 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
             return {
               x: value.Timestamp || value[0],
               y: parseValue(value.Value || value[1])
-            }
+            };
           })
         };
       }));

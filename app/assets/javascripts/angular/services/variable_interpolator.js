@@ -26,7 +26,7 @@ angular.module("Prometheus.services").factory('VariableInterpolator', ["$rootSco
         var rep = match.replace(/\s+/g, '').replace(/{|}/g, '').split("|");
 
         // Set on scope so we can $eval.
-        scope[rep[0]] = varValues[rep[0]]
+        scope[rep[0]] = varValues[rep[0]];
         // Check to see if rep[1] is in the list of known filters.
         if (knownFilters().indexOf(rep[1].split(":")[0]) > -1) {
           var result;
@@ -42,10 +42,10 @@ angular.module("Prometheus.services").factory('VariableInterpolator', ["$rootSco
     }
 
     // Replace the filtered variables.
-    for (var i in pipeObj) {
+    for (var o in pipeObj) {
       // Need to escape any special matchers.
-      var escapedSeq = i.replace(/([.*+?^=!:$()|\[\]\/\\])/g, "\\$1");
-      str = str.replace(new RegExp(escapedSeq, "g"), pipeObj[i]);
+      var escapedSeq = o.replace(/([.*+?^=!:$()|\[\]\/\\])/g, "\\$1");
+      str = str.replace(new RegExp(escapedSeq, "g"), pipeObj[o]);
     }
 
     // Replace the single variables.

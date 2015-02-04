@@ -9,6 +9,6 @@ angular.module("Prometheus.services").factory("CheckWidgetMenuAlignment", functi
         $el.addClass("alignLeft");
         $el.closest(".graph_control_tabbar").addClass("alignLeft");
       }
-    }
-  }
+    };
+  };
 });
