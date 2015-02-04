@@ -7,19 +7,21 @@ angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
         return null;
       }
       return scale(y);
-    }
+    };
     extendedScale.__proto__ = scale;
     return extendedScale;
   }
   return {
     setLogScale: function(min, max) {
-      return logScale = extendScale(d3.scale.log().domain([min, max]));
+      logScale = extendScale(d3.scale.log().domain([min, max]));
+      return logScale;
     },
     setLinearScale: function(min, max) {
       if (!logScale) {
         throw("Must set logScale first!");
       }
-      return linearScale = extendScale(d3.scale.linear().domain([min, max]).range(logScale.range()));
+      linearScale = extendScale(d3.scale.linear().domain([min, max]).range(logScale.range()));
+      return linearScale;
     },
     getScale: function(scale) {
       return scale === "log" ? logScale : linearScale;
@@ -38,7 +40,7 @@ angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
           } else {
             return n;
           }
-        }
+        };
       default:
         return null;
       }

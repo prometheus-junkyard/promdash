@@ -67,7 +67,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
         value: kvArr[1] === undefined ? undefined : decodeURIComponent(kvArr[1]),
       };
     });
-  }
+  };
 
   $scope.generateFrameComponents();
 

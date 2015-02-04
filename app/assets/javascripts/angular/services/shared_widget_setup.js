@@ -45,5 +45,5 @@ return function($scope) {
   };
 
   WidgetTabService($scope);
-}
+};
 }]);

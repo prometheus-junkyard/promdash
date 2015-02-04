@@ -24,7 +24,7 @@ angular.module("Prometheus.controllers")
 
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
-  }
+  };
 
   $scope.generatePermalink = function(event) {
     if ($scope.generatingPermalink || $scope.showPermalink) {
@@ -72,7 +72,7 @@ angular.module("Prometheus.controllers")
     }).finally(function() {
       $scope.saving = false;
     });
-  }
+  };
 
   $scope.enableFullscreen = function() {
     $scope.fullscreen = true;
@@ -175,7 +175,7 @@ angular.module("Prometheus.controllers")
     });
   }, true);
 
-  if ($scope.widgets.length == 0) {
+  if ($scope.widgets.length === 0) {
     $scope.addGraph();
   }
 

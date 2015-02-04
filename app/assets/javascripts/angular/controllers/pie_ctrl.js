@@ -10,23 +10,24 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   // Query for the data.
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
-    var server = $scope.serversById[exp['serverID'] || 1];
+    var server = $scope.serversById[exp.serverID || 1];
     if (server === undefined) {
       return;
     }
     $scope.requestInFlight = true;
     var url = document.createElement('a');
     url.href = server.url;
-    url.pathname = 'api/query'
+    url.pathname = 'api/query';
     $http.get(url.href, {
       params: {
         expr: exp.expression
       }
     }).then(function(payload) {
       var data = payload.data;
+      var errMsg;
       switch(data.Type || data.type) {
         case 'error':
-          var errMsg = "Expression " + exp.expression + ": " + (data.Value || data.value);
+          errMsg = "Expression " + exp.expression + ": " + (data.Value || data.value);
           $scope.errorMessages.push(errMsg);
           break;
         case 'vector':
@@ -34,7 +35,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
           $scope.errorMessages = [];
           break;
         default:
-          var errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" cannot be graphed."';
+          errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" cannot be graphed."';
           $scope.errorMessages.push(errMsg);
       }
     }, function(data, status, b) {

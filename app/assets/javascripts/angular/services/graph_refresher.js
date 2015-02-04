@@ -10,7 +10,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       var deferred = $q.defer();
       var url = document.createElement('a');
       url.href = server.url;
-      url.pathname = 'api/query_range'
+      url.pathname = 'api/query_range';
       $http.get(url.href, {
         params: {
           expr: expression,
@@ -49,7 +49,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       $scope.errorMessages = [];
       for (var i = 0; i < $scope.graph.expressions.length; i++) {
         var exp = $scope.graph.expressions[i];
-        var server = $scope.serversById[exp['serverID']];
+        var server = $scope.serversById[exp.serverID];
         if (server === undefined) {
           continue;
         }

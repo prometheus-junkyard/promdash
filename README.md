@@ -6,11 +6,26 @@ Dashboard builder for Prometheus.
 
 [![Build Status](https://travis-ci.org/prometheus/promdash.svg?branch=master)](https://travis-ci.org/prometheus/promdash)
 
-    # Ruby tests.
-    bundle exec rake
+### Ruby
 
-    # Javascript tests.
-    RAILS_ENV=test bundle exec rake spec:javascript
+```bash
+$ bundle exec rake
+```
+
+### Javascript
+
+```bash
+$ RAILS_ENV=test bundle exec rake spec:javascript
+```
+
+### JSHint
+JSHint is run against all pull requests. To shorten the feedback loop, it is recommended that you run JSHint locally.
+With [NPM installed](https://docs.npmjs.com/getting-started/installing-node), install and run JSHint:
+
+```bash
+$ npm install jshint -g
+$ jshint app/assets/javascripts
+```
 
 ## Deployment
 

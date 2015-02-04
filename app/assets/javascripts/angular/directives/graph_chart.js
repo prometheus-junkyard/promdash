@@ -314,7 +314,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "$
           formatter: function(series, x, y) {
             var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + (series.labels["__name__"] || 'value') + ": <strong>" + y + '</strong>';
+            var content = swatch + (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>';
             return date + '<br>' + content + '<br>' + renderLabels(series.labels);
           },
           onRender: function() {
@@ -359,7 +359,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "$
         return function(bound) {
           var limit = bound.apply(Math, flatYValues);
           return limit;
-        }
+        };
       }
 
       function setLegendPresence(series) {
@@ -389,7 +389,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "$
 
       function renderLabels(labels) {
         var labelRows = [];
-        for (label in labels) {
+        for (var label in labels) {
           if (label != "__name__") {
             labelRows.push("<tr><th>" + label + "</th><td>" + labels[label] + "</td></tr>");
           }

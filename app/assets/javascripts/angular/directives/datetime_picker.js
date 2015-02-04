@@ -13,7 +13,7 @@ angular.module("Prometheus.directives").directive('datetimePicker', function() {
       picker.on('changeDate', function(e) {
         scope.$apply(function() {
           var date = picker.data('datetimepicker').getDate();
-          if (date == null) {
+          if (date === null) {
             scope.datetime = null;
           } else {
             scope.datetime = date.getTime();
@@ -23,7 +23,7 @@ angular.module("Prometheus.directives").directive('datetimePicker', function() {
 
       scope.$watch('datetime', function() {
         var date = null;
-        if (scope.datetime != null) {
+        if (scope.datetime !== null) {
           date = new Date(scope.datetime);
         }
         picker.data('datetimepicker').setValue(date);

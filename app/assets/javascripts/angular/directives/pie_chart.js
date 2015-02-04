@@ -37,7 +37,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
                 return "=\"" + $2 + "\"";
               });
             }).join(",");
-            e.ts = ((e.Metric || e.metric)["__name__"] || '') + "{" + ts + "}";
+            e.ts = ((e.Metric || e.metric).__name__ || '') + "{" + ts + "}";
           }
           tooltip[e.ts] = e.Metric || e.metric;
         });
@@ -48,10 +48,10 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         pieGraph.addMeasureAxis("p", "value");
 
         var pies = pieGraph.addSeries("ts", dimple.plot.pie);
-        pies.radius = (graphHeight / 2) - 10
+        pies.radius = (graphHeight / 2) - 10;
         pies.getTooltipText = function(e) {
           var data = tooltip[e.aggField[0]];
-          var tt = [(data["__name__"] || 'value') + ": " + e.pValue];
+          var tt = [(data.__name__ || 'value') + ": " + e.pValue];
           return tt.concat(joinProperties(data, ": "));
         };
 

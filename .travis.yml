@@ -6,8 +6,10 @@ before_script:
   - mysql -e 'create database promdash_test;'
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - npm install jshint
 script:
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:migrate
   - bundle exec rake spec
   - bundle exec rake spec:javascript
+  - jshint app/assets/javascripts
