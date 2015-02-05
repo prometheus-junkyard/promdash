@@ -61,10 +61,10 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     var queryStringComponents = parser.search.substring(1).split("&");
     // [{foo: bar}, {baz: quux}]
     $scope.frameComponents = queryStringComponents.map(function(kv) {
-      var kvArr = kv.split("=");
+      var kvArr = unescape(kv).split(/=(.+)/);
       return {
         key: kvArr[0],
-        value: kvArr[1] === undefined ? undefined : decodeURIComponent(kvArr[1]),
+        value: kvArr[1],
       };
     });
   };
@@ -79,15 +79,21 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
     if (angular.equals(newValue, oldValue)) {
       return;
     }
+    initFrameURL();
+  }, true);
+
+  function initFrameURL() {
     var parser = document.createElement("a");
     parser.href = $scope.frame.url;
     parser.search = "?" + $scope.frameComponents.map(function(o) {
       if (o.value !== undefined) {
-        return o.key + "=" + encodeURIComponent(o.value);
+        return o.key + "=" + o.value;
       } else {
         return o.key;
       }
     }).join("&");
-    $scope.frame.url = parser.href;
-  }, true);
+    $scope.frame.escapedURL = VariableInterpolator(parser.href, $scope.vars);
+    $scope.frame.url = unescape(parser.href);
+  }
+  initFrameURL();
 }]);
