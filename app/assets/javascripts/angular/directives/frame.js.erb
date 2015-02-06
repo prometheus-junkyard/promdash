@@ -17,19 +17,6 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
         return WidgetHeightCalculator(element.find(".js_widget_wrapper")[0], scope.aspectRatio);
       }
 
-      scope.refreshFrame = function() {
-        var frame = element.find('.frame_container');
-        frame.html(frame.html());
-      };
-
-      var a = ['frame.url', 'frame.range', 'frame.endTime', 'refreshCounter', 'frame.graphite'];
-      a.forEach(function(w) {
-        scope.$watch(w, regenFrame);
-      });
-      ['refreshDashboard', 'redrawGraphs'].forEach(function(m) {
-        scope.$on(m, regenFrame);
-      });
-
       // In order for zoom-out to work correctly on dashboards with iframes,
       // the iframe needs to be completely reconstructed on each refresh.
       // Modifying an iframe's src attribute, as in the previous implementation,
@@ -37,17 +24,21 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
       // out as it takes an additional history.back() execution to traverse the
       // history state added by modifying an iframe's src.
       // http://khaidoan.wikidot.com/iframe-and-browser-history
-      function regenFrame() {
-        if (!scope.frame.escapedURL) {
-          return;
-        }
-        var url = scope.frame.escapedURL.slice();
-        delete scope.frame.escapedURL;
+      scope.refreshFrame = function() {
+        var url = VariableInterpolator(scope.frame.url, scope.vars);
         var trustedURL = $sce.trustAsResourceUrl(buildFrameURL(url));
         var frame = element.find('.frame_container');
         frame.height(frameHeight());
         frame.html('<iframe src="'+ trustedURL +'" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>');
-      }
+      };
+
+      var a = ['frame.url', 'frame.range', 'frame.endTime', 'refreshCounter', 'frame.graphite'];
+      a.forEach(function(w) {
+        scope.$watch(w, scope.refreshFrame);
+      });
+      ['refreshDashboard', 'redrawGraphs'].forEach(function(m) {
+        scope.$on(m, scope.refreshFrame);
+      });
 
       function buildFrameURL(url) {
         var parser = document.createElement('a');

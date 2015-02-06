@@ -19,10 +19,6 @@ describe('FrameCtrl', function() {
     it('doesnt escape or interpolate the displayed frame url', function() {
       expect($scope.frame.url).toEqual(url);
     });
-
-    it('escapes and interpolates the iframe src url', function() {
-      expect($scope.frame.escapedURL).toEqual('http://graphite/render/?target=alias(stats_counts.statsd.packets_received,%20%22alias name:%20derp%22)');
-    });
   });
 
   describe('generating frame components', function() {
