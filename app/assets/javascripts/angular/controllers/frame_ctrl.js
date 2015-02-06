@@ -92,7 +92,6 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
         return o.key;
       }
     }).join("&");
-    $scope.frame.escapedURL = VariableInterpolator(parser.href, $scope.vars);
     $scope.frame.url = unescape(parser.href);
   }
   initFrameURL();
