@@ -11,5 +11,6 @@ The following individuals have contributed code to this repository
 
 * Johannes 'fish' Ziemke <github@freigeist.org>
 * Julius Volz <julius@soundcloud.com>
+* Stefano Charissis <stefano.charissis@gmail.com>
 * Stuart Nelson <stn@soundcloud.com>
 * Tobias Schmidt <ts@soundcloud.com>
