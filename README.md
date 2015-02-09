@@ -34,6 +34,11 @@ Install gems:
 
     bundle
 
+Set up your database:
+
+    cp config/database.yml.example config/database.yml
+    RAILS_ENV=development bundle exec rake db:setup
+
 Start the Rails server:
 
     bundle exec rails s
