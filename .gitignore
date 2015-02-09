@@ -20,7 +20,6 @@
 .ruby-gemset
 #.ruby-version
 
-/bin
 /build
 /vendor/bundle
 /system
