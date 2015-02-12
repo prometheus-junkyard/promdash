@@ -2,8 +2,8 @@ FROM       ubuntu:13.10
 MAINTAINER Prometheus Team <prometheus-developers@googlegroups.com>
 ENV        RAILS_ENV production
 
-RUN        apt-get update && apt-get install -yq \
-           ruby2.0 ruby2.0-dev gcc make g++ libmysqlclient-dev
+RUN        apt-get update && apt-get -qq upgrade && apt-get install -yq \
+           ruby2.0 ruby2.0-dev gcc make g++ libmysqlclient-dev && apt-get clean
 RUN        gem install bundler
 
 WORKDIR    /promdash
