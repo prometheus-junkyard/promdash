@@ -23,8 +23,6 @@ GEM
       activemodel (= 4.1.7)
       activesupport (= 4.1.7)
       arel (~> 5.0.0)
-      activerecord-postgresql-adapter (0.0.1)
-        pg
     activesupport (4.1.7)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
