@@ -5,7 +5,6 @@ gem 'rails', '4.1.7'
 
 gem 'mysql2'
 gem 'pg'
-gem 'activerecord-postgresql-adapter'
 
 gem 'active_model_serializers'
 
