@@ -4,7 +4,7 @@ BUILDDIR=build
 RUBY_VERSION=$(shell cat .ruby-version | perl -ne "chomp and print")
 RUBY_TAR=ruby-$(RUBY_VERSION).tar.gz
 RUBY_SRC=$(BUILDDIR)/ruby-$(RUBY_VERSION)
-RUBY_URL=ftp://ftp.ruby-lang.org/pub/ruby/2.0/$(RUBY_TAR)
+RUBY_URL?=ftp://ftp.ruby-lang.org/pub/ruby/2.0/$(RUBY_TAR)
 RUBY_BIN=$(DESTDIR)/bin/ruby
 
 build: Gemfile.lock $(RUBY_BIN)
