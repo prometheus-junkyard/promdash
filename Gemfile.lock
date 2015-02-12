@@ -23,6 +23,8 @@ GEM
       activemodel (= 4.1.7)
       activesupport (= 4.1.7)
       arel (~> 5.0.0)
+      activerecord-postgresql-adapter (0.0.1)
+        pg
     activesupport (4.1.7)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
@@ -84,6 +86,7 @@ GEM
     mysql2 (0.3.13)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
+    pg (0.18.1)
     phantomjs (1.9.8.0)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
