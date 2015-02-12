@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.7'
 
-gem 'mysql2'
+# Allow people to ignore the database provider they don't need by doing bundle install --without mysql
+gem 'mysql2', group: 'mysql'
+gem 'pg', group: 'postgresql'
 
 gem 'active_model_serializers'
 
