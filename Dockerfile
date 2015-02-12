@@ -1,4 +1,4 @@
-FROM       ubuntu:13.10
+FROM       ubuntu:14.04
 MAINTAINER Prometheus Team <prometheus-developers@googlegroups.com>
 ENV        RAILS_ENV production
 
