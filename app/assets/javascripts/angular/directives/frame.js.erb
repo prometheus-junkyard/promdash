@@ -41,20 +41,27 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
       });
 
       function buildFrameURL(url) {
-        var parser = document.createElement('a');
-        parser.href = url;
+        var parts = url.split('?'),
+        var path = parts[0];
+        var query = parts[1] ? parts[1].split('&') : [];
+
         if (scope.frame.graphite) {
-          return parseGraphiteURL(parser);
+          query = parseGraphiteQuery(query);
         }
-        parser.search = parser.search + '&decache=' + scope.refreshCounter;
-        return parser.href;
+
+        query.push('decache=' + scope.refreshCounter);
+        query = query.map(function (component) {
+          return component.split('=').map(encodeURIComponent).join('=');
+        });
+
+        return [path, query.join('&')].join('?');
       }
 
-      function parseGraphiteURL(parser) {
-        var queryStringComponents = parser.search.substring(1).split('&');
+      function parseGraphiteQuery(query) {
         var fields = {};
         var targets = [];
-        queryStringComponents.forEach(function(f) {
+
+        query.forEach(function(f) {
           var s = f.split('=');
           // If there are more than 1 target in the query string, they get overridden.
           // So we can't put them in the fields object.
@@ -66,13 +73,14 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
         });
 
         var height = frameHeight();
-        fields.height = height;
-        fields.width = (height / scope.aspectRatio) - FRAME_CONTAINER_PADDING;
-        fields.from = GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime);
-        fields.until = GraphiteTimeConverter.graphiteUntil(scope.frame.endTime);
-        fields.bgcolor = FRAME_BACKGROUND_COLOR;
-        parser.search = '?' + decodeURI($.param(fields)) + '&' + targets.join('&') + '&decache=' + scope.refreshCounter;
-        return parser.href;
+
+        return [
+          'height=' + height,
+          'width=' + ((height / scope.aspectRatio) - FRAME_CONTAINER_PADDING),
+          'from=' + GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime),
+          'until=' + GraphiteTimeConverter.graphiteUntil(scope.frame.endTime),
+          'bgcolor=' + FRAME_BACKGROUND_COLOR
+        ].concat(targets);
       }
     }
   };
