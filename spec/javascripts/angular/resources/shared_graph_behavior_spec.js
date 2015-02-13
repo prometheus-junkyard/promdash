@@ -21,9 +21,9 @@ describe('SharedGraphBehavior', function() {
       vars: {},
     };
     $scope.widgets = [
-      {range: 'widgetRange', endTime: 'widgetEndTime'},
-      {range: 'widgetRange', endTime: 'widgetEndTime'},
-      {range: 'widgetRange', endTime: 'widgetEndTime'},
+      {range: 'widgetRange', endTime: 'widgetEndTime', type:'graph'},
+      {range: 'widgetRange', endTime: 'widgetEndTime', type:'frame'},
+      {type:'pie'},
     ];
   });
 
@@ -98,8 +98,13 @@ describe('SharedGraphBehavior', function() {
       expect($scope.globalConfig.endTime).toEqual(dateMS);
       expect($scope.globalConfig.range).toEqual(range);
       $scope.widgets.forEach(function(w) {
-        expect(w.range).toEqual(range);
-        expect(w.endTime).toEqual(dateMS);
+        if (w.type === "pie") {
+          expect(w.range).toEqual(undefined);
+          expect(w.endTime).toEqual(undefined);
+        } else {
+          expect(w.range).toEqual(range);
+          expect(w.endTime).toEqual(dateMS);
+        }
       });
     });
 
@@ -111,8 +116,13 @@ describe('SharedGraphBehavior', function() {
       expect($scope.globalConfig.endTime).toEqual('configEndTime');
       expect($scope.globalConfig.range).toEqual('configRange');
       $scope.widgets.forEach(function(w) {
-        expect(w.range).toEqual('widgetRange');
-        expect(w.endTime).toEqual('widgetEndTime');
+        if (w.type === "pie") {
+          expect(w.range).toEqual(undefined);
+          expect(w.endTime).toEqual(undefined);
+        } else {
+          expect(w.range).toEqual('widgetRange');
+          expect(w.endTime).toEqual('widgetEndTime');
+        }
       });
     });
   });

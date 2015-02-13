@@ -25,6 +25,22 @@ feature "Dashboard#show", js: true do
       end
     end
 
+    describe 'changing time settings' do
+      it 'should save after changing global range' do
+        find('[title="Increase range"]').click
+        click_button 'Save Changes'
+        # if the save is unsuccessful this spec fails
+        # no explicit assertion is required
+      end
+
+      it 'should save after changing global until' do
+        find('[title="Decrease end time"]').click
+        click_button 'Save Changes'
+        # if the save is unsuccessful this spec fails
+        # no explicit assertion is required
+      end
+    end
+
     describe "removing pie charts" do
       before { open_tab 'Remove chart' }
 
