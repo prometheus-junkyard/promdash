@@ -1,4 +1,13 @@
-angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "VariableInterpolator", "GraphiteTimeConverter", "WidgetHeightCalculator", function($sce, VariableInterpolator, GraphiteTimeConverter, WidgetHeightCalculator) {
+angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
+                                                  "VariableInterpolator",
+                                                  "GraphiteTimeConverter",
+                                                  "WidgetHeightCalculator",
+                                                  "URLParser",
+                                                  function($sce,
+                                                    VariableInterpolator,
+                                                    GraphiteTimeConverter,
+                                                    WidgetHeightCalculator,
+                                                    URLParser) {
   var FRAME_CONTAINER_PADDING = 10;
   var FRAME_BACKGROUND_COLOR = '%23191919';
   return {
@@ -41,46 +50,24 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce", "Varia
       });
 
       function buildFrameURL(url) {
-        var parts = url.split('?'),
-        var path = parts[0];
-        var query = parts[1] ? parts[1].split('&') : [];
+        var parser = URLParser(url);
 
         if (scope.frame.graphite) {
-          query = parseGraphiteQuery(query);
+          setGraphiteParams(parser);
         }
 
-        query.push('decache=' + scope.refreshCounter);
-        query = query.map(function (component) {
-          return component.split('=').map(encodeURIComponent).join('=');
-        });
+        parser.setQueryParam('decache', scope.refreshCounter);
 
-        return [path, query.join('&')].join('?');
+        return parser.stringify();
       }
 
-      function parseGraphiteQuery(query) {
-        var fields = {};
-        var targets = [];
-
-        query.forEach(function(f) {
-          var s = f.split('=');
-          // If there are more than 1 target in the query string, they get overridden.
-          // So we can't put them in the fields object.
-          if (s[0] !== 'target') {
-            fields[s.shift()] = s.join('=');
-          } else {
-            targets.push(f);
-          }
-        });
-
+      function setGraphiteParams(parser) {
         var height = frameHeight();
-
-        return [
-          'height=' + height,
-          'width=' + ((height / scope.aspectRatio) - FRAME_CONTAINER_PADDING),
-          'from=' + GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime),
-          'until=' + GraphiteTimeConverter.graphiteUntil(scope.frame.endTime),
-          'bgcolor=' + FRAME_BACKGROUND_COLOR
-        ].concat(targets);
+        parser.setQueryParam('height', height);
+        parser.setQueryParam('width', ((height / scope.aspectRatio) - FRAME_CONTAINER_PADDING));
+        parser.setQueryParam('from', GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime));
+        parser.setQueryParam('until', GraphiteTimeConverter.graphiteUntil(scope.frame.endTime));
+        parser.setQueryParam('bgcolor', FRAME_BACKGROUND_COLOR);
       }
     }
   };

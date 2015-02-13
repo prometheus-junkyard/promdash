@@ -1,7 +1,8 @@
 describe('FrameCtrl', function() {
   var $controller;
   var $scope;
-  beforeEach(inject(function(_$controller_, _VariableInterpolator_, $rootScope){
+
+  beforeEach(inject(function(_$controller_, $rootScope){
     $controller = _$controller_;
     $scope = $rootScope.$new(true);
     $scope.frame = {};
