@@ -58,6 +58,14 @@ Run the production server from the bundled environment:
 
     bin/env bin/bundle exec bin/thin -p $PORT start
 
+### Deploy with Docker
+To deploy PromDash with Docker, use the [prom/promdash](https://registry.hub.docker.com/u/prom/promdash/).
+By default, the image will start the [thin webserver](http://code.macournoyer.com/thin/)
+webserver in production mode. To run rake tasks like migrations, you
+can specify any kind of command as parameter to the Docker image:
+
+    docker run -e DATABASE_URL=... prom/promdash ./bin/rake db:migrate
+
 ### Deployment Checklist
 
 *Before* deploying a new version of PromDash, follow this checklist:

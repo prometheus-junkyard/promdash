@@ -1,15 +1,9 @@
-FROM       ubuntu:14.04
+FROM       ruby:2.1.5-onbuild
 MAINTAINER Prometheus Team <prometheus-developers@googlegroups.com>
 ENV        RAILS_ENV production
 
-RUN        apt-get update && apt-get install -yq \
-           ruby2.0 ruby2.0-dev gcc make g++ libmysqlclient-dev
-RUN        gem install bundler
-
-WORKDIR    /promdash
 ENTRYPOINT [ "./run" ]
 CMD        [ "./bin/thin", "start" ]
-ADD        . /promdash
 RUN        cp config/database.yml.example config/database.yml && \
            bundle install --deployment --binstubs --without="development test migration" && \
            bundle exec rake assets:precompile
