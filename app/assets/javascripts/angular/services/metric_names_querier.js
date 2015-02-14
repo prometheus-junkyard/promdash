@@ -8,7 +8,7 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", fu
     }
     var url = document.createElement('a');
     url.href = serverURL;
-    url.pathname = 'api/metrics';
+    url.pathname = url.pathname.replace(/\/?$/, '/api/metrics');
     $http.get(url.href).success(function(metricNames) {
       metricNamesCache[serverID] = metricNames;
       scope.metricNames = metricNames;

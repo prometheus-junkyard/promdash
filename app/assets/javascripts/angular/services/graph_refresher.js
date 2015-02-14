@@ -10,7 +10,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       var deferred = $q.defer();
       var url = document.createElement('a');
       url.href = server.url;
-      url.pathname = 'api/query_range';
+      url.pathname = url.pathname.replace(/\/?$/, '/api/query_range');
       $http.get(url.href, {
         params: {
           expr: expression,

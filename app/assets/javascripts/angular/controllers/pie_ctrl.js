@@ -17,7 +17,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
     $scope.requestInFlight = true;
     var url = document.createElement('a');
     url.href = server.url;
-    url.pathname = 'api/query';
+    url.pathname = url.pathname.replace(/\/?$/, '/api/query');
     $http.get(url.href, {
       params: {
         expr: exp.expression
