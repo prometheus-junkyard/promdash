@@ -7,7 +7,7 @@
 
 <div class="fullscreen">
   <div class="single_widget" ng-controller="SingleWidgetCtrl">
-    <span ng-switch="widget.type">
+    <span ng-repeat="widget in widgets" ng-switch="widget.type">
       <span ng-switch-when="graph">
         <graph
           graph-settings="widget"
