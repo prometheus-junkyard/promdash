@@ -1,6 +1,6 @@
 angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$window", "$timeout", "$scope", "$http", "URLConfigDecoder", "GraphRefresher", "ServersByIDObject", "FullScreenAspectRatio", "ThemeManager", "SharedGraphBehavior", function($window, $timeout, $scope, $http, URLConfigDecoder, GraphRefresher, ServersByIDObject, FullScreenAspectRatio, ThemeManager, SharedGraphBehavior) {
   var graphBlob = URLConfigDecoder(window.blob);
-  $scope.widget = graphBlob.widget;
+  $scope.widgets = [graphBlob.widget];
   $scope.servers = servers;
   $scope.serversById = ServersByIDObject($scope.servers);
   $scope.globalConfig = graphBlob.globalConfig || {};
