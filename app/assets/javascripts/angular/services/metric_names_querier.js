@@ -1,4 +1,4 @@
-angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", function($http) {
+angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", "URLGenerator", function($http, URLGenerator) {
   var metricNamesCache = {};
 
   return function(serverID, serverURL, scope) {
@@ -6,10 +6,7 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", fu
       scope.metricNames = metricNamesCache[serverID];
       return;
     }
-    var url = document.createElement('a');
-    url.href = serverURL;
-    url.pathname = 'api/metrics';
-    $http.get(url.href).success(function(metricNames) {
+    $http.get(URLGenerator(serverURL, '/api/metrics')).success(function(metricNames) {
       metricNamesCache[serverID] = metricNames;
       scope.metricNames = metricNames;
       return;

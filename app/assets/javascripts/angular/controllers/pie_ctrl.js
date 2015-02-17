@@ -1,9 +1,11 @@
 angular.module("Prometheus.controllers").controller('PieCtrl',
                                                     ["$scope", "$http",
                                                       "SharedWidgetSetup",
+                                                      "URLGenerator",
                                                       function($scope,
                                                                $http,
-                                                               SharedWidgetSetup) {
+                                                               SharedWidgetSetup,
+                                                               URLGenerator) {
   SharedWidgetSetup($scope);
   $scope.errorMessages = [];
 
@@ -15,10 +17,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
       return;
     }
     $scope.requestInFlight = true;
-    var url = document.createElement('a');
-    url.href = server.url;
-    url.pathname = 'api/query';
-    $http.get(url.href, {
+    $http.get(URLGenerator(server.url, '/api/query'), {
       params: {
         expr: exp.expression
       }
