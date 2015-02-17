@@ -2,16 +2,15 @@ angular.module("Prometheus.services").factory('GraphRefresher',
                                               ["$http",
                                                "$q",
                                                "VariableInterpolator",
+                                               "URLGenerator",
                                                function($http,
                                                         $q,
-                                                        VariableInterpolator) {
+                                                        VariableInterpolator,
+                                                        URLGenerator) {
   return function($scope) {
     function loadGraphData(idx, expression, server, expressionID, endTime, rangeSeconds, step) {
       var deferred = $q.defer();
-      var url = document.createElement('a');
-      url.href = server.url;
-      url.pathname = url.pathname.replace(/\/?$/, '/api/query_range');
-      $http.get(url.href, {
+      $http.get(URLGenerator(server.url, '/api/query_range'), {
         params: {
           expr: expression,
           range: rangeSeconds,
