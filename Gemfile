@@ -22,7 +22,6 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'sinatra'
   gem 'pry'
-  gem 'jasmine-rails'
   gem 'rspec-rails', "~> 3.0.0.beta2"
   gem 'selenium-webdriver'
   gem 'database_cleaner'
