@@ -8,9 +8,9 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - npm install jshint
   - npm install
-script:
-  - jshint app/assets/javascripts
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:migrate
+script:
+  - jshint app/assets/javascripts
   - bundle exec rake spec
   - bundle exec rake karma:run
