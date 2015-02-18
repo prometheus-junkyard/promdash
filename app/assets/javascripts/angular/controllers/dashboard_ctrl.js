@@ -88,6 +88,14 @@ angular.module("Prometheus.controllers")
     ModalService.closeModal();
   };
 
+  $scope.hideDashboardSettings = function() {
+    $scope.showDashboardSettings = false;
+  };
+
+  $scope.hidePermalink = function() {
+    $scope.showPermalink = false;
+  };
+
   $scope.$on('closeModal', function() {
     $scope.showCloneControls = false;
   });

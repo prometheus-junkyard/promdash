@@ -21,7 +21,11 @@
       <!-- Chart control tab content panes -->
       <!-- 1) Datasources -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'datasources'">
-        <div class="panel-heading">Datasources</div>
+        <div class="panel-heading">
+          Datasources
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <expression
             axes="graph.axes"
@@ -39,7 +43,11 @@
 
       <!-- 2) Chart Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'graph'">
-        <div class="panel-heading">Chart Settings</div>
+        <div class="panel-heading">
+          Chart Settings
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <label>Chart Title:</label>
           <input class="form-control" ng-model="graph.title">
@@ -48,13 +56,21 @@
 
       <!-- 3) Palette Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'palette'">
-        <div class="panel-heading">Palette Settings</div>
+        <div class="panel-heading">
+          Palette Settings
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">Palette settings are not yet implemented.</div>
       </div>
 
       <!-- 4) Legend Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'legend'">
-        <div class="panel-heading">Legend Settings</div>
+        <div class="panel-heading">
+          Legend Settings
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <label>Show legend</label>
           <br />
@@ -82,7 +98,11 @@
 
       <!-- 5) Static link to graph -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
-        <div class="panel-heading">Link to this graph</div>
+        <div class="panel-heading">
+          Link to this graph
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <div class="input-group">
             <input type="text" class="form-control" ng-model="widgetLink">

@@ -59,7 +59,10 @@
 
     <div class="global_grouping">
       <div>
-        <button class="btn btn-default" ng-click="showDashboardSettings = !showDashboardSettings" title="Dashboard Settings">
+        <button class="btn btn-default"
+          ng-class="{'btn_active': showDashboardSettings}"
+          ng-click="showDashboardSettings = !showDashboardSettings"
+          title="Dashboard Settings">
           <span class="glyphicon glyphicon-cog"></span>
         </button>
         <button class="btn btn-default" ng-click="enableFullscreen()" title="Fullscreen mode">
@@ -67,6 +70,7 @@
         </button>
         <% unless @dashboard.permalink %>
           <button class="btn btn-default" ng-click="generatePermalink()"
+            ng-class="{'btn_active': showPermalink}"
             tooltip-append-to-body="true" tooltip="Create permalink to current dashboard state">
             <span ng-show="!generatingPermalink" class="glyphicon glyphicon-link"></span>
             <span ng-show="generatingPermalink" class="glyphicon glyphicon-refresh spin"></span>
@@ -75,7 +79,11 @@
       </div>
       <% unless @dashboard.permalink %>
         <div class="dashboard_settings panel panel-default" ng-show="showPermalink">
-          <div class="panel-heading">Dashboard Permalink</div>
+          <div class="panel-heading">
+            Dashboard Permalink
+            <i ng-click="hidePermalink()" class="clone_widget_close pointer pull-right icon-cross"
+             tooltip-append-to-body="true" tooltip="Close"></i>
+          </div>
           <div class="panel-body">
             <div class="input-group">
               <input type="text" class="form-control" ng-model="permalink">
@@ -92,7 +100,12 @@
         </div>
       <% end %>
       <div class="dashboard_settings panel panel-default" ng-show="showDashboardSettings">
-        <div class="panel-heading">Dashboard Settings</div>
+        <div class="panel-heading">
+          Dashboard Settings
+          <i class="clone_widget_close pointer pull-right icon-cross"
+            ng-click="hideDashboardSettings()"
+            tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <label>Columns:
             <input class="form-control" type="number"

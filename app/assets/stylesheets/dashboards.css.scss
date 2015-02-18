@@ -103,6 +103,13 @@ $light-secondary-background: #f0f0f0;
       color: #428bca;
     }
   }
+  & .btn_active {
+    color: #428bca;
+  }
+}
+
+.btn_active {
+  color: #428bca;
 }
 
 .legend_buttons {
@@ -370,6 +377,9 @@ error-message {
           color: $dark-text;
         }
       }
+      .btn_active {
+        color: $dark-text;
+      }
     }
 
     .dropdown-menu > .active > a {
@@ -388,6 +398,10 @@ error-message {
 
     .graph_config_menu .btn {
       color: $dark-inactive-icon;
+    }
+
+    .graph_config_menu .btn_active {
+      color: $dark-text;
     }
 
     .global_grouping, .widget_title {
