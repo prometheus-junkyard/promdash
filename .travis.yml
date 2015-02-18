@@ -7,9 +7,10 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install jshint
+  - npm install
 script:
+  - jshint app/assets/javascripts
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:migrate
   - bundle exec rake spec
-  - bundle exec rake spec:javascript
-  - jshint app/assets/javascripts
+  - bundle exec rake karma:run

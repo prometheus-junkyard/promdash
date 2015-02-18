@@ -59,7 +59,7 @@ module.exports = function(config) {
 
     ngHtml2JsPreprocessor: {
       stripPrefix: 'app/assets/templates/',
-      prependPrefix: '/assets/' // might not need this?
+      prependPrefix: '/assets/', // might not need this?
       // stripSufix: '.slim'
     }
   });
