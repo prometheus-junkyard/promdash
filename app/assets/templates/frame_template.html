@@ -16,7 +16,11 @@
       <!-- Frame control tab content panes -->
       <!-- 1) Frame Source (URL) -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_source'">
-        <div class="panel-heading">Frame Source</div>
+        <div class="panel-heading">
+          Frame Source
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <form class="form-inline">
             <div class="form-group col-xs-12">
@@ -42,11 +46,16 @@
       <widget-time-options
         ng-show="showTab == 'timerange'"
         range="frame.range"
+        close-tab="closeTab"
         end-time="frame.endTime"></widget-time-options>
 
       <!-- 3) Frame Settings -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'frame_settings'">
-        <div class="panel-heading">Frame Settings</div>
+        <div class="panel-heading">
+          Frame Settings
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <div class="checkbox">
             <label><input type="checkbox" ng-model="frame.graphite" /> this is a graphite graph</label>
@@ -56,7 +65,11 @@
 
       <!-- 4) Static link to graph -->
       <div class="graph_control_tabpane panel panel-default" ng-show="showTab == 'staticlink'">
-        <div class="panel-heading">Link to this graph</div>
+        <div class="panel-heading">
+          Link to this graph
+          <i ng-click="closeTab($event)" class="clone_widget_close pointer pull-right icon-cross"
+           tooltip-append-to-body="true" tooltip="Close"></i>
+        </div>
         <div class="panel-body">
           <div class="input-group">
             <input type="text" class="form-control" ng-model="widgetLink">
