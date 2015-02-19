@@ -33,4 +33,7 @@ PrometheusDashboard::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # For loading application_spec.js
+  config.assets.paths << Rails.root.join('spec', 'javascripts')
 end

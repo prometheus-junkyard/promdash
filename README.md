@@ -15,7 +15,7 @@ $ bundle exec rake
 ### Javascript
 
 ```bash
-$ RAILS_ENV=test bundle exec rake spec:javascript
+$ RAILS_ENV=test bundle exec rake karma:run
 ```
 
 ### JSHint
