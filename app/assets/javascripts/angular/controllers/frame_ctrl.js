@@ -6,6 +6,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                     "WidgetLinkHelper",
                                                     "GraphiteTimeConverter",
                                                     "WidgetTabService",
+                                                    "URLParser",
                                                     function($scope, $sce,
                                                              $timeout,
                                                              VariableInterpolator,
@@ -13,7 +14,8 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
                                                              InputHighlighter,
                                                              WidgetLinkHelper,
                                                              GraphiteTimeConverter,
-                                                             WidgetTabService) {
+                                                             WidgetTabService,
+                                                             URLParser) {
   WidgetTabService($scope);
 
   $scope.generateWidgetLink = function(event) {
@@ -55,18 +57,19 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
   });
 
   $scope.generateFrameComponents = function() {
-    var parser = document.createElement("a");
-    parser.href = $scope.frame.url;
-    // [foo=bar, baz=quux]
-    var queryStringComponents = parser.search.substring(1).split("&");
-    // [{foo: bar}, {baz: quux}]
-    $scope.frameComponents = queryStringComponents.map(function(kv) {
-      var kvArr = unescape(kv).split(/=(.+)/);
-      return {
-        key: kvArr[0],
-        value: kvArr[1],
-      };
-    });
+    // This URL should already be unescaped
+    var parser = URLParser($scope.frame.url);
+    var queryParams = parser.getQueryParams();
+    $scope.frameComponents = Object.keys(queryParams).reduce(function(components, key) {
+      // possible to have array of values for any key
+      [].concat(queryParams[key]).forEach(function (value) {
+        components.push({
+          key: key,
+          value: value
+        });
+      });
+      return components;
+    }, []);
   };
 
   $scope.generateFrameComponents();
@@ -83,16 +86,21 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
   }, true);
 
   function initFrameURL() {
-    var parser = document.createElement("a");
-    parser.href = $scope.frame.url;
-    parser.search = "?" + $scope.frameComponents.map(function(o) {
-      if (o.value !== undefined) {
-        return o.key + "=" + o.value;
-      } else {
-        return o.key;
+    var parser = URLParser($scope.frame.url);
+    var previousParams = Object.keys(parser.getQueryParams());
+    var newParams = $scope.frameComponents.reduce(function (params, component) {
+      params[component.key] = params[component.key] ? [].concat(params[component.key], component.value) : component.value;
+      return params;
+    }, {});
+    Object.keys(newParams).forEach(function (key) {
+      parser.setQueryParam(key, newParams[key]);
+    });
+    previousParams.forEach(function (key) {
+      if (typeof newParams.key !== 'undefined') {
+        parser.removeQueryParam(key);
       }
-    }).join("&");
-    $scope.frame.url = unescape(parser.href);
+    });
+    $scope.frame.url = parser.stringify(false);
   }
   initFrameURL();
 }]);
