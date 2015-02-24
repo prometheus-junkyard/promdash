@@ -50,7 +50,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
       });
 
       function buildFrameURL(url) {
-        var parser = URLParser(url);
+        var parser = URLParser(url, {ignoreHash: scope.frame.graphite});
 
         if (scope.frame.graphite) {
           setGraphiteParams(parser);

@@ -28,7 +28,7 @@ describe('UrlConfig', function() {
     });
 
     it('can treat a hash (#) as part of a query parameter', function() {
-      var url = 'http://graphite-example.com/render?width=370&from=-3hours&until=-&height=250&target=color(alias(drawAsInfinite(some.event),""),"#663399")&yMinRight=0&title&hideLegend=false'
+      var url = 'http://graphite-example.com/render?width=370&from=-3hours&until=-&height=250&target=color(alias(drawAsInfinite(some.event),""),"#663399")&yMinRight=0&title&hideLegend=false';
       var parsed = URLParser(url, {ignoreHash: true});
       expect(parsed.path).toEqual('http://graphite-example.com/render');
       expect(parsed.getQueryParams()).toEqual({
@@ -52,6 +52,14 @@ describe('UrlConfig', function() {
         width: '370',
         from: '-3hours',
         until: '-'
+      });
+    });
+
+    it('correctly parses a colorList', function() {
+      var url = 'http://graphite-example.com/render?colorList=#38AFEB,#EB3838,#38EB38,#EB38DC';
+      var parsed = URLParser(url, {ignoreHash: true});
+      expect(parsed.getQueryParams()).toEqual({
+        colorList: '#38AFEB,#EB3838,#38EB38,#EB38DC'
       });
     });
 
