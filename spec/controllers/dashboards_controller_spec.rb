@@ -10,6 +10,7 @@ describe DashboardsController do
 
   it "#new" do
     get :new
+    expect(assigns(:directories)).to match_array(Directory.sorted)
     expect(response).to be_success
   end
 
