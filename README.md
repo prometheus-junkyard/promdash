@@ -1,6 +1,8 @@
 # PromDash
 
-Dashboard builder for Prometheus.
+Dashboards for Prometheus.
+
+![promdash](http://prometheus.io/assets/promdash_event_processor.png)
 
 ## Testing
 
