@@ -3,7 +3,7 @@ class DirectoriesController < ApplicationController
   before_action :set_unassigned_dashboards, only: [:edit, :new, :index]
 
   def index
-    @directories = Directory.order("lower(name)").includes(:dashboards)
+    @directories = Directory.sorted.includes(:dashboards)
     respond_to do |format|
       format.html { render 'index' }
       format.json do

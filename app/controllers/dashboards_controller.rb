@@ -116,7 +116,7 @@ class DashboardsController < ApplicationController
   end
 
   def set_directories
-    @directories = Directory.all
+    @directories = Directory.sorted
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

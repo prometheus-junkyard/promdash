@@ -1,5 +1,7 @@
 class Directory < ActiveRecord::Base
-  has_many :dashboards, -> { order "lower(name)" }
+  has_many :dashboards, -> { order('lower(name)') }
+
+  scope :sorted, -> { order('lower(name)') }
 
   validates :name,
     uniqueness: { case_sensitive: false },
