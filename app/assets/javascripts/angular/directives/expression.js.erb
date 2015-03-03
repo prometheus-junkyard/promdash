@@ -15,6 +15,24 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
     },
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
+      var ENTER_KEY = 13;
+
+      function changeExpression() {
+        if (scope.expr.expression) {
+          scope.$emit('changeExpression');
+        }
+      }
+
+      $(el).on('keyup', function(e) {
+        if (e.keyCode === ENTER_KEY) {
+          changeExpression();
+        }
+      });
+
+      scope.$watch('expr.serverID', function() {
+        changeExpression();
+      });
+
       scope.updateMetricNames = function() {
         var server = scope.serversById[scope.expr.serverID];
         if (server === undefined) {
@@ -53,7 +71,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
           step_input: "",
           stacked: stacked,
           tab: 0
-        }
+        };
 
         var hash = escape(JSON.stringify([expr]));
         return server.url + "graph#" + hash;
@@ -69,7 +87,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
 
         $timeout(function() {
           el.focus();
-          el.setSelectionRange(lastCursorPosition, lastCursorPosition + metricName.length)
+          el.setSelectionRange(lastCursorPosition, lastCursorPosition + metricName.length);
         }, 0);
       };
 
