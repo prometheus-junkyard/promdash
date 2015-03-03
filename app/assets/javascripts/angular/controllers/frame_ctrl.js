@@ -58,7 +58,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
 
   $scope.generateFrameComponents = function() {
     // This URL should already be unescaped
-    var parser = URLParser($scope.frame.url);
+    var parser = URLParser($scope.frame.url, {ignoreHash: $scope.frame.graphite});
     var queryParams = parser.getQueryParams();
     $scope.frameComponents = Object.keys(queryParams).reduce(function(components, key) {
       // possible to have array of values for any key
@@ -86,7 +86,7 @@ angular.module("Prometheus.controllers").controller('FrameCtrl', ["$scope",
   }, true);
 
   function initFrameURL() {
-    var parser = URLParser($scope.frame.url);
+    var parser = URLParser($scope.frame.url, {ignoreHash: $scope.frame.graphite});
     var previousParams = Object.keys(parser.getQueryParams());
     var newParams = $scope.frameComponents.reduce(function (params, component) {
       params[component.key] = params[component.key] ? [].concat(params[component.key], component.value) : component.value;
