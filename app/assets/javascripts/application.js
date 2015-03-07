@@ -21,7 +21,7 @@
 //= require ui-bootstrap-tpls-0.11.0.min
 //= require ui-slider
 //= require d3.v3.js
-//= require rickshaw.min
+//= require rickshaw-1.5.1
 //= require dimple.v2.1.0.min
 //= require sortable.js
 //= require angular/app.js
