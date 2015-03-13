@@ -26,5 +26,9 @@ FactoryGirl.define do
     trait :pie_chart do
       dashboard_json File.read('./spec/support/sample_json/pie_chart_dashboard_json')
     end
+
+    trait :gauge_chart do
+      dashboard_json File.read('./spec/support/sample_json/gauge_chart_dashboard_json')
+    end
   end
 end

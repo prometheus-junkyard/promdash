@@ -312,6 +312,79 @@
               }
             }
           },
+          // "gauge" widget type.
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "danger",
+              "expression",
+              "max",
+              "precision",
+              "refresh",
+              "title",
+              "type",
+              "units",
+              "warning"
+            ],
+            "properties": {
+              "expression": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "expression",
+                  "id",
+                  "serverID"
+                ],
+                "properties": {
+                  "expression": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "enum": [0]
+                  },
+                  "serverID": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "danger": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "max": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "precision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "refresh": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["gauge"]
+              },
+              "units": {
+                "type": "string"
+              },
+              "warning": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
           // "frame" widget type.
           {
             "type": "object",

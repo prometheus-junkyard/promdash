@@ -1,0 +1,13 @@
+angular.module("Prometheus.directives").directive('gauge', function() {
+  return {
+    scope: {
+      graph: "=graphSettings",
+      servers: "=",
+      aspectRatio: "=",
+      index: "=",
+      vars: "="
+    },
+    restrict: "AE",
+    templateUrl: "<%= asset_path('gauge_template.html') %>"
+  };
+});

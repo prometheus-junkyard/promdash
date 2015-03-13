@@ -34,7 +34,10 @@ return function($scope) {
       .highlightInput(event);
   };
   $scope.serversById = ServersByIDObject($scope.servers);
-  $scope.graph.showLegend = $scope.graph.showLegend || "sometimes";
+
+  if ($scope.graph.type !== "gauge") {
+    $scope.graph.showLegend = $scope.graph.showLegend || "sometimes";
+  }
 
   $scope.$on('refreshDashboard', function(ev) {
     $scope.refreshGraph();

@@ -99,3 +99,153 @@ Prometheus.Graph = {
     };
   }
 };
+
+Prometheus.Graph.Gauge = function(args) {
+  if (!args.element) {
+    throw "Prometheus.Graph.Gauge needs a reference to an element";
+  }
+  if (!args.value) {
+    throw "Prometheus.Graph.Gauge needs a value";
+  }
+  if (!args.max) {
+    throw "Prometheus.Graph.Gauge needs a max";
+  }
+  var defaults = {
+    width:     args.element.clientWidth,
+    height:    args.element.clientHeight,
+    value:     args.value,
+    max:       args.max,
+    hideGauge: false,
+    danger:    0.75,
+    warning:   0.50,
+    precision: 2,
+    bgColor:   "#666",
+    textColor: "#fff",
+  };
+
+  this.element = args.element;
+  this.svg = d3.select(this.element).append("svg");
+  this.width = args.width || defaults.width;
+  this.height = args.height || defaults.height;
+
+  this.value = args.value || defaults.value;
+  this.units = args.units;
+
+  this.max = args.max || defaults.max;
+  this.thickness = args.thickness || this.width/15;
+  this.precision = args.precision || this.precision;
+  this.hideGauge = args.hideGauge || this.hideGauge;
+
+  this.danger = args.danger || defaults.danger;
+  this.warning = args.warning || defaults.warning;
+  this.bgColor = args.bgColor || defaults.bgColor;
+  this.textColor = args.textColor || defaults.textColor;
+};
+
+Prometheus.Graph.Gauge.prototype.render = function() {
+  var pi = Math.PI;
+  var translate = "translate(" + this.width/2 + "," + this.height + ")";
+  var start = -0.5 * pi;
+  var fullGaugeWidth = start + pi;
+  var percentage = this.value / this.max;
+  var end = (percentage * pi) - fullGaugeWidth;
+  var normalColor = "green";
+  var warningColor = "yellow";
+  var dangerColor = "red";
+  if (this.value > this.max) {
+    end = fullGaugeWidth;
+  }
+
+  var d = this.width/2;
+  if (this.height < d) {
+    d = this.height;
+  }
+  var outerRadius = d;
+  var innerRadius = outerRadius - this.thickness;
+
+  this.svg.attr("width", this.width)
+          .attr("height", this.height);
+
+  if (!this.hideGauge) {
+    // Gauge container.
+    var container = d3.svg.arc()
+                          .innerRadius(innerRadius)
+                          .outerRadius(outerRadius)
+                          .startAngle(start)
+                          .endAngle(fullGaugeWidth);
+
+    this.svg.append("path")
+            .attr("d", container)
+            .attr("fill", this.bgColor)
+            .attr("transform", translate);
+
+    // The current value of the gauge.
+    var arc = d3.svg.arc()
+                    .innerRadius(innerRadius)
+                    .outerRadius(outerRadius)
+                    .startAngle(start)
+                    .endAngle(end);
+
+    this.svg.append("path")
+            .attr("d", arc)
+            .attr("fill", function(d) {
+              if (percentage > this.danger) {
+                return dangerColor;
+              } else if (percentage > this.warning) {
+                return warningColor;
+              }
+              return normalColor;
+            }.bind(this))
+            .attr("transform", translate);
+
+    // Score the gauge.
+    var minScore = d3.svg.arc()
+                         .innerRadius(innerRadius-10)
+                         .outerRadius(outerRadius+10)
+                         .startAngle((this.warning*pi - fullGaugeWidth)-0.005)
+                         .endAngle((this.warning*pi - fullGaugeWidth));
+
+    this.svg.append("path")
+            .attr("d", minScore)
+            .attr("fill", warningColor)
+            .attr("transform", translate);
+
+    var maxScore = d3.svg.arc()
+                         .innerRadius(innerRadius-10)
+                         .outerRadius(outerRadius+10)
+                         .startAngle((this.danger*pi - fullGaugeWidth)-0.005)
+                         .endAngle((this.danger*pi - fullGaugeWidth));
+
+    this.svg.append("path")
+            .attr("d", maxScore)
+            .attr("fill", dangerColor)
+            .attr("transform", translate);
+  }
+
+  // The label for the gauge.
+  var t = this.value.toFixed(this.precision) + " " + (this.units || "");
+  var self = this;
+  this.svg.selectAll("text")
+          .data([{value: this.value, units: this.units}])
+          .enter()
+          .append("text")
+          .attr("x", this.width/2)
+          .style("text-anchor", "middle")
+          .attr("font-size", function() {
+            var f = t.length*0.75;
+            if (self.hideGauge) {
+              f /= 1.33;
+            }
+            return self.width/f + "px";
+          })
+          .attr("y", function() {
+            if (self.hideGauge) {
+              var s = parseFloat(this.getAttribute("font-size"));
+              var h = self.height;
+              return (h+s)/2;
+            }
+            return self.height*0.95;
+          })
+          .text(t)
+          .attr("fill", this.textColor);
+};

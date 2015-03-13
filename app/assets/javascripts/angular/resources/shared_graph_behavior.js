@@ -42,7 +42,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if (urlVars.range) {
         $scope.globalConfig.range = urlVars.range;
         $scope.widgets.forEach(function(w) {
-          if (w.type !== "pie") {
+          if (["pie", "gauge"].indexOf(w.type) === -1) {
             w.range = urlVars.range;
           }
         });
@@ -52,7 +52,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       if (urlVars.until) {
         var date = Date.parse(urlVars.until);
         $scope.widgets.forEach(function(w) {
-          if (w.type !== "pie") {
+          if (["pie", "gauge"].indexOf(w.type) === -1) {
             w.endTime = date;
           }
         });

@@ -7,6 +7,9 @@ class FauxMetheus < Sinatra::Base
   end
 
   get '/api/query' do
+    if params[:expr] == 'scalar(rate(prometheus_local_storage_ingested_samples_total[5m]))'
+      return json_response 200, 'prometheus_response_scalar.json'
+    end
     json_response 200, 'prometheus_response_query.json'
   end
 

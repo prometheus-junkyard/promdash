@@ -36,13 +36,14 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       scope.updateMetricNames = function() {
         var server = scope.serversById[scope.expr.serverID];
         if (server === undefined) {
+          scope.metricNames = [];
           return;
         }
         MetricNamesQuerier(scope.expr.serverID, server.url, scope);
       };
 
       scope.linkToPrometheus = function() {
-        if (!scope.expr.axisID && scope.type !== "pie") {
+        if (!scope.expr.axisID && scope.type === "graph") {
           return;
         }
         var server = scope.serversById[scope.expr.serverID];
@@ -50,7 +51,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
           return;
         }
         var stacked = "";
-        if (scope.type !== "pie") {
+        if (scope.type === "chart") {
           scope.axes.forEach(function(a) {
             if (a.id === scope.expr.axisID && a.renderer === "stack") {
               stacked = "true";
@@ -70,7 +71,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
           end_input: endTime,
           step_input: "",
           stacked: stacked,
-          tab: 0
+          tab: scope.type === "gauge" ? 1 : 0
         };
 
         var hash = escape(JSON.stringify([expr]));
