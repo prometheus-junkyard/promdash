@@ -13,6 +13,7 @@ feature "Graph legend", js: true do
       all('.legend_string_container .icon-cross').each(&:click)
       within_graph do
         expect(page).to have_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
       end
     end
 
@@ -128,6 +129,13 @@ feature "Graph legend", js: true do
           within_graph do
             expect(page).to have_content "undefined"
           end
+        end
+      end
+
+      it "HTML escaping" do
+        legend_string.set '{{html_label}}'
+        within_graph do
+          expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
         end
       end
     end

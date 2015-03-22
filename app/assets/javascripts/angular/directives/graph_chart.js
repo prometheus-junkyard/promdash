@@ -1,4 +1,19 @@
-angular.module("Prometheus.directives").directive('graphChart', ["$location", "$rootScope", "WidgetHeightCalculator", "VariableInterpolator", "RickshawDataTransformer", "YAxisUtilities", function($location, $rootScope, WidgetHeightCalculator, VariableInterpolator, RickshawDataTransformer, YAxisUtilities) {
+angular.module("Prometheus.directives").directive('graphChart', [
+    "$location",
+    "$rootScope",
+    "WidgetHeightCalculator",
+    "VariableInterpolator",
+    "RickshawDataTransformer",
+    "YAxisUtilities",
+    "HTMLEscaper",
+    function(
+      $location,
+      $rootScope,
+      WidgetHeightCalculator,
+      VariableInterpolator,
+      RickshawDataTransformer,
+      YAxisUtilities,
+      HTMLEscaper) {
   return {
     scope: {
       graphSettings: '=',
@@ -22,11 +37,11 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "$
               var lst = scope.graphSettings.legendFormatStrings.filter(function(lst) {
                 return lst.id === exp.legendID;
               })[0];
-              if (!(lst || {}).name) {
-                return;
+              if ((lst || {}).name) {
+                s.name = VariableInterpolator(lst.name, s.labels);
               }
-              s.name = VariableInterpolator(lst.name, s.labels);
             }
+            s.name = HTMLEscaper(s.name);
           });
         });
       }
@@ -391,7 +406,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "$
         var labelRows = [];
         for (var label in labels) {
           if (label != "__name__") {
-            labelRows.push("<tr><th>" + label + "</th><td>" + labels[label] + "</td></tr>");
+            labelRows.push("<tr><th>" + label + "</th><td>" + HTMLEscaper(labels[label]) + "</td></tr>");
           }
         }
         return "<table class=\"labels_table\">" + labelRows.join("") + "</table>";
