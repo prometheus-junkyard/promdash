@@ -13,7 +13,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
     var server = $scope.serversById[exp.serverID || 1];
-    if (server === undefined) {
+    if (server === undefined || !exp.expression) {
       return;
     }
     $scope.requestInFlight = true;
@@ -46,6 +46,10 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   };
 
   $scope.refreshGraph();
+
+  $scope.$on('changeExpression', function(ev) {
+    $scope.refreshGraph();
+  });
 
   if (location.pathname.match(/^\/w\//)) { // On a widget page.
     $scope.widgetPage = true;

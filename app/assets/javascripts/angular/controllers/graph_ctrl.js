@@ -102,6 +102,10 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     $scope.refreshGraph(500);
   });
 
+  $scope.$on('changeExpression', function(ev) {
+    $scope.refreshGraph();
+  });
+
   $scope.addLegendString = function() {
     var lsts = $scope.graph.legendFormatStrings;
     var id = (new Date()).getTime().toString(16);
@@ -143,7 +147,18 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     $scope.addAxis();
   }
 
+  $scope.$watch('graph.range', function() {
+    $scope.refreshGraph();
+  });
+  $scope.$watch('graph.endTime', function() {
+    $scope.refreshGraph();
+  });
+  $scope.$watch('graph.resolution', function() {
+    $scope.refreshGraph();
+  });
+
   $scope.refreshGraph();
+
   if (location.pathname.match(/^\/w\//)) { // On a widget page.
     $scope.widgetPage = true;
     $scope.dashboard = dashboard;

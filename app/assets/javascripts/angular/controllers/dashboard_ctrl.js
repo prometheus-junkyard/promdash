@@ -155,7 +155,7 @@ angular.module("Prometheus.controllers")
       title: "Title",
       expression: {
         id: 0,
-        serverID: 1,
+        serverID: ($scope.servers[0] || {}).id,
         expression: "",
         legendID: 1
       },
