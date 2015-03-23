@@ -13,7 +13,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
   $scope.refreshGraph = function() {
     var exp = $scope.graph.expression;
     var server = $scope.serversById[exp.serverID || 1];
-    if (server === undefined || !exp) {
+    if (server === undefined || !exp.expression) {
       return;
     }
     $scope.requestInFlight = true;
