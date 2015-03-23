@@ -20,8 +20,6 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
     restrict: "AE",
     templateUrl: "<%= asset_path('frame_template.html') %>",
     link: function(scope, element, attrs) {
-      // Appended to frame source URL to trigger refresh.
-      scope.refreshCounter = 0;
       function frameHeight() {
         return WidgetHeightCalculator(element.find(".js_widget_wrapper")[0], scope.aspectRatio);
       }
@@ -41,7 +39,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
         frame.html('<iframe src="'+ trustedURL +'" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>');
       };
 
-      var a = ['frame.url', 'frame.range', 'frame.endTime', 'refreshCounter', 'frame.graphite'];
+      var a = ['frame.url', 'frame.range', 'frame.endTime', 'frame.graphite'];
       a.forEach(function(w) {
         scope.$watch(w, scope.refreshFrame);
       });
@@ -55,8 +53,6 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
         if (scope.frame.graphite) {
           setGraphiteParams(parser);
         }
-
-        parser.setQueryParam('decache', scope.refreshCounter);
 
         return parser.stringify();
       }
