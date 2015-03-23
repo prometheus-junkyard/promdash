@@ -49,7 +49,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       for (var i = 0; i < $scope.graph.expressions.length; i++) {
         var exp = $scope.graph.expressions[i];
         var server = $scope.serversById[exp.serverID];
-        if (server === undefined) {
+        if (server === undefined || !exp.expression) {
           continue;
         }
         var expression = VariableInterpolator(exp.expression, $scope.vars);
