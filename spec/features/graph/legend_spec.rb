@@ -58,6 +58,17 @@ feature "Graph legend", js: true do
         end
       end
     end
+
+    it "does not double-escape legend strings when there are multiple expressions" do
+      open_tab 'Legend Settings'
+      legend_inputs = all '.legend_string_input'
+      input1 = legend_inputs[0]
+      input2 = legend_inputs[1]
+
+      input1.set ''
+      input2.set ''
+      expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
+    end
   end
 
   describe "one legend string" do

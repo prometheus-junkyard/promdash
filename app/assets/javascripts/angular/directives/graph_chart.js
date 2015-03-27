@@ -40,8 +40,8 @@ angular.module("Prometheus.directives").directive('graphChart', [
               if ((lst || {}).name) {
                 s.name = VariableInterpolator(lst.name, s.labels);
               }
+              s.name = HTMLEscaper(s.name);
             }
-            s.name = HTMLEscaper(s.name);
           });
         });
       }
