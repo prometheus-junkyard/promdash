@@ -68,6 +68,12 @@ can specify any kind of command as parameter to the Docker image:
 
     docker run -e DATABASE_URL=... prom/promdash ./bin/rake db:migrate
 
+### Deploy behind a reverse proxy
+
+To deploy PromDash behind a reverse proxy you can set a global path prefix
+using the environment variable `PROMDASH_PATH_PREFIX`. Once set all URLs will
+start with the given prefix.
+
 ### Deployment Checklist
 
 *Before* deploying a new version of PromDash, follow this checklist:

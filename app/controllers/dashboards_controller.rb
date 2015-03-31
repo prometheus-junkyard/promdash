@@ -48,7 +48,7 @@ class DashboardsController < ApplicationController
     @dashboard = Dashboard.new_permalink(dashboard_params)
     if @dashboard.save
       payload = {
-        url: "/permalink/" + SlugMaker.slug("#{@dashboard.id} #{@dashboard.slug}")
+        url: Rails.configuration.path_prefix + "permalink/" + SlugMaker.slug("#{@dashboard.id} #{@dashboard.slug}")
       }
       render json: payload, status: :created
     else

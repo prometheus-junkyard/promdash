@@ -13,7 +13,7 @@ angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", "
       var until = Math.floor(graph.endTime || Date.now()) / 1000;
 
       tags.forEach(function(t) {
-        $http.get('/annotations', {
+        $http.get('<%= Rails.configuration.path_prefix %>annotations', {
           params: {
             'tags[]': t,
             until: until,

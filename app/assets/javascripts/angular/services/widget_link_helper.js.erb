@@ -1,7 +1,7 @@
 angular.module("Prometheus.services").factory('WidgetLinkHelper', ["$http", "InputHighlighter", function($http, InputHighlighter) {
   return {
     createLink: function(data) {
-      this.promise = $http.post('/w', data);
+      this.promise = $http.post('<%= Rails.configuration.path_prefix %>w', data);
       return this;
     },
     setLink: function(scope) {
@@ -9,7 +9,7 @@ angular.module("Prometheus.services").factory('WidgetLinkHelper', ["$http", "Inp
         return;
       }
       this.promise.then(function(payload) {
-        scope.widgetLink = location.origin + "/w/" + payload.data.id;
+        scope.widgetLink = location.origin + '<%= Rails.configuration.path_prefix %>w/' + payload.data.id;
       });
       this.promise = null;
       return this;

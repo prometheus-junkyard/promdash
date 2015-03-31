@@ -25,5 +25,18 @@ module PrometheusDashboard
     # Required for working dashboard JSON PUTs.
     # See http://stackoverflow.com/a/25428800/915941.
     config.action_dispatch.perform_deep_munge = false
+
+    config.path_prefix = ENV['PROMDASH_PATH_PREFIX'] || '/'
+    unless config.path_prefix.start_with?('/')
+      config.path_prefix = '/' + config.path_prefix
+    end
+    unless config.path_prefix.end_with?('/')
+      config.path_prefix = config.path_prefix + '/'
+    end
+
+    unless config.path_prefix == '/'
+      # To prevent a double slash like /prefix//assets we'll cut off the last bit of path_prefix
+      config.assets.prefix = config.path_prefix[0..-2] + config.assets.prefix
+    end
   end
 end
