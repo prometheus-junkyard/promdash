@@ -189,6 +189,14 @@ $light-secondary-background: #f0f0f0;
 
 // Hover-detail styling.
 .rickshaw_graph .detail {
+  .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 3px;
+  }
+
   .date {
     color: #a0a0a0;
   }
