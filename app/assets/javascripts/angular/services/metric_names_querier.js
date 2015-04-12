@@ -6,7 +6,7 @@ angular.module("Prometheus.services").factory('MetricNamesQuerier', ["$http", "U
       scope.metricNames = metricNamesCache[serverID];
       return;
     }
-    $http.get(URLGenerator(serverURL, '/api/metrics')).success(function(metricNames) {
+    $http.get(URLGenerator(serverURL, '/api/metrics', scope.vars)).success(function(metricNames) {
       metricNamesCache[serverID] = metricNames;
       scope.metricNames = metricNames;
       return;
