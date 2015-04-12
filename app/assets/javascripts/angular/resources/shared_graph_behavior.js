@@ -60,6 +60,22 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       }
     }
 
+    function addVarsFromServerInterpolations(servers) {
+      var singleInterpolation = /{{\s?(\w+)\s?}}/g;
+      for (var i = 0; i < servers.length; i++) {
+        while (match = singleInterpolation.exec(servers[i].url)) {
+          var_name = match[1]
+          if (!(var_name in $scope.globalConfig.vars)) {
+            console.log("Found " + var_name + " in " + servers[i].url)
+            $scope.globalConfig.vars[var_name] = ''  // no default value
+          }
+        }
+      }
+    }
+
+    $scope.servers = servers;
+    addVarsFromServerInterpolations(servers)
+
     $scope.$watch(function() {
       return $location.url();
     }, function() {
@@ -67,7 +83,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     });
 
     $scope.globalConfig.tags = $scope.globalConfig.tags || [];
-    $scope.servers = servers;
+
 
     $scope.sortableOptions = {
       handle: ".widget_title",
