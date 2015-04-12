@@ -10,7 +10,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
   return function($scope) {
     function loadGraphData(idx, expression, server, expressionID, endTime, rangeSeconds, step) {
       var deferred = $q.defer();
-      $http.get(URLGenerator(server.url, '/api/query_range'), {
+      $http.get(URLGenerator(server.url, '/api/query_range', $scope.vars), {
         params: {
           expr: expression,
           range: rangeSeconds,

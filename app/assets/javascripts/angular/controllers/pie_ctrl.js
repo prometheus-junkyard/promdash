@@ -17,7 +17,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
       return;
     }
     $scope.requestInFlight = true;
-    $http.get(URLGenerator(server.url, '/api/query'), {
+    $http.get(URLGenerator(server.url, '/api/query', $scope.vars), {
       params: {
         expr: exp.expression
       }
