@@ -9,6 +9,11 @@ module ApplicationHelper
     end
   end
 
+  def widget_page?
+    ["single_widget", "embed"].include?(controller_name) ||
+      "dashboards_show" == "#{controller_name}_#{action_name}"
+  end
+
   def dashboards_active?
     %w{dashboards directories}.include? params[:controller]
   end

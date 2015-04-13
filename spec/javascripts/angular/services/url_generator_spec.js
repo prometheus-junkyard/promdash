@@ -22,4 +22,12 @@ describe('URLGenerator', function() {
       });
     });
   });
+
+  it('interpolates into urls', function() {
+    var s = 'http://promdash.{{zone}}.com/prometheus';
+    ['aa', 'bb', 'cc', 'dd'].forEach(function(zone) {
+      var url = urlGenerator(s, '', {zone: zone});
+      expect(url).toEqual('http://promdash.' + zone + '.com/prometheus');
+    });
+  });
 });
