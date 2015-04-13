@@ -2,50 +2,24 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
                                                     ["$scope", "$http",
                                                       "SharedWidgetSetup",
                                                       "URLGenerator",
-                                                      "VariableInterpolator",
+                                                      "GraphRefresher",
                                                       function($scope,
                                                                $http,
                                                                SharedWidgetSetup,
                                                                URLGenerator,
-                                                               VariableInterpolator) {
+                                                               GraphRefresher) {
   SharedWidgetSetup($scope);
   $scope.errorMessages = [];
 
-  // Query for the data.
-  $scope.refreshGraph = function() {
-    var exp = $scope.graph.expression;
-    var server = $scope.serversById[exp.serverID || 1];
-    if (server === undefined || !exp.expression) {
-      return;
-    }
-    $scope.requestInFlight = true;
-    $http.get(URLGenerator(server.url, '/api/query', $scope.vars), {
-      params: {
-        expr: VariableInterpolator(exp.expression, $scope.vars)
-      }
-    }).then(function(payload) {
-      var data = payload.data;
-      var errMsg;
-      switch (data.type) {
-        case 'error':
-          errMsg = "Expression " + exp.expression + ": " + data.value;
-          $scope.errorMessages.push(errMsg);
-          break;
-        case 'vector':
-          $scope.$broadcast('redrawGraphs', data.value);
-          $scope.errorMessages = [];
-          break;
-        default:
-          errMsg = 'Expression ' + exp.expression + ': Result type "' + data.type + '" cannot be graphed."';
-          $scope.errorMessages.push(errMsg);
-      }
-    }, function(data, status, b) {
-      var errMsg = "Expression " + exp.expression  + ": Server returned status " + status + ".";
-      $scope.errorMessages.push(errMsg);
-    }).finally(function() {
-      $scope.requestInFlight = false;
-    });
-  };
+  $scope.refreshGraph = function(scope) {
+    var refreshFn = GraphRefresher(scope);
+    return function() {
+      refreshFn('/api/query', {}).then(function(data) {
+        var flatData = $.map(data, function(n) { return n; });
+        scope.$broadcast('redrawGraphs', flatData);
+      });
+    };
+  }($scope);
 
   $scope.refreshGraph();
 

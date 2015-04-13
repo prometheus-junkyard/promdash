@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20150601101059) do
     t.boolean  "permalink",      default: false
   end
 
-  add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id", using: :btree
+  add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id"
 
   create_table "directories", force: true do |t|
     t.string   "name"
@@ -42,12 +42,12 @@ ActiveRecord::Schema.define(version: 20150601101059) do
   create_table "shortened_urls", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "encoded_url"
+    t.text     "encoded_url",   limit: 255
     t.datetime "last_accessed"
-    t.string   "checksum",      limit: 32, default: "", null: false
+    t.string   "checksum",      limit: 32,  default: "", null: false
     t.integer  "dashboard_id"
   end
 
-  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true, using: :btree
+  add_index "shortened_urls", ["checksum"], name: "index_shortened_urls_on_checksum", unique: true
 
 end

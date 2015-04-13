@@ -19,9 +19,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   // TODO: Set these on graph creation so we don't have to keep doing these
   // checks
-  $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
-    {id: 1, name: ""}
-  ];
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "linear";
   $scope.graph.disabledSeries = $scope.graph.disabledSeries || {};
   $scope.graph.axes = $scope.graph.axes || [];
@@ -32,33 +29,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.requestsInFlight = 0;
   $scope.palettes = Palettes;
-
-  $scope.addExpression = function() {
-    var serverID = 0;
-    var axisID = 0;
-    var id = 0;
-    if ($scope.graph.expressions.length !== 0) {
-      var prev = $scope.graph.expressions[$scope.graph.expressions.length-1];
-      id = prev.id + 1;
-      serverID = prev.serverID;
-      axisID = prev.axisID;
-    } else if ($scope.servers.length !== 0) {
-      serverID = $scope.servers[0].id;
-      axisID = $scope.graph.axes[0].id;
-    }
-
-    var exp = {
-      id: id,
-      serverID: serverID,
-      axisID: axisID,
-      expression: ''
-    };
-    $scope.graph.expressions.push(exp);
-  };
-
-  $scope.$on('removeExpression', function(ev, index) {
-    $scope.graph.expressions.splice(index, 1);
-  });
 
   $scope.addAxis = function() {
     var len = $scope.graph.axes.push(Prometheus.Graph.getAxisDefaults());
@@ -106,16 +76,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
     $scope.refreshGraph();
   });
 
-  $scope.addLegendString = function() {
-    var lsts = $scope.graph.legendFormatStrings;
-    var id = (new Date()).getTime().toString(16);
-    lsts.push({id: id, name: ""});
-  };
-
-  $scope.removeLegendString = function(index) {
-    $scope.graph.legendFormatStrings.splice(index, 1);
-  };
-
   $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;
   $scope.checkValidNumber = YAxisUtilities.checkValidNumber;
 
@@ -133,7 +93,11 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       // Cancels the reload request if it exists.
       $timeout.cancel(debounce);
       debounce = $timeout(function() {
-        refreshFn($scope.graph.endTime, $scope.graph.range, step).then(function(data) {
+        refreshFn('/api/query_range', {
+          end: $scope.graph.endTime,
+          range: $scope.graph.range,
+          step: step < 5 ? 5 : step,
+        }).then(function(data) {
           scope.$broadcast('redrawGraphs', data);
           AnnotationRefresher(scope.graph, scope);
         });

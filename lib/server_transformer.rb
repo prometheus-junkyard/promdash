@@ -9,12 +9,10 @@ module ServerTransformer
   def self.transform(dashboard_json)
     dashboard_json['widgets'].each do |w|
       case w['type']
-      when 'graph'
+      when 'graph',' pie'
         w['expressions'].each do |e|
           transform_server(e)
         end
-      when 'pie'
-        transform_server(w['expression'])
       end
     end
   end

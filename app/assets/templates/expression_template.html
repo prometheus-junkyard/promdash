@@ -1,6 +1,6 @@
 <div><b>Expression {{index + 1}}</b></div>
 <form class="form-inline expression_form">
-  <div class="form-group col-xs-4 pad-right expression_select" ng-class="{'col-xs-12': type !== 'graph' }">
+  <div ng-class="{'col-xs-8': type !== 'graph' }" class="form-group col-xs-4 pad-right expression_select">
     <select class="form-control"
       ng-model="expr.serverID"
       ng-options="s.id as s.name for s in servers"
@@ -8,14 +8,14 @@
       <option value="">- Select Server -</option>
     </select>
   </div>
-  <div ng-if="type === 'graph'">
-    <div class="form-group col-xs-4 expression_select pad-right">
+  <div>
+    <div ng-if="type === 'graph'" class="form-group col-xs-4 expression_select pad-right">
       <select class="form-control" ng-model="expr.axisID" ng-options="a.id as ('Axis ' + a.id) for a in axes">
         <option value="">- Select Axis -</option>
       </select>
     </div>
   </div>
-  <div ng-if="type === 'graph'" class="form-group col-xs-4 expression_select">
+  <div class="form-group col-xs-4 expression_select">
     <select class="form-control"
       ng-model="expr.legendID"
       ng-options="s.id as s.name for s in legendFormatStrings">
@@ -23,7 +23,7 @@
     </select>
   </div>
 </form>
-<div class="input-group expression_select" ng-class="{'col-xs-12': type !== 'graph' }">
+<div class="input-group expression_select">
   <input type="text" class="form-control"
     ng-model="expr.expression"
     typeahead="m for m in getMetrics($viewValue)"
