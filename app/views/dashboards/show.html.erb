@@ -6,7 +6,7 @@
 </script>
 
 <div id="dashboard" ng-controller="DashboardCtrl">
-  <h1 class="col-lg-12"
+  <h1 class="col-lg-12" ng-non-bindable
     ng-class="{fullscreen_title: fullscreenTitle && fullscreen}">
     <%= page_title @dashboard.name %>
   </h1>

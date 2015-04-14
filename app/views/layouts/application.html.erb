@@ -6,7 +6,11 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Rails Bootstrap" %>">
     <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css" media="all" rel="stylesheet">
     <%= stylesheet_link_tag "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
+    <% if widget_page? %>
+      <%= javascript_include_tag "application" %>
+    <% else %>
+      <%= javascript_include_tag "base" %>
+    <% end %>
     <%= csrf_meta_tags %>
   </head>
   <body>
@@ -30,7 +34,9 @@
       </div>
     </div>
 
-    <div ng-show="ModalService.modalOpen()" ng-click="ModalService.closeModal()" class="modal_overlay"></div>
+    <% if widget_page? %>
+      <div ng-show="ModalService.modalOpen()" ng-click="ModalService.closeModal()" class="modal_overlay"></div>
+    <% end %>
 
     <main role="main">
       <div class="container">

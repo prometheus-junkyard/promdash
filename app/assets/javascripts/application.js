@@ -12,12 +12,8 @@
 // (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery.min
-//= require jquery-ui.min
+//= require base
 //= require angular.min
-//= require jquery_ujs
-//= require bootstrap.min
-//= require bootstrap-datetimepicker
 //= require ui-bootstrap-tpls-0.11.0.min
 //= require ui-slider
 //= require d3.v3.js
