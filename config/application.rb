@@ -21,6 +21,7 @@ module PrometheusDashboard
     # config.i18n.default_locale = :de
 
     config.assets.precompile << /\.(?:svg|eot|woff|ttf)$/
+    config.assets.precompile << 'base.js'
 
     # Required for working dashboard JSON PUTs.
     # See http://stackoverflow.com/a/25428800/915941.
