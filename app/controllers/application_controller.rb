@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def profile_slug_path(profile)
+    "/#{profile.dashboard.slug}/#{profile.slug}"
+  end
+
   protected
   def verified_request?
     super || form_authenticity_token == request.headers['X-XSRF-TOKEN']

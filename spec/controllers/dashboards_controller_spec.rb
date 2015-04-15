@@ -16,16 +16,16 @@ describe DashboardsController do
 
   context "#create" do
     it "a new dashboard" do
-      d = Dashboard.new_with_slug(name: "example dash")
+      d = Dashboard.new_with_slug(name: "example dash", dashboard_type: "standalone" )
       expect {
-        post :create, dashboard: { name: d.name }
+        post :create, dashboard: { name: d.name, dashboard_type: d.dashboard_type }
       }.to change{ Dashboard.count }.by(1)
 
       expect(response).to redirect_to(dashboard_slug_path(d.slug))
     end
 
     it "creates a new permalink dashboard" do
-      d = Dashboard.new_with_slug(name: "static dash")
+      d = Dashboard.new_with_slug(name: "static dash", dashboard_type: "standalone" )
       expect {
         post :permalink, dashboard: { name: d.name }
       }.to change{ Dashboard.count }.by(1)
@@ -33,7 +33,7 @@ describe DashboardsController do
     end
 
     it "clones the dashboard given a source_id" do
-      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: @sample_dashboard_json)
+      d = Dashboard.new_with_slug(name: "example dash", dashboard_json: @sample_dashboard_json, dashboard_type: "standalone" )
       d.save!
       post :create, dashboard: { name: "dashboard clone"}, source_id: d.id
       expect(Dashboard.last.dashboard_json).to eq(d.dashboard_json)
@@ -59,7 +59,7 @@ describe DashboardsController do
       dashboard_json = File.read('./spec/support/sample_json/server_by_url.json')
       dashboard_obj = JSON.parse(dashboard_json)
       expect {
-        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj }
+        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj, dashboard_type: "standalone" }
         expect(response.status).to eq 201
       }.to change{ Dashboard.count }.by(1)
       expect(Dashboard.last.dashboard_json).not_to match("serverURL")
@@ -70,7 +70,7 @@ describe DashboardsController do
       dashboard_json = File.read('./spec/support/sample_json/server_by_url.json')
       dashboard_obj = JSON.parse(dashboard_json)
       expect {
-        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj }
+        post :create, format: 'json', dashboard: { name: "example dash", dashboard_json: dashboard_obj, dashboard_type: "standalone"  }
         expect(response.status).to eq 422
         expect(response.body).to match("No server with URL http://test-server:9090/")
       }.not_to change{ Dashboard.count }

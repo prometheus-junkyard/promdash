@@ -1,0 +1,56 @@
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "profiles.js" %>
+<% end %>
+<%= form_for @profile do |f| %>
+  <% if @profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+
+      <ul>
+      <% @profile.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field form-group">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, class: "form-control input-small" %>
+  </div>
+
+  <% unless @profile.new_record? %>
+    <div class="field form-group">
+      <%= f.label :slug %><br>
+      <%= f.text_field :slug, class: "form-control input-small" %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :template %><br>
+    <%= select_tag "profile[dashboard_id]",
+      options_from_collection_for_select(@templates, "id", "name", @profile.dashboard_id),
+      class: "form-control js-template-select",
+      prompt: "- Select directory -" %>
+  </div>
+
+  <% @templates.each do |t| %>
+    <div class="directory_container <%= t.name %>">
+      <div>
+        <h3 class="directory_name">Templates for <%= t.name %></h3>
+      </div>
+      <%= render 'profiles_table', profiles: t.profiles %>
+      <div class="form-group">
+        <% t.template_variables.each do |k, default_v| %>
+          <%= f.label k.to_sym %><br>
+          <%= text_field :variables, k.to_sym, { value: @template_variables[k], placeholder: default_v, class: "form-control input-small" } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back', root_path, class: "btn btn-default" %>
+  </div>
+<% end %>

@@ -14,11 +14,13 @@ end
 
 class Dashboard < ActiveRecord::Base
   belongs_to :directory
-  has_many :shortened_urls
+  has_many :shortened_urls, dependent: :destroy
+  has_many :profiles, dependent: :destroy
 
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
   validate :acceptable_slug
+  validate :acceptable_type
   validates :slug,
     format: {
       with: /\A[a-z0-9\-]+\z/,
@@ -29,6 +31,8 @@ class Dashboard < ActiveRecord::Base
   scope :alphabetical, -> { order("lower(name)") }
   scope :cloneable, -> { where("dashboard_json is not null").select :id, :name }
   scope :unassigned, -> { where("directory_id is null") }
+  scope :standalone, -> { where(dashboard_type: "standalone") }
+  scope :template, -> { where(dashboard_type: "template") }
 
   def self.new_with_slug(params)
     dashboard = new(params)
@@ -55,16 +59,26 @@ class Dashboard < ActiveRecord::Base
     end
   end
 
+  def acceptable_type
+    unless ["standalone", "template"].include? dashboard_type
+      errors.add(:dashboard_type, "Invalid dashboard type")
+    end
+  end
+
   def black_listed_slug_names
-    %w(dashboard servers about help signin signout home contact assets w annotations)
+    %w(dashboard servers about help signin signout home contact assets w annotations profiles)
   end
 
   def widgets
     return [] unless dashboard_json
-    (JSON.parse dashboard_json)['widgets']
+    JSON.parse(dashboard_json)['widgets']
   end
 
   def create_slug
     self.slug = SlugMaker.slug(name)
+  end
+
+  def template_variables
+    JSON.parse(dashboard_json)['globalConfig']['vars'] || {}
   end
 end

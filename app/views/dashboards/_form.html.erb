@@ -33,6 +33,14 @@
       prompt: "- Select directory -" %>
   </div>
 
+  <div class="form-group">
+    <%= f.label :dashboard_type %><br>
+    <p>how to manage changing a template dashboard to a standalone dashboard???</p>
+    <%= select_tag "dashboard[dashboard_type]",
+      options_for_select([["standalone"], ["template"]], "standalone"),
+      class: "form-control" %>
+  </div>
+
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
     <%= link_to 'Back', root_path, class: "btn btn-default" %>
