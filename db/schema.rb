@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126150102) do
+ActiveRecord::Schema.define(version: 20150416102032) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150126150102) do
     t.string   "slug"
     t.integer  "directory_id"
     t.boolean  "permalink",      default: false
+    t.string   "dashboard_type", default: "standalone"
   end
 
   add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id", using: :btree
@@ -30,6 +31,17 @@ ActiveRecord::Schema.define(version: 20150126150102) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "profiles", force: true do |t|
+    t.string   "name"
+    t.text     "variables"
+    t.integer  "template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "slug"
+  end
+
+  add_index "profiles", ["template_id"], name: "index_profiles_on_template_id", using: :btree
 
   create_table "servers", force: true do |t|
     t.string   "name"

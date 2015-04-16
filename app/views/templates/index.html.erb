@@ -1,0 +1,33 @@
+<h2><%= page_title 'Templates' %></h2>
+
+<div class="create_form">
+  <%= form_tag(new_template_path, method: 'get') do %>
+    <button type="submit" class="btn btn-primary">New Dashboard Template</button>
+  <% end %>
+  <%= form_tag(new_profile_path, method: 'get') do %>
+    <button type="submit" class="btn btn-primary">New Dashboard Profile</button>
+  <% end %>
+</div>
+
+<% @templates.each do |t| %>
+  <div class="directory_container">
+    <div>
+      <h3 class="directory_name"><%= t.name %></h3>
+      <%= link_to edit_template_path(t), class: "directory_icon" do %>
+        <i class="icon-pencil"></i>
+      <% end %>
+      <%= link_to t, method: :delete, data: { confirm: 'Are you sure?' }, class: "directory_icon" do %>
+        <i class="icon-trash"></i>
+      <% end %>
+    </div>
+    <% if t.profiles.length > 0 %>
+      <%= render 'profiles/profiles_table', profiles: t.profiles %>
+    <% else %>
+        <table class="table table-condensed">
+          <tr>
+            <td class="dashboard_name">No profiles for <%= t.name %></td>
+          </tr>
+      </table>
+    <% end %>
+    </div>
+  <% end %>

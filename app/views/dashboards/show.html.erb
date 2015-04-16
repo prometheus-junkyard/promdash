@@ -158,16 +158,44 @@
         </div>
       </div>
     </div>
+
     <% unless @dashboard.permalink %>
       <div class="global_grouping">
-        <button class="btn btn-default" ng-click="saveDashboard()" ng-disabled="saving">
-          <span ng-show="saving">Saving...</span>
-          <span ng-show="!saving">Save Changes</span>
-        </button>
+        <% if @profile.present? %>
+          <button class="btn btn-default" ng-click="saveProfile()" ng-disabled="saving">
+            <span ng-show="saving">Saving...</span>
+            <span ng-show="!saving">Save Profile</span>
+          </button>
+        <% else %>
+          <button class="btn btn-default" ng-click="saveDashboard()" ng-disabled="saving">
+            <span ng-show="saving">Saving...</span>
+            <span ng-show="!saving">Save Changes</span>
+          </button>
+        <% end %>
       </div>
     <% end %>
+
     <span class="clearfix"></span>
   </div>
+
+  <% if @dashboard.dashboard_type == "template" %>
+    <div class="global_grouping template_variables col-lg-12">
+      <table>
+        <tr>
+          <th colspan="4">Profiles</th>
+        </tr>
+        <% @dashboard.profiles.each do |p| %>
+          <tr>
+            <td>
+              <a class="btn btn-primary <%= params[:profile_slug] == p.slug ? 'btn_active' : '' %>"  href="<%= "/#{@dashboard.slug}/#{p.slug}" %>">
+                <%= p.name %>
+              </a>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
 
   <div class="global_grouping template_variables col-lg-12" ng-show="globalConfig.showTags">
     <table>
@@ -209,9 +237,11 @@
 
       <tr ng-show="vars.length == 0">
         <td colspan="4">
-          <button class="btn btn-primary" type="button" ng-click="addVariable()">
-            <i class="icon-plus"></i>
-          </button>
+          <% unless @profile.present? %>
+            <button class="btn btn-primary" type="button" ng-click="addVariable()">
+              <i class="icon-plus"></i>
+            </button>
+          <% end %>
         </td>
       </tr>
 

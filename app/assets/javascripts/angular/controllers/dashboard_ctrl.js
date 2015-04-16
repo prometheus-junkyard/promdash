@@ -74,6 +74,15 @@ angular.module("Prometheus.controllers")
     });
   };
 
+  $scope.saveProfile = function() {
+    $scope.saving = true;
+    $http.put($window.location.pathname + '.json', buildProfileJSON()).error(function(data, status) {
+      alert("Error saving dashboard.");
+    }).finally(function() {
+      $scope.saving = false;
+    });
+  };
+
   $scope.enableFullscreen = function() {
     $scope.fullscreen = true;
     $scope.nextCycleRedraw();
@@ -221,6 +230,12 @@ angular.module("Prometheus.controllers")
   $scope.copyWidget = function() {
     $scope.widgets.push(angular.copy($scope.widgetToClone));
   };
+
+  function buildProfileJSON() {
+    return {
+      'variables': $scope.globalConfig.vars
+    };
+  }
 
   function buildDashboardJSON() {
     return {

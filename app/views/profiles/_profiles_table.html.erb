@@ -1,0 +1,17 @@
+<table class="table table-condensed">
+  <% if profiles.length == 0 %>
+    <tr>
+      <td class="dashboard_name">No profiles</td>
+    </tr>
+  <% end %>
+  <% profiles.each do |profile| %>
+    <tr>
+      <td class="dashboard_name"><%= link_to profile.name, "/#{profile.dashboard.slug}/#{profile.slug}" %></td>
+      <td>
+        <%= link_to 'Edit', edit_profile_path(profile) %>
+        &nbsp;&nbsp;
+        <%= link_to 'Delete', profile, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+</table>

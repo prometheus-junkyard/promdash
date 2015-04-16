@@ -9,6 +9,13 @@
         &nbsp;&nbsp;
         <%= link_to 'Delete', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %>
       </td>
+      <% if dashboard.dashboard_type == "template" && dashboard.profiles.length > 0 %>
+        <tr>
+          <td>
+            Profiles: <%= dashboard.profiles.map {|p| p.name }.join(" | ") %>
+          </td>
+        </tr>
+      <% end %>
     </tr>
   <% end %>
 </table>

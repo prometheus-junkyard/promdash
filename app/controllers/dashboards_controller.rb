@@ -127,6 +127,6 @@ class DashboardsController < ApplicationController
       ServerTransformer.transform(dashboard_json)
       params[:dashboard][:dashboard_json] = JSON.generate(dashboard_json)
     end
-    params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id)
+    params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id, :dashboard_type)
   end
 end
