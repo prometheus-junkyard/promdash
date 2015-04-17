@@ -130,7 +130,7 @@
           <label>Color Scheme:
             <select class="form-control" type="text"
               ng-model="globalConfig.palette"
-              ng-options="p for p in palettes">
+              ng-options="value as name for (name,value) in palettes">
             </select>
           </label>
           <label>Resolution:
