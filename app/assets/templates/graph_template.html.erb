@@ -179,9 +179,9 @@
         <div class="panel-body">
           <label>Color scheme</label>
           <br />
-          <div class="radio" ng-repeat="p in palettes">
-            <label><input type="radio" ng-model="graph.palette" ng-value="p">
-              {{p}}
+          <div class="radio" ng-repeat="(name,value) in palettes">
+            <label><input type="radio" ng-model="graph.palette" ng-value="value">
+              {{name}}
             </label>
           </div>
         </div>

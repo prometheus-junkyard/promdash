@@ -62,7 +62,7 @@ angular.module("Prometheus.controllers")
   $scope.widgets = $scope.widgets || dashboardData.widgets || [];
   SharedGraphBehavior($scope, dashboardData.globalConfig);
   $scope.palettes = Palettes;
-  $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
+  $scope.globalConfig.palette = $scope.globalConfig.palette || 'spectrum2001';
   $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
 
   $scope.saveDashboard = function() {

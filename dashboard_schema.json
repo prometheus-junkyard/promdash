@@ -162,6 +162,7 @@
                     "axisID",
                     "expression",
                     "id",
+                    "palette",
                     "serverID"
                   ],
                   "properties": {
@@ -172,6 +173,12 @@
                     },
                     "expression": {
                       "type": "string"
+                    },
+                    "palette": {
+                      "type": [
+                        "array",
+                        "string"
+                      ]
                     },
                     "id": {
                       "type": "integer",
