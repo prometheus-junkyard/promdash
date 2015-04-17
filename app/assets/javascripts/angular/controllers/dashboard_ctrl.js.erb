@@ -32,7 +32,7 @@ angular.module("Prometheus.controllers")
       return;
     }
     $scope.generatingPermalink = true;
-    $http.post($window.location.origin + "/permalink", buildDashboardJSON()).then(function(payload) {
+    $http.post($window.location.origin + "<%= Rails.configuration.path_prefix %>permalink", buildDashboardJSON()).then(function(payload) {
       $scope.showPermalink = true;
       $scope.permalink = $window.location.origin + payload.data.url;
       var input = $("[ng-model=permalink]")[0];
@@ -189,7 +189,7 @@ angular.module("Prometheus.controllers")
 
   $scope.queryDirectory = function() {
     $scope.directoryForClone.id = $scope.directoryForClone.id || "unassigned";
-    $http.get('/directories/' + $scope.directoryForClone.id).then(function(payload) {
+    $http.get('<%= Rails.configuration.path_prefix %>directories/' + $scope.directoryForClone.id).then(function(payload) {
       $scope.dashboardNames = payload.data.dashboards;
       $scope.dashboardForClone = payload.data.dashboards.filter(function(d) {
         return d.name == dashboardName;
@@ -199,7 +199,7 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.queryDashboard = function() {
-    $http.get('/dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
+    $http.get('<%= Rails.configuration.path_prefix %>dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
       $scope.dashboardWidgets = payload.data.widgets;
       $scope.widgetToClone = payload.data.widgets[0];
     });
@@ -210,7 +210,7 @@ angular.module("Prometheus.controllers")
     ModalService.toggleModal();
   };
 
-  $http.get('/directories.json').then(function(payload) {
+  $http.get('<%= Rails.configuration.path_prefix %>directories.json').then(function(payload) {
     $scope.directoryNames = payload.data.directories;
     $scope.directoryForClone = payload.data.directories.filter(function(d) {
       return d.name == directoryName;
