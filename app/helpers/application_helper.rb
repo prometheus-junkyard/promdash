@@ -17,4 +17,12 @@ module ApplicationHelper
   def dashboards_active?
     %w{dashboards directories}.include? params[:controller]
   end
+
+  def container_class
+    if widget_page?
+      "container-fluid"
+    else
+      "container"
+    end
+  end
 end
