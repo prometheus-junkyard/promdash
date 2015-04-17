@@ -16,6 +16,7 @@ class DashboardsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
+        @dashboard_profile = params[:profile]
         @directoryName = @dashboard.directory.name if @dashboard.directory
         @servers = Server.order("lower(name)")
       end

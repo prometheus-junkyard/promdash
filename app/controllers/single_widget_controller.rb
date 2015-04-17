@@ -8,6 +8,7 @@ class SingleWidgetController < ApplicationController
     @dashboard = shortened_url.dashboard
     @blob = shortened_url.encoded_url
     @servers = Server.all
+    @dashboard_profile = params[:profile]
     render layout: 'single_widget'
   end
 
