@@ -1,4 +1,4 @@
-angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", "VariableInterpolator", function($timeout, MetricNamesQuerier, VariableInterpolator) {
+angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", "VariableInterpolator", "Palettes", function($timeout, MetricNamesQuerier, VariableInterpolator, Palettes) {
   return {
     restrict: "E",
     scope: {
@@ -7,6 +7,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
       expr: "=",
       index: "=",
       legendFormatStrings: "=",
+      palette: "=",
       range: "=",
       servers: "=",
       serversById: "=",
@@ -16,6 +17,8 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
     link: function(scope, element, attrs) {
       var el = element[0].querySelector("[ng-model='expr.expression']");
       var ENTER_KEY = 13;
+
+      scope.palettes = Palettes;
 
       function changeExpression() {
         if (scope.expr.expression) {

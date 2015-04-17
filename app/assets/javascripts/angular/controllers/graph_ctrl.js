@@ -84,6 +84,9 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.$on('setPalette', function(ev, palette) {
     $scope.graph.palette = palette;
+    scope.graphSettings.expressions.forEach(function(expr) {
+      expr.palette = palette;
+    });
     $scope.refreshGraph();
   });
 

@@ -38,6 +38,11 @@
       <i class="glyphicon glyphicon-new-window"></i>
     </a>
   </span>
+  <select class="form-control" type="text"
+    ng-model="expr.palette"
+    ng-options="value as name for (name,value) in palettes">
+    <option value="">- Palette -</option>
+  </select>
 </div>
 <select class="form-control" type="text"
   ng-show="showMetrics"

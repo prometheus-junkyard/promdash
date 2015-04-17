@@ -19,13 +19,14 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
     return tsName;
   }
 
-  return function(data, axisIDByExprID) {
+  return function(data, axisIDByExprID, palettesByExprID) {
     var series = [];
     for (var i = 0; i < data.length; i++) {
       if (!data[i]) {
         continue;
       }
 
+      var palette = new Rickshaw.Color.Palette({scheme: palettesByExprID[data[i].exp_id]});
       series = series.concat((data[i].data.Value || data[i].data.value).map(function(ts) {
         var name = metricToTsName(ts.Metric || ts.metric);
         return {
@@ -33,6 +34,7 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
           // uniqName is added to be kept as a unique, unmodified identifier for a series.
           uniqName: name,
           axisID: axisIDByExprID[data[i].exp_id],
+          color: palette.color(),
           exp_id: data[i].exp_id,
           labels: ts.Metric || ts.metric,
           data: (ts.Values || ts.values).map(function(value) {

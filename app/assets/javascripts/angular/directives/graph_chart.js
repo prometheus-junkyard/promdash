@@ -6,6 +6,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
     "RickshawDataTransformer",
     "YAxisUtilities",
     "HTMLEscaper",
+    "Palettes",
     function(
       $location,
       $rootScope,
@@ -13,7 +14,8 @@ angular.module("Prometheus.directives").directive('graphChart', [
       VariableInterpolator,
       RickshawDataTransformer,
       YAxisUtilities,
-      HTMLEscaper) {
+      HTMLEscaper,
+      Palettes) {
   return {
     scope: {
       graphSettings: '=',
@@ -78,11 +80,16 @@ angular.module("Prometheus.directives").directive('graphChart', [
         var graphEl = $el.find('.graph_chart').get(0);
 
         var axisIDByExprID = {};
-        scope.graphSettings.expressions.forEach(function(expr) {
+        var palettesByExprID = {};
+        var k = Object.keys(Palettes);
+        var len = k.length;
+        scope.graphSettings.expressions.forEach(function(expr, i) {
           axisIDByExprID[expr.id] = expr.axisID;
+          var p = expr.palette ? expr.palette : scope.graphSettings.palette || Palettes[k[Math.abs(len-i)%len]];
+          palettesByExprID[expr.id] = p;
         });
 
-        var series = RickshawDataTransformer(graphData, axisIDByExprID);
+        var series = RickshawDataTransformer(graphData, axisIDByExprID, palettesByExprID);
 
         var seriesYLimitFn = calculateBound(series);
         var yMinForLog = seriesYLimitFn(Math.min);
@@ -119,7 +126,6 @@ angular.module("Prometheus.directives").directive('graphChart', [
           min: a2LimitFn(Math.min),
         };
 
-        var palette = new Rickshaw.Color.Palette({scheme: scope.graphSettings.palette});
         var yScales = {};
         var scaleID;
         var graphMax;
@@ -128,8 +134,6 @@ angular.module("Prometheus.directives").directive('graphChart', [
           var matchingAxis = axes.filter(function(a) {
             return a.id === s.axisID;
           })[0] || axes[0];
-
-          s.color = palette.color();
 
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
@@ -429,10 +433,20 @@ angular.module("Prometheus.directives").directive('graphChart', [
           return "" + expr.legendID + expr.axisID;
         });
       }, redrawGraph, true);
+      scope.$watch(function(scope) {
+        return scope.graphSettings.expressions.map(function(expr) {
+          return expr.palette;
+        });
+      }, redrawGraph, true);
       scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
 
       scope.$watch('graphSettings.stacked', redrawGraph);
-      scope.$watch('graphSettings.palette', redrawGraph);
+      scope.$watch('graphSettings.palette', function(newPalette) {
+        scope.graphSettings.expressions.forEach(function(expr) {
+          expr.palette = newPalette;
+        });
+        redrawGraph();
+      });
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.showLegend', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
