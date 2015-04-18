@@ -273,13 +273,6 @@ angular.module("Prometheus.directives").directive('graphChart', [
         var maxWidth = Math.max.apply(Math, widths);
         $legendElements.css("width", maxWidth);
 
-        // TODO: Figure out why mouseleave changes graph elements to same color
-        // On legend element mouseleave, all graph elements change to same fill color
-        // var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
-        //   graph: rsGraph,
-        //   legend: legend
-        // });
-
         rsGraph.configure({
           dotSize: 2,
           height: calculateGraphHeight($legend)
@@ -327,17 +320,34 @@ angular.module("Prometheus.directives").directive('graphChart', [
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
           graph: rsGraph,
           formatter: function(series, x, y) {
-            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>';
-            return date + '<br>' + content + '<br>' + renderLabels(series.labels);
+            var swatch = '<span class="swatch" style="background-color: ' + series.color + '"></span>';
+            return [
+              swatch + series.name,
+              '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>',
+              (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>',
+              renderLabels(series.labels),
+            ].join('<br />')
           },
           onRender: function() {
             var dot = this.graph.element.querySelector('.dot');
             var hoverContent = this.graph.element.querySelector('.item');
+            var label = this.graph.element.querySelector('.x_label');
+            var boundaries = hoverContent.getBoundingClientRect();
 
             dot.style.top = parseFloat(dot.style.top) + elementHeight($legend) + "px";
             hoverContent.style.top = parseFloat(hoverContent.style.top) + elementHeight($legend) + "px";
+
+            if (boundaries.left < 0) {
+			  hoverContent.classList.remove('right')
+			  hoverContent.classList.add('left');
+			  label.classList.remove('right');
+			  label.classList.add('left');
+            } else if (boundaries.right > document.documentElement.clientWidth) {
+			  hoverContent.classList.remove('left')
+			  hoverContent.classList.add('right');
+			  label.classList.remove('left');
+			  label.classList.add('right');
+            }
           },
         });
       }
