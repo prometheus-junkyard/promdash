@@ -6,16 +6,12 @@ gem 'rails', '4.1.7'
 # Allow people to ignore the database provider they don't need by doing bundle install --without mysql
 gem 'mysql2', group: 'mysql'
 gem 'pg', group: 'postgresql'
+gem 'sqlite3', group: 'sqlite3'
 
 gem 'active_model_serializers'
 
 group :production do
   gem 'thin'
-end
-
-group :development do
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
 end
 
 group :test, :development do
