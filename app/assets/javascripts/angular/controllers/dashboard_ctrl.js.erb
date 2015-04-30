@@ -130,13 +130,15 @@ angular.module("Prometheus.controllers")
 
   $scope.addFrame = function() {
     var url = prompt("Please enter the URL for the frame to display", "http://");
-    $scope.widgets.push({
-      type: "frame",
-      title: "",
-      range: $scope.globalConfig.range,
-      endTime: $scope.globalConfig.endTime,
-      url: url
-    });
+    if (url) {
+      $scope.widgets.push({
+        type: "frame",
+        title: "",
+        range: $scope.globalConfig.range,
+        endTime: $scope.globalConfig.endTime,
+        url: url
+      });
+    }
   };
 
   $scope.addGraph = function() {
