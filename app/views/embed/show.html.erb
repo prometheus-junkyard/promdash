@@ -25,6 +25,22 @@
               index="$index"
               vars="globalConfig.vars">
           </span>
+          <span ng-switch-when="gauge">
+            <gauge
+              graph-settings="widget"
+              servers="servers"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
+              vars="globalConfig.vars">
+          </span>
+          <span ng-switch-when="pie">
+            <pie
+              graph-settings="widget"
+              servers="servers"
+              aspect-ratio="globalConfig.aspectRatio"
+              index="$index"
+              vars="globalConfig.vars">
+          </span>
           <span ng-switch-when="frame">
             <inline-frame
               frame-settings="widget"

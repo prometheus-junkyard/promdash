@@ -1,0 +1,29 @@
+{
+  "globalConfig": {
+    "numColumns": 2,
+    "aspectRatio": 0.75,
+    "theme": "dark_theme",
+    "endTime": null,
+    "vars": {},
+    "tags": [],
+    "palette": "colorwheel",
+    "resolution": 4
+  },
+  "widgets": [
+    {
+      "title": "Title",
+      "expression": {
+        "id": 0,
+        "serverID": 1,
+        "expression": "scalar(rate(prometheus_local_storage_ingested_samples_total[5m]))"
+      },
+      "danger": 66,
+      "warning": 33,
+      "max": 3000,
+      "precision": 3,
+      "refresh": 1,
+      "type": "gauge",
+      "units": "requests"
+    }
+  ]
+}
