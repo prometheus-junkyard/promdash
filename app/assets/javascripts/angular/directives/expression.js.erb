@@ -64,6 +64,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
         }
 
         var expression = VariableInterpolator(scope.expr.expression, scope.vars);
+        var url = VariableInterpolator(server.url, scope.vars);
         var expr = {
           expr: expression,
           range_input: scope.range || "",
@@ -74,7 +75,7 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
         };
 
         var hash = escape(JSON.stringify([expr]));
-        return server.url + "graph#" + hash;
+        return url + "graph#" + hash;
       };
 
       scope.setExpression = function(metricName) {
