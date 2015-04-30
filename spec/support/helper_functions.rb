@@ -2,6 +2,10 @@ def accept_alert
   page.driver.browser.switch_to.alert.accept
 end
 
+def dismiss_alert
+  page.driver.browser.switch_to.alert.dismiss
+end
+
 def open_tab tab_name
   find(".widget_title").hover
   find("[tooltip='#{tab_name}']").click

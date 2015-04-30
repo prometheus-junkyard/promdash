@@ -60,16 +60,23 @@ feature "Dashboard#show", js: true do
           open_tab 'Remove graph'
           click_button 'Delete'
           click_button 'Add Frame'
-          accept_alert
-          open_tab 'Remove frame'
+        end
+
+        it "should allow canceling on frame creation" do
+          dismiss_alert
+          expect(all('.widget_title').count).to eq 0
         end
 
         it "should remove frames" do
+          accept_alert
+          open_tab 'Remove frame'
           click_button 'Delete'
           expect(all('.widget_title').count).to eq 0
         end
 
         it "should cancel" do
+          accept_alert
+          open_tab 'Remove frame'
           click_button 'Cancel'
           expect(all('.widget_title').count).to eq 1
         end
