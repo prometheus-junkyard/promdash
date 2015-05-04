@@ -61,12 +61,22 @@ Run the production server from the bundled environment:
     bin/env bin/bundle exec bin/thin -p $PORT start
 
 ### Deploy with Docker
-To deploy PromDash with Docker, use the [prom/promdash](https://registry.hub.docker.com/u/prom/promdash/).
+To deploy PromDash with Docker, use the [prom/promdash](https://registry.hub.docker.com/u/prom/promdash/) Docker image.
 By default, the image will start the [thin webserver](http://code.macournoyer.com/thin/)
 webserver in production mode. To run rake tasks like migrations, you
-can specify any kind of command as parameter to the Docker image:
+can specify any kind of command as parameter to the Docker image.  
 
-    docker run -e DATABASE_URL=... prom/promdash ./bin/rake db:migrate
+#### Super easy quickstart deployment with Docker
+
+The following is a quick-start example for running PromDash with a file-based local database.
+
+First, create the SQLite3 database in a shared local Docker volume on the host:
+
+    docker run -p 3000:3000 -v /tmp/prom:/tmp/prom -e DATABASE_URL=sqlite3:////tmp/prom/file.sqlite3 prom/promdash ./bin/rake db:migrate
+
+Now, we launch Prometheus with the database we've just created.
+
+    docker run -p 3000:3000 -e DATABASE_URL=sqlite3:///tmp/file.sqlite3 prom/promdash
 
 ### Deploy behind a reverse proxy
 
