@@ -335,9 +335,20 @@ angular.module("Prometheus.directives").directive('graphChart', [
           onRender: function() {
             var dot = this.graph.element.querySelector('.dot');
             var hoverContent = this.graph.element.querySelector('.item');
+            var xlabel = this.graph.element.querySelector('.x_label');
 
             dot.style.top = parseFloat(dot.style.top) + elementHeight($legend) + "px";
             hoverContent.style.top = parseFloat(hoverContent.style.top) + elementHeight($legend) + "px";
+
+            // Make sure the xlabel (date) and hoverContent (data point info) don't overlap.
+            //
+            // hoverContent has a negative margin of 1em. We can't extract this
+            // value in pixels using JS so we'll have to define a fixed value
+            // approximating it.
+            var extraMargin = 12 + 6; // 12px (line height) + 6px (to create some extra distance)
+            if ((xlabel.offsetHeight + extraMargin) > parseFloat(hoverContent.style.top)) {
+              hoverContent.style.top = xlabel.offsetHeight + extraMargin + 'px';
+            }
           },
         });
       }
