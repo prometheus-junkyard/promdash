@@ -9,7 +9,7 @@ RUBY_BIN=$(DESTDIR)/bin/ruby
 
 build: Gemfile.lock $(RUBY_BIN)
 	bin/env gem install bundler --bindir bin/ --no-document
-	bin/env bin/bundle install --deployment --binstubs --without="development test migration postgresql"
+	bin/env bin/bundle install --deployment --binstubs --without="development test migration postgresql sqlite3"
 	rm -rf public/assets/*
 	bin/env bin/bundle exec rake assets:precompile
 
