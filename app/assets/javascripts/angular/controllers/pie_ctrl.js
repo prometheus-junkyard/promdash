@@ -2,10 +2,12 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
                                                     ["$scope", "$http",
                                                       "SharedWidgetSetup",
                                                       "URLGenerator",
+                                                      "VariableInterpolator",
                                                       function($scope,
                                                                $http,
                                                                SharedWidgetSetup,
-                                                               URLGenerator) {
+                                                               URLGenerator,
+                                                               VariableInterpolator) {
   SharedWidgetSetup($scope);
   $scope.errorMessages = [];
 
@@ -19,7 +21,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
     $scope.requestInFlight = true;
     $http.get(URLGenerator(server.url, '/api/query', $scope.vars), {
       params: {
-        expr: exp.expression
+        expr: VariableInterpolator(exp.expression, $scope.vars)
       }
     }).then(function(payload) {
       var data = payload.data;
