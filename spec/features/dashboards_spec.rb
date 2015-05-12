@@ -7,6 +7,22 @@ feature "Dashboard", js: true do
     expect(page).to have_content("New dashboard")
   end
 
+  describe "container css" do
+    before :each do
+      FactoryGirl.create(:dashboard)
+    end
+
+    scenario "index page" do
+      visit root_path
+      expect(page).to have_css ".container"
+    end
+
+    scenario "show page" do
+      visit dashboard_slug_path Dashboard.first.slug
+      expect(page).to have_css ".container-fluid"
+    end
+  end
+
   describe "page titles" do
     before :each do
       Server.create! name: "prometheus", url: "http://localhost:#{Capybara.server_port}/"

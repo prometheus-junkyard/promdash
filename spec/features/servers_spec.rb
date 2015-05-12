@@ -19,10 +19,17 @@ feature 'Server', js: true do
     end
   end
 
+  describe "container css" do
+    scenario "index page" do
+      FactoryGirl.create(:server)
+      visit servers_path
+      expect(page).to have_css ".container"
+    end
+  end
+
   describe 'editing the dashboard' do
     before(:each) do
-      s = Server.create! name: 'New Server', url: "prometheus.server.com"
-      s.save!
+      FactoryGirl.create(:server)
       visit servers_path
     end
 
