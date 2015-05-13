@@ -6,6 +6,11 @@ def dismiss_alert
   page.driver.browser.switch_to.alert.dismiss
 end
 
+def fill_in_prompt text
+  page.driver.browser.switch_to.alert.send_keys text
+  accept_alert
+end
+
 def open_tab tab_name
   find(".widget_title").hover
   find("[tooltip='#{tab_name}']").click

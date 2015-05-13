@@ -33,9 +33,14 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
       // http://khaidoan.wikidot.com/iframe-and-browser-history
       scope.refreshFrame = function() {
         var url = VariableInterpolator(scope.frame.url, scope.vars);
-        var trustedURL = $sce.trustAsResourceUrl(buildFrameURL(url));
+        var parser = buildParser(url);
+        var trustedURL = $sce.trustAsResourceUrl(parser.stringify());
         var frame = element.find('.frame_container');
         frame.height(frameHeight());
+        if (parser.error) {
+          frame.html('<div>Error: ' + parser.error + '. Please check your frame URL.</div>');
+          return;
+        }
         frame.html('<iframe src="'+ trustedURL +'" class="frame_iframe" marginwidth="0" scrolling="no"></iframe>');
       };
 
@@ -47,14 +52,14 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
         scope.$on(m, scope.refreshFrame);
       });
 
-      function buildFrameURL(url) {
+      function buildParser(url) {
         var parser = URLParser(url, {ignoreHash: scope.frame.graphite});
 
         if (scope.frame.graphite) {
           setGraphiteParams(parser);
         }
 
-        return parser.stringify();
+        return parser;
       }
 
       function setGraphiteParams(parser) {
