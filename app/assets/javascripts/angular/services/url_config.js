@@ -93,7 +93,28 @@ angular.module("Prometheus.services").factory('URLParser', function() {
     removeHashParam: function (key) { delete this.hash[key]; }
   };
 
+  function BrokenURL(brokenURL, error) {
+    this.brokenURL = brokenURL;
+    this.error = error;
+  }
+
+  BrokenURL.prototype = {
+    stringify: function() {
+      return this.brokenURL;
+    },
+    getQueryParams: function () { return []; },
+    setQueryParam: function () {},
+    removeQueryParam: function () {},
+    getHashParams: function () { return []; },
+    setHashParam: function () {},
+    removeHashParam: function () {}
+  };
+
   return function (url, options) {
-    return new URLRepresentation(url, options);
+    try {
+      return new URLRepresentation(url, options);
+    } catch (e) {
+      return new BrokenURL(url, e.message);
+    }
   };
 });
