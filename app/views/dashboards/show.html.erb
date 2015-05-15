@@ -20,7 +20,7 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li class="until_container" ng-repeat="(name, _) in globalConfig.profiles" ng-click="setActiveProfile(name)">
+        <li ng-repeat="(name, _) in globalConfig.profiles" ng-click="setActiveProfile(name)">
           <span class="pointer">{{name}}</span>
         </li>
       </ul>
@@ -310,8 +310,10 @@
     </button>
   </div>
   <div class="clearfix"></div>
-  <div ng-show="globalConfig.showProfiles" class="global_grouping col-lg-12" ng-repeat="(name, profile) in globalConfig.profiles">
-    <profile ng-show="isActiveProfile(name)" name="name" profile="profile"></profile>
+  <div class="global_grouping col-lg-12"
+    ng-show="globalConfig.showProfiles && isActiveProfile(name)"
+    ng-repeat="(name, profile) in globalConfig.profiles">
+    <profile name="name" profile="profile"></profile>
   </div>
   <div class="clearfix"></div>
 

@@ -9,13 +9,15 @@
         <input type="text" class="form-control" placeholder="Variable value" ng-model="p.value">
       </td>
       <td>
-        <button class="btn btn-default" type="button" ng-click="removeVariable($index)">
+        <button class="btn btn-default" type="button" ng-click="removeVariable($index)"
+           tooltip-append-to-body="true" tooltip="Remove profile variable">
           <i class="icon-cross"></i>
         </button>
       </td>
     </tr>
   </table>
-  <button class="btn btn-primary" type="button" ng-click="addVariable()">
+  <button class="btn btn-primary" type="button" ng-click="addVariable()"
+    tooltip-append-to-body="true" tooltip="Add profile variable">
     <i class="icon-plus"></i>
   </button>
 </div>
