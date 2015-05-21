@@ -208,8 +208,13 @@ angular.module("Prometheus.controllers")
     $scope.addGraph();
   }
 
+  $scope.dashboardForClone = {};
   $scope.queryDirectory = function() {
     $scope.directoryForClone.id = $scope.directoryForClone.id || "unassigned";
+
+    // Clear old data while querying for new data.
+    $scope.dashboardNames = [{name: ""}];
+    $scope.dashboardWidgets = [{title: ""}];
     $http.get('<%= Rails.configuration.path_prefix %>directories/' + $scope.directoryForClone.id).then(function(payload) {
       $scope.dashboardNames = payload.data.dashboards;
       $scope.dashboardForClone = payload.data.dashboards.filter(function(d) {
@@ -220,11 +225,25 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.queryDashboard = function() {
+    if ($scope.dashboardForClone.name === dashboardName) {
+      $scope.dashboardWidgets = $scope.widgets;
+      $scope.widgetToClone = $scope.widgets[0];
+      return;
+    }
+
+    // Clear old data while querying for new data.
+    $scope.dashboardWidgets = [{title: ""}];
     $http.get('<%= Rails.configuration.path_prefix %>dashboards/' + $scope.dashboardForClone.id + '/widgets').then(function(payload) {
       $scope.dashboardWidgets = payload.data.widgets;
       $scope.widgetToClone = payload.data.widgets[0];
     });
   };
+
+  $scope.$watch('widgets', function(newWidgets) {
+    if ($scope.dashboardForClone.name === dashboardName) {
+      $scope.dashboardWidgets = $scope.widgets;
+    }
+  });
 
   $scope.showCloneMenu = function() {
     $scope.showCloneControls = true;
