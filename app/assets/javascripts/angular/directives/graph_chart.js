@@ -84,18 +84,28 @@ angular.module("Prometheus.directives").directive('graphChart', [
 
         var series = RickshawDataTransformer(graphData, axisIDByExprID);
 
-        var seriesYLimitFn = calculateBound(series);
-        var yMinForLog = seriesYLimitFn(Math.min);
-        var yMin = yMinForLog > 0 ? 0 : yMinForLog;
-        var yMax = seriesYLimitFn(Math.max);
+        var yMinForGraph;
+        var hasLog;
+        scope.graphSettings.axes.forEach(function(a) {
+          if (a.scale === "log" ) {
+            hasLog = true;
+          }
+        });
 
-        var yMinForGraph = yMin;
-        // The range on the y-axis is way too large if both yMin and yMax are
-        // negative. Setting yMin to 0 fixes this.
-        if (yMinForLog > 0) {
-          yMinForGraph = 0;
-        } else if (yMin < 0 && yMax < 0) {
-          yMinForGraph = 0;
+        if (hasLog) {
+          var seriesYLimitFn = calculateBound(series);
+          var yMinForLog = seriesYLimitFn(Math.min);
+          var yMin = yMinForLog > 0 ? 0 : yMinForLog;
+          var yMax = seriesYLimitFn(Math.max);
+
+          yMinForGraph = yMin;
+          // The range on the y-axis is way too large if both yMin and yMax are
+          // negative. Setting yMin to 0 fixes this.
+          if (yMinForLog > 0) {
+            yMinForGraph = 0;
+          } else if (yMin < 0 && yMax < 0) {
+            yMinForGraph = 0;
+          }
         }
 
         // Set scale in yScales based on max/min of all series on that axis.
