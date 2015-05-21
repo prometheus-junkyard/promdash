@@ -241,7 +241,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
     $document.on('click', function(ev) {
       // If the following selectors aren't in the event.target's ancestor chain,
       // clear open menus from the screen.
-      if (!$(ev.target).closest('.graph_config_menu, .graph_control_tabbar, #global_controls, .add_widget_button, .modal_container').length) {
+      if (!$(ev.target).closest('expression, .graph_config_menu, .legend_string_container, .graph_control_tabbar, #global_controls, .add_widget_button, .modal_container').length) {
         clearScreen();
       }
     });
