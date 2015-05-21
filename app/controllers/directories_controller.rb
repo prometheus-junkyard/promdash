@@ -18,7 +18,7 @@ class DirectoriesController < ApplicationController
 
   def show
     if params[:id] == "unassigned"
-      render json: Dashboard.unassigned.cloneable, root: :dashboards
+      render json: Dashboard.where(permalink: false).unassigned.cloneable, root: :dashboards
     else
       set_directory
       render json: @directory.dashboards.cloneable, root: :dashboards
