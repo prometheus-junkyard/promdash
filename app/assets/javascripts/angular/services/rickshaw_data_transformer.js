@@ -1,7 +1,9 @@
 angular.module("Prometheus.services").factory('RickshawDataTransformer', [function() {
   function parseValue(value) {
     if (value == "NaN" || value == "Inf" || value == "-Inf") {
-      return 0; // TODO: what should we really do here?
+      // Show special float values as gaps, since there's no better way to
+      // display them.
+      return null;
     } else {
       return parseFloat(value);
     }
