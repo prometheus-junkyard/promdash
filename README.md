@@ -74,7 +74,7 @@ First, create the SQLite3 database in a shared local Docker volume on the host:
 
     docker run -v /tmp/prom:/tmp/prom -e DATABASE_URL=sqlite3:/tmp/prom/file.sqlite3 prom/promdash ./bin/rake db:migrate
 
-Now, we launch Prometheus with the database we've just created:
+Now, we launch PromDash with the database we've just created:
 
     docker run -p 3000:3000 -v /tmp/prom:/tmp/prom -e DATABASE_URL=sqlite3:/tmp/prom/file.sqlite3 prom/promdash
 
