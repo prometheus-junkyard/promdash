@@ -26,7 +26,7 @@
 <div class="input-group expression_select" ng-class="{'col-xs-12': type !== 'graph' }">
   <input type="text" class="form-control"
     ng-model="expr.expression"
-    typeahead="m for m in metricNames | filter:$viewValue"
+    typeahead="m for m in getMetrics($viewValue)"
     typeahead-on-select="setExpression($item)"
     typeahead-wait-ms="100"
     placeholder="Enter expression" />

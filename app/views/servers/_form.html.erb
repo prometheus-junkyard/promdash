@@ -19,6 +19,10 @@
     <%= f.label :url %><br>
     <%= f.text_field :url, class: "form-control" %>
   </div>
+  <div class="field form-group">
+    <%= f.label :server_type %><br>
+    <%= f.select :server_type, backends_for_select, {}, class: "form-control" %>
+  </div>
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
     <%= link_to 'Back', servers_path, class: "btn btn-default" %>

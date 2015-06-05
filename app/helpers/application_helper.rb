@@ -18,6 +18,14 @@ module ApplicationHelper
     %w{dashboards directories}.include? params[:controller]
   end
 
+  def supported_backends
+    b = ["prometheus", "graphite"]
+  end
+
+  def backends_for_select
+    supported_backends.map {|e| [e.capitalize, e] }
+  end
+
   def container_class
     if widget_page?
       "container-fluid"

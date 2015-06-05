@@ -23,31 +23,29 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
 
   return function(data, axisIDByExprID) {
     var series = [];
-    for (var i = 0; i < data.length; i++) {
-      if (!data[i]) {
-        continue;
-      }
-
-      series = series.concat((data[i].data.Value || data[i].data.value).map(function(ts) {
-        var name = metricToTsName(ts.Metric || ts.metric);
-        return {
-          name: name,
-          // uniqName is added to be kept as a unique, unmodified identifier for a series.
-          uniqName: name,
-          axisID: axisIDByExprID[data[i].exp_id],
-          exp_id: data[i].exp_id,
-          labels: ts.Metric || ts.metric,
-          data: (ts.Values || ts.values).map(function(value) {
-            return {
-              x: value.Timestamp || value[0],
-              y: parseValue(value.Value || value[1])
-            };
-          })
-        };
-      }));
+    if (!data) {
+      return;
     }
 
-    series = new Rickshaw.Series(series);
+    series = series.concat((data.data.Value || data.data.value).map(function(ts) {
+      var name = metricToTsName(ts.Metric || ts.metric);
+      return {
+        name: name,
+        // uniqName is added to be kept as a unique, unmodified identifier for a series.
+        uniqName: name,
+        type: data.type,
+        axisID: axisIDByExprID[data.expID],
+        expID: data.expID,
+        labels: ts.Metric || ts.metric,
+        data: (ts.Values || ts.values).map(function(value) {
+          return {
+            x: value.Timestamp || value[0],
+            y: parseValue(value.Value || value[1])
+          };
+        })
+      };
+    }));
+
     return series;
   };
 }]);

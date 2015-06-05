@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126150102) do
+ActiveRecord::Schema.define(version: 20150601101059) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20150126150102) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "server_type", default: "prometheus"
   end
 
   create_table "shortened_urls", force: true do |t|
