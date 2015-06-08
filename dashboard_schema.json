@@ -382,6 +382,9 @@
               "warning": {
                 "type": "integer",
                 "minimum": 1
+              },
+              "hideGauge": {
+                "type": "boolean"
               }
             }
           },
