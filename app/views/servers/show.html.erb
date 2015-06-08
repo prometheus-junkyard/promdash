@@ -9,6 +9,11 @@
   <%= @server.url %>
 </p>
 
+<p>
+  <strong>Server type:</strong>
+  <%= @server.server_type.capitalize %>
+</p>
+
 <div class="actions">
   <%= link_to 'Edit', edit_server_path(@server), class: "btn btn-primary" %>
   <%= link_to 'Back', servers_path, class: "btn btn-default" %>

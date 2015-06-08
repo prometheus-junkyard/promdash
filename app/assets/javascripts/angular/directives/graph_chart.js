@@ -4,6 +4,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
     "WidgetHeightCalculator",
     "VariableInterpolator",
     "RickshawDataTransformer",
+    "GraphiteDataTransformer",
     "YAxisUtilities",
     "HTMLEscaper",
     function(
@@ -12,6 +13,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
       WidgetHeightCalculator,
       VariableInterpolator,
       RickshawDataTransformer,
+      GraphiteDataTransformer,
       YAxisUtilities,
       HTMLEscaper) {
   return {
@@ -33,7 +35,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
         var expressions = scope.graphSettings.expressions;
         expressions.forEach(function(exp) {
           series.forEach(function(s) {
-            if (s.exp_id === exp.id) {
+            if (s.expID === exp.id) {
               var lst = scope.graphSettings.legendFormatStrings.filter(function(lst) {
                 return lst.id === exp.legendID;
               })[0];
@@ -82,7 +84,16 @@ angular.module("Prometheus.directives").directive('graphChart', [
           axisIDByExprID[expr.id] = expr.axisID;
         });
 
-        var series = RickshawDataTransformer(graphData, axisIDByExprID);
+        var series = graphData.map(function(d) {
+          if (d.type === "prometheus") {
+            return RickshawDataTransformer(d, axisIDByExprID);
+          }
+          return GraphiteDataTransformer(d, axisIDByExprID);
+        });
+
+        // Flatten returned data.
+        series = $.map(series, function(n) { return n; });
+        series = new Rickshaw.Series(series);
 
         var yMinForGraph;
         var hasLog;
@@ -208,7 +219,10 @@ angular.module("Prometheus.directives").directive('graphChart', [
 
         // Insert (x, null) pair at any discontinuity in the data.
         // Rickshaw.Series.zeroFill breaks logarithmic graphs.
-        Rickshaw.Series.fill(series, null);
+        // Graphite series typically don't have enough data, and null
+        // filling them ends up hiding the timeseries.
+        p = series.filter(function(s) { return s.type === "prometheus"; });
+        Rickshaw.Series.fill(p, null);
 
         // If all series are removed from a certain axis but a scale has been
         // assigned to that axis, it will render with the wrong range.

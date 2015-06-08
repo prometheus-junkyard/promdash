@@ -1,4 +1,11 @@
-angular.module("Prometheus.directives").directive('expression', ["$timeout", "MetricNamesQuerier", "VariableInterpolator", function($timeout, MetricNamesQuerier, VariableInterpolator) {
+angular.module("Prometheus.directives").directive('expression', ["$http",
+                                                  "$timeout", "$filter",
+                                                  "MetricNamesQuerier",
+                                                  "VariableInterpolator",
+                                                  function($http, $timeout,
+                                                           $filter,
+                                                           MetricNamesQuerier,
+                                                           VariableInterpolator) {
   return {
     restrict: "E",
     scope: {
@@ -35,11 +42,23 @@ angular.module("Prometheus.directives").directive('expression', ["$timeout", "Me
 
       scope.updateMetricNames = function() {
         var server = scope.serversById[scope.expr.serverID];
-        if (server === undefined) {
+        if (server === undefined || server.server_type === "graphite") {
           scope.metricNames = [];
           return;
         }
         MetricNamesQuerier(scope.expr.serverID, server.url, scope);
+      };
+
+      scope.getMetrics = function(val) {
+        var server = scope.serversById[scope.expr.serverID];
+        if (server.server_type === "graphite") {
+          return $http.get(server.url + '/metrics/find?query='+val).then(function(payload){
+            return payload.data.map(function(item){
+              return item.id;
+            });
+          });
+        }
+        return $filter('filter')(scope.metricNames, val);
       };
 
       scope.linkToPrometheus = function() {

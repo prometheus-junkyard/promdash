@@ -27,6 +27,27 @@ feature 'Server', js: true do
     end
   end
 
+  describe 'creating a dashboard' do
+    scenario 'prometheus backend' do
+      visit servers_path
+      click_button('New Server')
+      fill_in('Name', :with => 'John')
+      fill_in('Url', :with => 'http://prometheus.com/')
+      click_button('Create Server')
+      expect(page).to have_content("Server type: Prometheus")
+    end
+
+    scenario 'graphite backend' do
+      visit servers_path
+      click_button('New Server')
+      fill_in('Name', :with => 'John')
+      fill_in('Url', :with => 'http://graphite.com/')
+      select('Graphite', :from => 'server[server_type]')
+      click_button('Create Server')
+      expect(page).to have_content("Server type: Graphite")
+    end
+  end
+
   describe 'editing the dashboard' do
     before(:each) do
       FactoryGirl.create(:server)
@@ -35,7 +56,7 @@ feature 'Server', js: true do
 
     scenario 'the name' do
       click_link('Edit')
-      find('#server_name').set('some other name')
+      fill_in('Name', :with => 'some other name')
       click_button('Update Server')
       expect(page).to have_content(/successfully updated/)
       expect(page).to have_content(/some other name/)
@@ -43,10 +64,17 @@ feature 'Server', js: true do
 
     scenario 'the url' do
       click_link('Edit')
-      find('#server_url').set('prom.server.com:{{port}}/')
+      fill_in('Url', :with => 'prom.server.com:{{port}}/')
       click_button('Update Server')
       expect(page).to have_content(/successfully updated/)
       expect(page).to have_content(/prom.server.com:{{port}}/)
+    end
+
+    scenario 'the server_type' do
+      click_link('Edit')
+      select('Graphite', :from => 'server[server_type]')
+      click_button('Update Server')
+      expect(page).to have_content("Server type: Graphite")
     end
 
     scenario 'destroy' do

@@ -11,6 +11,7 @@
     <tr>
       <th>Name</th>
       <th>URL</th>
+      <th>Server Type</th>
       <th>Actions</th>
       <th></th>
     </tr>
@@ -21,6 +22,7 @@
       <tr>
         <td><%= server.name %></td>
         <td><a href="<%= server.url %>"><%= server.url %></a></td>
+        <td><%= server.server_type.capitalize %></td>
         <td>
           <%= link_to 'Edit', edit_server_path(server) %>
           &nbsp;&nbsp;
