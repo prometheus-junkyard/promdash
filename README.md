@@ -52,6 +52,10 @@ configure the database parameters:
     DATABASE_URL="mysql2://username:password@host/database"
     RAILS_ENV="production"
 
+**Note**: Besides MySQL, you may also use any other Rails-compatible relational
+database like PostgreSQL or SQLite3. See also
+http://edgeguides.rubyonrails.org/configuring.html.
+
 Create a self-contained Ruby environment and precompile assets:
 
     make build
