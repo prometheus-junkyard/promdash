@@ -12,19 +12,20 @@ angular.module("Prometheus.filters").filter('toPercentile', function() {
 
 angular.module("Prometheus.filters").filter('hostnameFqdn', function() {
   return function(input) {
-    var a = document.createElement("a");
-    a.href = input;
-    return a.host;
+    var re = /^([^:\/?]+:\/\/(www\.)?)?([^\/]+)/;
+    var match = input.match(re);
+    if (match && match[3]) {
+      return match[3].replace('www.', '').replace(/:[0-9]+/,'');
+    }
+    return '';
   };
 });
 
-angular.module("Prometheus.filters").filter('hostname', function() {
+angular.module("Prometheus.filters").filter('hostname', ['$filter', function($filter) {
   return function(input) {
-    var a = document.createElement("a");
-    a.href = input;
-    return a.host.split(".", 1)[0];
+    return $filter('hostnameFqdn')(input).split('.')[0];
   };
-});
+}]);
 
 angular.module("Prometheus.filters").filter('regex', function() {
   return function(input, regex, replace) {

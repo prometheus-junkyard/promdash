@@ -40,7 +40,7 @@ describe('VariableInterpolator', function() {
 
   it("filter function and single interpolation play nice", function() {
     var formatStr = "{{quantile | toPercent}} for {{server | hostname}}";
-    expect(variableInterpolator(formatStr, this.availableFields)).toEqual("75% for localhost:8080");
+    expect(variableInterpolator(formatStr, this.availableFields)).toEqual("75% for localhost");
   });
 
   describe("regex", function() {
