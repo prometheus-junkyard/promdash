@@ -20,9 +20,9 @@ angular.module("Prometheus.filters").filter('hostnameFqdn', function() {
 
 angular.module("Prometheus.filters").filter('hostname', function() {
   return function(input) {
-    var a = document.createElement("a");
-    a.href = input;
-    return a.host.split(".", 1)[0];
+    var re = /^([^:\/?#]+:\/\/)?([^\/?#]*)?/;
+    var match = input.match(re);
+    return match ? match[2] : '';
   };
 });
 
