@@ -16,7 +16,10 @@ build: Gemfile.lock $(RUBY_BIN)
 clean:
 	rm -rf $(BUILDDIR) $(DESTDIR)
 
-.PHONY: build clean
+test-js:
+	RAILS_ENV=test bundle exec rake karma:run
+
+.PHONY: build clean test-js
 
 $(RUBY_SRC)/Makefile: .ruby-version
 	mkdir -p $(RUBY_SRC)
