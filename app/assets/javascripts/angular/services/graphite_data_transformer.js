@@ -1,6 +1,6 @@
 angular.module("Prometheus.services").factory('GraphiteDataTransformer', [function() {
   function makeData(ts, axisIDByExprID) {
-    var name = "{" + ts.data.target + "}";
+    var name = "{target: \"" + ts.data.target + "\"}";
     return {
       name: name,
       // uniqName is added to be kept as a unique, unmodified identifier for a series.

@@ -20,8 +20,8 @@ describe('GraphiteDataTransformer', function() {
     var got = xfr(data, axisIDObj);
 
     var want = {
-      name: "{public}",
-      uniqName: "{public}",
+      name: "{target: \"public\"}",
+      uniqName: "{target: \"public\"}",
       axisID: 1,
       type: "graphite",
       expID: 0,
