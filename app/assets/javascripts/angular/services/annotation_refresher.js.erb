@@ -1,31 +1,66 @@
-angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", "VariableInterpolator", function($http, VariableInterpolator) {
-  return function(graph, scope) {
-    var tags = graph.tags.map(function(e) {
-      if (e.name) {
-        var n = VariableInterpolator(e.name, scope.vars);
-        return n.split(",").map(function(s) { return s.trim(); });
-      } else {
-        return "";
-      }
-    });
-    if (tags.length) {
-      var range = Prometheus.Graph.parseDuration(graph.range);
-      var until = Math.floor(graph.endTime || Date.now()) / 1000;
-
-      tags.forEach(function(t) {
-        $http.get('<%= Rails.configuration.path_prefix %>annotations', {
-          params: {
-            'tags[]': t,
-            until: until,
-            range: range
-          }
-        })
-        .then(function(payload) {
-          scope.$broadcast('annotateGraph', payload.data.posts);
-        }, function(response) {
-          scope.errorMessages.push("Error " + response.status + ": Error occurred fetching annotations.");
-        });
+angular.module("Prometheus.services").factory('AnnotationRefresher', ["$http", "$q", "$timeout", "VariableInterpolator", function($http, $q, $timeout, VariableInterpolator) {
+  var MINUTE = 1000*60;
+  var promises = {};
+  var debounce;
+  function key(range, endTime) {
+    return "" + range + endTime;
+  }
+  return {
+    refresh: function(tags, range, endTime, vars) {
+      var tags = tags.map(function(e) {
+        if (e.name) {
+          var n = VariableInterpolator(e.name, vars);
+          return n.split(",").map(function(s) { return s.trim(); });
+        } else {
+          return "";
+        }
       });
+
+      var k = key(range, endTime);
+
+      if (tags.length) {
+        var r = Prometheus.Graph.parseDuration(range);
+        var until = Math.floor(endTime || Date.now()) / 1000;
+
+        if (!promises[k]) {
+
+          // Delete the cached annotations after 1 minute.
+          var clear = function(key) {
+            return function() { promises[key] = undefined; };
+          }(k);
+          $timeout(clear, 1*MINUTE);
+
+          promises[k] = tags.map(function(t) {
+            return $http.get(dashboardURL + 'annotations', {
+              params: {
+                'tags[]': t,
+                until: until,
+                range: r
+              }
+            }).then(function(payload) {
+              return payload.data.posts;
+            }, function(response) {
+              return [];
+            });
+          });
+        }
+      } else {
+        promises[k] = undefined;
+      }
+
+      return this;
+    },
+    result: function(range, endTime, fn) {
+      var p = promises[key(range, endTime)];
+
+      if (p) {
+        return $q.all(p).then(function(posts) {
+          return $.map(posts, function(n) { return n; });
+        }).then(fn);
+      }
+    },
+    clearCache: function(range, endTime) {
+      promises[key(range, endTime)] = undefined;
     }
   };
 }]);
