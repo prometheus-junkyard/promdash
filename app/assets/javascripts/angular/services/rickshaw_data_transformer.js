@@ -27,8 +27,8 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
       return;
     }
 
-    series = series.concat((data.data.Value || data.data.value).map(function(ts) {
-      var name = metricToTsName(ts.Metric || ts.metric);
+    series = series.concat(data.data.value.map(function(ts) {
+      var name = metricToTsName(ts.metric);
       return {
         name: name,
         // uniqName is added to be kept as a unique, unmodified identifier for a series.
@@ -36,11 +36,11 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
         type: data.type,
         axisID: axisIDByExprID[data.expID],
         expID: data.expID,
-        labels: ts.Metric || ts.metric,
-        data: (ts.Values || ts.values).map(function(value) {
+        labels: ts.metric,
+        data: ts.values.map(function(value) {
           return {
-            x: value.Timestamp || value[0],
-            y: parseValue(value.Value || value[1])
+            x: value[0],
+            y: parseValue(value[1])
           };
         })
       };

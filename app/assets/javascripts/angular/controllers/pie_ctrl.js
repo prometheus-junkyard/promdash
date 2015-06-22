@@ -26,17 +26,17 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
     }).then(function(payload) {
       var data = payload.data;
       var errMsg;
-      switch(data.Type || data.type) {
+      switch (data.type) {
         case 'error':
-          errMsg = "Expression " + exp.expression + ": " + (data.Value || data.value);
+          errMsg = "Expression " + exp.expression + ": " + data.value;
           $scope.errorMessages.push(errMsg);
           break;
         case 'vector':
-          $scope.$broadcast('redrawGraphs', data.Value || data.value);
+          $scope.$broadcast('redrawGraphs', data.value);
           $scope.errorMessages = [];
           break;
         default:
-          errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" cannot be graphed."';
+          errMsg = 'Expression ' + exp.expression + ': Result type "' + data.type + '" cannot be graphed."';
           $scope.errorMessages.push(errMsg);
       }
     }, function(data, status, b) {

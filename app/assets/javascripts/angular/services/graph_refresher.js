@@ -25,9 +25,9 @@ angular.module("Prometheus.services").factory('GraphRefresher',
           cache: false
         }).then(function(payload, status) {
           data = payload.data;
-          switch(data.Type || data.type) {
+          switch (data.type) {
             case 'error':
-              var errMsg = "Expression " + (idx + 1) + ": " + (data.Value || data.value);
+              var errMsg = "Expression " + (idx + 1) + ": " + data.value;
               $scope.errorMessages.push(errMsg);
               break;
             case 'matrix':
@@ -38,7 +38,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
               });
               break;
             default:
-              var errMsg = 'Expression ' + (idx + 1) + ': Result type "' + (data.Type || data.type) + '" cannot be graphed."';
+              var errMsg = 'Expression ' + (idx + 1) + ': Result type "' + data.type + '" cannot be graphed."';
               $scope.errorMessages.push(errMsg);
           }
         }, function(data, status, b) {
