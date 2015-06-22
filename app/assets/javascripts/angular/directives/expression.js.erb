@@ -2,10 +2,12 @@ angular.module("Prometheus.directives").directive('expression', ["$http",
                                                   "$timeout", "$filter",
                                                   "MetricNamesQuerier",
                                                   "VariableInterpolator",
+                                                  "URLGenerator",
                                                   function($http, $timeout,
                                                            $filter,
                                                            MetricNamesQuerier,
-                                                           VariableInterpolator) {
+                                                           VariableInterpolator,
+                                                           URLGenerator) {
   return {
     restrict: "E",
     scope: {
@@ -84,7 +86,7 @@ angular.module("Prometheus.directives").directive('expression', ["$http",
         }
 
         var expression = VariableInterpolator(scope.expr.expression, scope.vars);
-        var url = VariableInterpolator(server.url, scope.vars);
+        var url = URLGenerator(server.url, "graph", scope.vars);
         var expr = {
           expr: expression,
           range_input: scope.range || "",
@@ -95,7 +97,7 @@ angular.module("Prometheus.directives").directive('expression', ["$http",
         };
 
         var hash = escape(JSON.stringify([expr]));
-        return url + "graph#" + hash;
+        return url + "#" + hash;
       };
 
       scope.setExpression = function(metricName) {
