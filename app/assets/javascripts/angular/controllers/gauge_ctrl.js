@@ -29,14 +29,14 @@ angular.module("Prometheus.controllers").controller('GaugeCtrl',
       var data = payload.data;
       var errMsg;
       $scope.errorMessages = [];
-      switch(data.Type || data.type) {
+      switch (data.type) {
         case 'error':
-          errMsg = "Expression " + exp.expression + ": " + (data.Value || data.value);
+          errMsg = "Expression " + exp.expression + ": " + data.value;
           $scope.errorMessages.push(errMsg);
           break;
         case 'scalar':
           if (!data.value) {
-            errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" has no data."';
+            errMsg = 'Expression ' + exp.expression + ': Result type "' + data.type + '" has no data."';
             $scope.errorMessages.push(errMsg);
             return;
           }
@@ -46,7 +46,7 @@ angular.module("Prometheus.controllers").controller('GaugeCtrl',
           $scope.errorMessages = [];
           break;
         default:
-          errMsg = 'Expression ' + exp.expression + ': Result type "' + (data.Type || data.type) + '" cannot be graphed. Must be scalar type."';
+          errMsg = 'Expression ' + exp.expression + ': Result type "' + data.type + '" cannot be graphed. Must be scalar type."';
           $scope.errorMessages.push(errMsg);
       }
     }, function(data, status, b) {
