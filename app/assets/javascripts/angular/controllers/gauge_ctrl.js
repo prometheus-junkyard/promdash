@@ -3,11 +3,13 @@ angular.module("Prometheus.controllers").controller('GaugeCtrl',
                                                       "$http",
                                                       "$timeout",
                                                       "SharedWidgetSetup",
+                                                      "VariableInterpolator",
                                                       "URLGenerator",
                                                       function($scope,
                                                                $http,
                                                                $timeout,
                                                                SharedWidgetSetup,
+                                                               VariableInterpolator,
                                                                URLGenerator) {
   SharedWidgetSetup($scope);
   $scope.errorMessages = [];
@@ -23,7 +25,7 @@ angular.module("Prometheus.controllers").controller('GaugeCtrl',
     $scope.requestInFlight = true;
     $http.get(URLGenerator(server.url, '/api/query', $scope.vars), {
       params: {
-        expr: exp.expression
+        expr: VariableInterpolator(exp.expression, $scope.vars)
       }
     }).then(function(payload) {
       var data = payload.data;
