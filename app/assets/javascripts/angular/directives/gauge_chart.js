@@ -1,6 +1,7 @@
 angular.module("Prometheus.directives").directive('gaugeChart',
   ["$location", "$timeout", "WidgetHeightCalculator", "VariableInterpolator", "YAxisUtilities", "ThemeManager",
     function($location, $timeout, WidgetHeightCalculator, VariableInterpolator, YAxisUtilities, ThemeManager) {
+
   return {
     restrict: "A",
     scope: {
@@ -16,7 +17,7 @@ angular.module("Prometheus.directives").directive('gaugeChart',
         var graphWidth = $el.width();
         $el.css('height', graphHeight);
 
-        if (!scope.gaugeData || !scope.graphSettings.max) {
+        if (!isNumeric(scope.gaugeData) || !scope.graphSettings.max) {
           return;
         }
 
@@ -40,7 +41,7 @@ angular.module("Prometheus.directives").directive('gaugeChart',
       scope.$watch('graphSettings.hideGauge', redrawGraph);
       scope.$watch('graphSettings.legendFormatString', redrawGraph);
       scope.$on('redrawGraphs', function(e, data) {
-        if (data) {
+        if (isNumeric(data)) {
           scope.gaugeData = data;
         }
         redrawGraph();
