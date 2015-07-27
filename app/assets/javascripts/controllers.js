@@ -100,12 +100,16 @@ Prometheus.Graph = {
   }
 };
 
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 Prometheus.Graph.Gauge = function(args) {
   if (!args.element) {
     throw "Prometheus.Graph.Gauge needs a reference to an element";
   }
-  if (!args.value) {
-    throw "Prometheus.Graph.Gauge needs a value";
+  if (!isNumeric(args.value)) {
+    throw "Prometheus.Graph.Gauge needs a numeric value";
   }
   if (!args.max) {
     throw "Prometheus.Graph.Gauge needs a max";
