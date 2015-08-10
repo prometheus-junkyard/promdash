@@ -12,6 +12,7 @@
 <% @directories.each do |directory| %>
   <div class="directory_container">
     <div>
+      <a class="directory_anchor" id="<%= directory.anchor_name %>"></a>
       <h3 class="directory_name"><%= directory.name %></h3>
       <%= link_to edit_directory_path(directory), class: "directory_icon" do %>
         <i class="icon-pencil"></i>
@@ -19,6 +20,9 @@
       <%= link_to directory, method: :delete, data: { confirm: 'Are you sure?' }, class: "directory_icon" do %>
         <i class="icon-trash"></i>
       <% end %>
+      <a href="#<%= directory.anchor_name %>" class="directory_icon">
+        <i class="icon-link"></i>
+      </a>
     </div>
     <%= render 'dashboards_table', dashboards: directory.dashboards %>
   </div>
