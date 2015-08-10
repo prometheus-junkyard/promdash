@@ -12,4 +12,8 @@ class Directory < ActiveRecord::Base
   def unassociate_dashboards
     dashboards.update_all(directory_id: nil)
   end
+
+  def anchor_name
+    name.gsub(/\W+/, '-').gsub(/^-+|-+$/, '').downcase
+  end
 end
