@@ -1,1 +1,1 @@
-{"globalConfig":{"numColumns":1,"aspectRatio":0.75,"theme":"dark_theme","endTime":null,"vars":{},"tags":[],"palette":"colorwheel"},"widgets":[{"title":"My awesome pie-chart","expression":{"id":0,"serverID":1,"expression":"cpu_idle","legendID":1},"type":"pie","showLegend":"always"}]}
+{"globalConfig":{"numColumns":1,"aspectRatio":0.75,"theme":"dark_theme","endTime":null,"vars":{},"tags":[],"palette":"colorwheel"},"widgets":[{"title":"My awesome pie-chart","expressions":[{"id":0,"serverID":1,"expression":"cpu_idle","legendID":1}],"type":"pie","showLegend":"always"}]}

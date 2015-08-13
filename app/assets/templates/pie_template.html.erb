@@ -6,7 +6,7 @@
       {{title()}}
 
       <div class="btn-group pull-right graph_config_menu">
-        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestInFlight}" class="glyphicon glyphicon-refresh"></i></div>
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="glyphicon glyphicon-refresh"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'graph')" tooltip-append-to-body="true" tooltip="Chart settings"><i class="icon-pie-chart"></i></div>
         <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab($event, 'palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
@@ -27,17 +27,20 @@
            tooltip-append-to-body="true" tooltip="Close"></i>
         </div>
         <div class="panel-body">
-          <expression
-            axes="graph.axes"
-            end-time="graph.endTime"
-            expr="graph.expression"
-            legend-format-strings="graph.legendFormatStrings"
-            range="graph.range"
-            servers="servers"
-            servers-by-id="serversById"
-            type="{{graph.type}}"
-            vars="vars"
-            index="$index"></expression>
+          <div ng-repeat="expr in graph.expressions">
+            <expression
+              axes="graph.axes"
+              end-time="graph.endTime"
+              expr="expr"
+              legend-format-strings="graph.legendFormatStrings"
+              range="graph.range"
+              servers="servers"
+              servers-by-id="serversById"
+              type="{{graph.type}}"
+              vars="vars"
+              index="$index"></expression>
+          </div>
+          <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
         </div>
       </div>
 
@@ -90,8 +93,14 @@
               value="never"> never</label>
           </div>
           <label>Legend format:</label>
-          <div class="legend_string_container">
-            <input class="form-control legend_string_input" ng-model="graph.legendFormatString">
+          <div class="legend_string_container" ng-repeat="str in graph.legendFormatStrings track by $index">
+            <input class="form-control legend_string_input" ng-model="str.name">
+            <button class="btn btn-primary" type="button" ng-hide="$first" ng-click="removeLegendString($index)">
+              <i class="icon-cross"></i>
+            </button>
+            <button class="legend_string_add btn btn-primary" ng-show="$last" type="button" ng-click="addLegendString()">
+              <i class="icon-plus"></i>
+            </button>
           </div>
         </div>
       </div>

@@ -153,14 +153,14 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.addPie = function() {
+    var expression = {
+      id: 0,
+      serverID: ($scope.servers[0] || {}).id,
+      expression: "",
+    };
     var pie = {
       title: "Title",
-      expression: {
-        id: 0,
-        serverID: ($scope.servers[0] || {}).id,
-        expression: "",
-        legendID: 1
-      },
+      expressions: [expression],
       type: "pie"
     };
     $scope.widgets.push(pie);

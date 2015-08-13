@@ -175,10 +175,6 @@
                     },
                     "id": {
                       "type": "integer",
-                      "minimum": 1
-                    },
-                    "id": {
-                      "type": "integer",
                       "minimum": 0
                     },
                     "legendID": {
@@ -256,44 +252,65 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
-              "expression",
+              "expressions",
               //"legendFormatString",
               "showLegend",
               "title",
               "type"
             ],
             "properties": {
-              "expression": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "expression",
-                  "id",
-                  "legendID",
-                  "serverID"
-                ],
-                "properties": {
-                  "expression": {
-                    "type": "string"
-                  },
-                  // TODO: Can we get rid of this for the pie chart?
-                  "id": {
-                    "type": "integer",
-                    "enum": [0]
-                  },
-                  // TODO: Can we get rid of this for the pie chart?
-                  "legendID": {
-                    "type": "integer",
-                    "enum": [1]
-                  },
-                  "serverID": {
-                    "type": "integer",
-                    "minimum": 1
+              "expressions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "expression",
+                    "id",
+                    "serverID"
+                  ],
+                  "properties": {
+                    "expression": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "legendID": {
+                      "type": [
+                        "integer",
+                        "string",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "serverID": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
                   }
                 }
               },
-              "legendFormatString": {
-                "type": "string"
+              "legendFormatStrings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": [
+                        // TODO: Check if we should standardize on either integers
+                        // or strings for legend IDs.
+                        "integer",
+                        "string"
+                      ]
+                    }
+                  }
+                }
               },
               "showLegend": {
                 "type": "string",

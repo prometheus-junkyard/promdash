@@ -18,7 +18,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         $el.css('height', graphHeight);
 
         if (pieGraph) {
-          $el.html('<div class="graph_chart"></div>');
+          $el.html('<div class="graph_chart pie_chart"></div>');
           pieGraph = null;
         }
 
@@ -26,20 +26,37 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
           return;
         }
 
-        pieData.forEach(function(e) {
-          e.value = parseFloat(e.value);
+        var expressionIDToLegendID = {};
+        scope.graphSettings.expressions.forEach(function(expr) {
+          expressionIDToLegendID[expr.id] = expr.legendID;
+        });
 
-          if (scope.graphSettings.legendFormatString) {
-            e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.metric);
+        legendIDToString = {};
+        scope.graphSettings.legendFormatStrings.forEach(function(ls) {
+          legendIDToString[ls.id] = ls.name;
+        });
+
+        pieData.forEach(function(e) {
+          var m = e.metric;
+          m.value = e.value = parseFloat(e.value);
+
+          var legendID = expressionIDToLegendID[e.expressionID];
+          var legendStr;
+          if (legendID) {
+            legendStr = legendIDToString[legendID];
+          }
+
+          if (legendStr) {
+            e.ts = VariableInterpolator(legendStr, m);
           } else {
-            var ts = joinProperties(e.metric, "=").map(function(t) {
+            var ts = joinProperties(m, "=").map(function(t) {
               return t.replace(/=(.+)/, function($1, $2) {
                 return "=\"" + $2 + "\"";
               });
             }).join(",");
-            e.ts = (e.metric.__name__ || '') + "{" + ts + "}";
+            e.ts = (m.__name__ || '') + "{" + ts + "}";
           }
-          tooltip[e.ts] = e.metric;
+          tooltip[e.ts] = m;
         });
 
         var svg = dimple.newSvg($el.find(".graph_chart")[0], graphWidth, graphHeight);
@@ -77,7 +94,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
       }
 
       scope.$watch('graphSettings.showLegend', redrawGraph);
-      scope.$watch('graphSettings.legendFormatString', redrawGraph);
+      scope.$watch('graphSettings.legendFormatStrings', redrawGraph, true);
       scope.$watch('data', redrawGraph, true);
       scope.$on('redrawGraphs', function(e, data) {
         if (data) {
