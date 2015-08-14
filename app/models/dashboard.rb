@@ -16,7 +16,7 @@ class Dashboard < ActiveRecord::Base
   belongs_to :directory
   has_many :shortened_urls
 
-  validates :name, uniqueness: { case_sensitive: false }
+  validates :name, :slug, uniqueness: { case_sensitive: false }
   validates :name, :slug, presence: true
   validate :acceptable_slug
   validates :slug,
@@ -32,7 +32,7 @@ class Dashboard < ActiveRecord::Base
 
   def self.new_with_slug(params)
     dashboard = new(params)
-    dashboard.create_slug
+    dashboard.create_slug dashboard.name
     dashboard
   end
 
@@ -64,7 +64,10 @@ class Dashboard < ActiveRecord::Base
     (JSON.parse dashboard_json)['widgets']
   end
 
-  def create_slug
-    self.slug = SlugMaker.slug(name)
+  def create_slug name, n=nil
+    self.slug = SlugMaker.slug("#{name} #{n}")
+    if !valid? && errors[:slug].any?
+      create_slug name, n.to_i+1
+    end
   end
 end

@@ -16,11 +16,27 @@ describe Dashboard do
     end
     it "doesn't make blacklisted slug names" do
       d = Dashboard.new_with_slug(name: "dashboard")
-      expect(d).to_not be_valid
+      expect(d.slug).to eq('dashboard-1')
     end
     it "makes permalink dashboards" do
       d = Dashboard.new_permalink(name: "static dashboard")
       expect(d).to be_valid
+    end
+    it "creates unique slugs" do
+      d = Dashboard.new_with_slug(name: "dashboard-name-here")
+      d.save
+
+      # Verify that the first dashboard has been saved, necessitating a
+      # different slug for the following dashboard.
+      expect(d.persisted?).to eq(true)
+
+      c = Dashboard.new_with_slug(name: "dashboard-name here")
+
+      expect(c.slug).to eq('dashboard-name-here-1')
+      c.save
+
+      b = Dashboard.new_with_slug(name: "dashboard name here")
+      expect(b.slug).to eq('dashboard-name-here-2')
     end
   end
 
