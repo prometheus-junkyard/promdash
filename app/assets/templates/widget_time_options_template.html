@@ -5,45 +5,47 @@
      tooltip-append-to-body="true" tooltip="Close"></i>
   </div>
   <div class="panel-body">
-    <div class="col-lg-4">
-      <label>Relative range:</label>
-      <div class="input-group">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
-            <i class="icon-minus"></i>
-          </button>
-        </span>
-        <input type="text" class="form-control" ng-model="range" placeholder="Range">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
-            <i class="icon-plus"></i>
-          </button>
-        </span>
-      </div>
-    </div>
-
-    <div class="col-lg-7">
-      <label>End time:</label>
-      <div class="input-group">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
-            <i class="icon-fb"></i>
-          </button>
-        </span>
-        <span class="until_container">
-          <input type="text" class="form-control" datetime-picker datetime="endTime" data-format="yyyy-MM-dd" placeholder="Until">
-          <span class="until_clear pointer"
-            ng-click="clearEndTime()"
-            ng-show="endTime"
-            tooltip-append-to-body="true" tooltip="Clear">
-            <i class="glyphicon glyphicon-remove"></i>
+    <div class="row">
+      <div class="col-lg-6">
+        <label>Relative range:</label>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
+              <i class="icon-minus"></i>
+            </button>
           </span>
-        </span>
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
-            <i class="icon-ff"></i>
-          </button>
-        </span>
+          <input type="text" class="form-control" ng-model="range" placeholder="Range">
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
+              <i class="icon-plus"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <label>End time:</label>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
+              <i class="icon-fb"></i>
+            </button>
+          </span>
+          <span class="until_container">
+            <input type="text" class="form-control" datetime-picker datetime="endTime" data-format="yyyy-MM-dd" placeholder="Until">
+            <span class="until_clear pointer"
+              ng-click="clearEndTime()"
+              ng-show="endTime"
+              tooltip-append-to-body="true" tooltip="Clear">
+              <i class="glyphicon glyphicon-remove"></i>
+            </span>
+          </span>
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
+              <i class="icon-ff"></i>
+            </button>
+          </span>
+        </div>
       </div>
     </div>
   </div>
