@@ -16,7 +16,7 @@
       <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
         <i class="icon-minus"></i>
       </button>
-      <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range">
+      <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range"></input>
       <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
         <i class="icon-plus"></i>
       </button>
@@ -27,7 +27,7 @@
         <i class="icon-fb"></i>
       </button>
       <span class="until_container">
-        <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until">
+        <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until"></input>
         <span class="until_clear global pointer"
           ng-show="globalConfig.endTime"
           ng-click="globalConfig.endTime = null"
