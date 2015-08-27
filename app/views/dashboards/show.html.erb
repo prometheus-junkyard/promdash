@@ -12,20 +12,27 @@
   </h1>
 
   <div id="global_controls">
-    <div class="global_grouping">
-      <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
-        <i class="icon-minus"></i>
-      </button>
+
+    <div class="input-group global_grouping global_time_input">
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="decreaseRange()" title="Decrease range">
+          <i class="icon-minus"></i>
+        </button>
+      </span>
       <input type="text" class="form-control" ng-changed="setRange()" ng-model="globalConfig.range" placeholder="Range"></input>
-      <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
-        <i class="icon-plus"></i>
-      </button>
+      <span class="input-group-btn">x
+        <button class="btn btn-default" ng-click="increaseRange()" title="Increase range">
+          <i class="icon-plus"></i>
+        </button>
+      </span>
     </div>
 
-    <div class="global_grouping">
-      <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
-        <i class="icon-fb"></i>
-      </button>
+    <div class="input-group global_grouping global_date_input">
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="decreaseEndTime()" title="Decrease end time">
+          <i class="icon-fb"></i>
+        </button>
+      </span>
       <span class="until_container">
         <input type="text" class="form-control" datetime-picker datetime="globalConfig.endTime" data-format="yyyy-MM-dd" placeholder="Until"></input>
         <span class="until_clear global pointer"
@@ -35,9 +42,11 @@
           <i class="glyphicon glyphicon-remove"></i>
         </span>
       </span>
-      <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
-        <i class="icon-ff"></i>
-      </button>
+      <span class="input-group-btn">x
+        <button class="btn btn-default" ng-click="increaseEndTime()" title="Increase end time">
+          <i class="icon-ff"></i>
+        </button>
+      </span>
     </div>
 
     <div class="global_grouping">
