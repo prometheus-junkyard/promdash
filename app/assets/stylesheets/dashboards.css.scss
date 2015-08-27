@@ -41,14 +41,13 @@ $light-secondary-background: #f0f0f0;
 .fullscreen {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: -6px;
+  right: -6px;
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   z-index: 1050; // Bootstrap's navbar is at 1030.
   background-color: #FFFFFF;
-  padding: 3px;
 }
 
 .fullscreen_title_bump {
