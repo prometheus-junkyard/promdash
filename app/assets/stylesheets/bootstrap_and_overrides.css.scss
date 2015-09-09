@@ -1,4 +1,12 @@
 @import "bootstrap";
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+
+  src: image-url('glyphicons-halflings-regular.eot');
+  src: image-url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), image-url('glyphicons-halflings-regular.woff2') format('woff2'), image-url('glyphicons-halflings-regular.woff') format('woff'), image-url('glyphicons-halflings-regular.ttf') format('truetype'), image-url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
 body { padding-top: 60px; }
 
 .panel-heading {
