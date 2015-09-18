@@ -12,10 +12,6 @@ $light-secondary-background: #f0f0f0;
   margin-bottom: 20px;
 }
 
-#global_controls {
-  margin-bottom: 8px;
-}
-
 .container-fluid {
   padding-right: 10px;
   padding-left: 10px;
@@ -39,13 +35,15 @@ $light-secondary-background: #f0f0f0;
 }
 
 .fullscreen {
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: -6px;
+  right: -6px;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 1050; // Bootstrap's navbar is at 1030.
   background-color: #FFFFFF;
-  padding: 3px;
 }
 
 .fullscreen_title_bump {
@@ -68,7 +66,6 @@ $light-secondary-background: #f0f0f0;
   background-color: $light-secondary-background;
   border: none;
   padding: 5px;
-  position: relative;
   width: 100%;
 }
 
@@ -527,11 +524,11 @@ error-message {
   z-index: 1;
 }
 
-.graph_settings_image {
+.radio .graph_settings_image {
   background-repeat: no-repeat;
   background-size: 30px 17px;
-  background-position-y: -1px;
-  padding-left: 35px;
+  background-position-y: 1px;
+  padding-left: 58px;
 }
 
 hr {
@@ -586,7 +583,7 @@ hr {
 
 .global_grouping {
   float: left;
-  margin-right: 15px;
+  margin-right: 10px;
   position: relative;
   &:first-child {
     margin-left: 15px;
@@ -639,6 +636,7 @@ hr {
 
 .expression_form {
   overflow: auto;
+  margin-bottom: 5px;
 }
 
 .expression_select {
