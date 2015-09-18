@@ -13,3 +13,9 @@ body { padding-top: 60px; }
   font-weight: bold;
   padding: 8px 10px 10px 10px;
 }
+
+// Bootstrap's default is 0. This rule ensures that table cells (e.g. when
+// defining annotation tags or dashboard variables) are not "glued" together.
+th, td {
+  padding: 1px;
+}
