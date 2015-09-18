@@ -14,7 +14,7 @@
 //
 //= require base
 //= require angular.min
-//= require ui-bootstrap-tpls-0.13.3.min
+//= require ui-bootstrap-tpls-0.11.0.min
 //= require ui-slider
 //= require d3.v3.js
 //= require rickshaw.min
