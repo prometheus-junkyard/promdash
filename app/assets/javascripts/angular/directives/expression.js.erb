@@ -86,7 +86,7 @@ angular.module("Prometheus.directives").directive('expression', ["$http",
         }
 
         var expression = VariableInterpolator(scope.expr.expression, scope.vars);
-        var url = URLGenerator(server.url, "graph", scope.vars);
+        var url = URLGenerator(server.url, "/graph", scope.vars);
         var expr = {
           expr: expression,
           range_input: scope.range || "",

@@ -14,6 +14,15 @@ describe('URLGenerator', function() {
     });
   });
 
+  it('allows urls with custom paths, no leading slash', function() {
+    ['http://promdash.server.com/prometheus', 'http://promdash.com'].forEach(function(s) {
+      ['api/query_range', 'api/query', 'api/metrics', 'arbitrary/endpoint'].forEach(function(ep) {
+        var url = urlGenerator(s, ep, {});
+        expect(url).toEqual(s + '/' + ep);
+      });
+    });
+  });
+
   it('allows urls with custom paths, with trailing slash', function() {
     ['http://promdash.server.com/prometheus/', 'http://promdash.com/'].forEach(function(s) {
       ['/api/query_range', '/api/query', '/api/metrics', '/arbitrary/endpoint'].forEach(function(ep) {
