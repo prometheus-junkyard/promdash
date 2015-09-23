@@ -19,10 +19,10 @@ group :test, :development do
   gem 'sinatra'
   gem 'pry'
   gem 'rspec-rails', "~> 3.0.0.beta2"
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '~> 2.47.1'
   gem 'database_cleaner'
   gem 'launchy'
-  gem 'capybara', "~> 2.3.0"
+  gem 'capybara', '~> 2.5.0'
   gem 'rake' # for .travis.yml
 end
 
