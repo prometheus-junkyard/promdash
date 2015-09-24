@@ -16,12 +16,12 @@
   <div id="global_controls">
     <div ng-if="!globalConfig.showProfiles" class="global_grouping">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span>{{activeProfile}}</span>
+        <span>{{activeProfileName}}</span>
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li ng-repeat="(name, _) in globalConfig.profiles" ng-click="setActiveProfile(name)">
-          <span class="pointer">{{name}}</span>
+        <li ng-repeat="p in parsedProfiles track by $index" ng-click="setActiveProfile($index)">
+          <span class="pointer">{{p.name}}</span>
         </li>
       </ul>
     </div>
@@ -233,6 +233,9 @@
       <tr>
         <th colspan="4">Template Variables</th>
       </tr>
+      <tr>
+        <th ng-if="activeProfileName" colspan="4"><small>WARNING: Profile variables take precedence over template variables</small></th>
+      </tr>
 
       <tr ng-show="vars.length == 0">
         <td colspan="4">
@@ -266,40 +269,24 @@
 
   <div ng-show="globalConfig.showProfiles" class="global_grouping col-lg-12">
     <h4>Profiles</h4>
-    <span class="until_container" ng-repeat="(name, _) in globalConfig.profiles">
-      <span class="profile_container"
-        ng-hide="editProfile && isActiveProfile(name)">
+    <span class="until_container" ng-repeat="p in parsedProfiles track by $index">
+      <span class="profile_container">
+        <input type="text" class="form-control" ng-model="p.name"
+          ng-keyup="setProfileURL($index)"
+          ng-class="{profile_active: activeProfileIDX === $index}"
+          ng-show="isActiveProfile($index)">
         <button class="btn btn-default" type="button"
-          ng-click="setActiveProfile(name)"
-          ng-class="{profile_active: activeProfile === name}"
-          tooltip-append-to-body="true" tooltip="Set {{name}} as active profile">
-          {{name}}
+          ng-hide="isActiveProfile($index)"
+          ng-click="setActiveProfile($index)"
+          tooltip-append-to-body="true" tooltip="Set {{p.name}} as active profile">
+          {{p.name}}
         </button>
-        <span ng-show="isActiveProfile(name)">
-          <span class="until_clear pointer profile_edit"
-            ng-click="editProfileName(name)"
-            tooltip-append-to-body="true" tooltip="Edit">
-            <i class="glyphicon glyphicon-pencil"></i>
-          </span>
+        <span ng-show="isActiveProfile($index)">
           <span class="until_clear pointer"
-            ng-click="removeProfile(name)"
+            ng-click="removeProfile($index)"
             tooltip-append-to-body="true" tooltip="Delete">
             <i class="glyphicon glyphicon-remove"></i>
           </span>
-        </span>
-      </span>
-      <span class="profile_container"
-        ng-show="editProfile && isActiveProfile(name)">
-        <input type="text" class="form-control" ng-model="editName">
-        <span class="until_clear pointer profile_edit"
-          ng-click="updateProfileName(editName)"
-          tooltip-append-to-body="true" tooltip="Confirm change">
-          <i class="glyphicon glyphicon-ok"></i>
-        </span>
-        <span class="until_clear pointer"
-          ng-click="cancelProfileEdit()"
-          tooltip-append-to-body="true" tooltip="Cancel">
-          <i class="glyphicon glyphicon-remove"></i>
         </span>
       </span>
     </span>
@@ -311,9 +298,9 @@
   </div>
   <div class="clearfix"></div>
   <div class="global_grouping col-lg-12"
-    ng-show="globalConfig.showProfiles && isActiveProfile(name)"
-    ng-repeat="(name, profile) in globalConfig.profiles">
-    <profile name="name" profile="profile"></profile>
+    ng-show="globalConfig.showProfiles && isActiveProfile($index)"
+    ng-repeat="profile in parsedProfiles">
+    <profile name="profile.name" profile="profile.variablePairs" idx="$index"></profile>
   </div>
   <div class="clearfix"></div>
 

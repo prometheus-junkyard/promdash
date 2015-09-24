@@ -1,12 +1,12 @@
 <div class="template_variables">
   <table>
-    <tr ng-repeat="p in profile track by $index">
+    <tr ng-repeat="pr in profile track by $index">
       <td>
-        <input type="text" class="form-control" placeholder="Variable name" ng-model="p.name">
+        <input type="text" class="form-control" placeholder="Variable name" ng-model="pr.name">
       </td>
       <td>=</td>
       <td>
-        <input type="text" class="form-control" placeholder="Variable value" ng-model="p.value">
+        <input type="text" class="form-control" placeholder="Variable value" ng-model="pr.value">
       </td>
       <td>
         <button class="btn btn-default" type="button" ng-click="removeVariable($index)"
@@ -16,7 +16,7 @@
       </td>
     </tr>
   </table>
-  <button class="btn btn-primary" type="button" ng-click="addVariable()"
+  <button class="btn btn-primary" type="button" ng-click="addVariable($index+1)"
     tooltip-append-to-body="true" tooltip="Add profile variable">
     <i class="icon-plus"></i>
   </button>

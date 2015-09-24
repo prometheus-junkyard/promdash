@@ -69,6 +69,35 @@ angular.module("Prometheus.controllers")
   $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
   $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
   $scope.globalConfig.profiles = $scope.globalConfig.profiles || {};
+  $scope.parsedProfiles = unmarshal($scope.globalConfig.profiles);
+
+  function Profile(name, variablePairs) {
+    this.name = name;
+    this.variablePairs = variablePairs;
+  }
+
+  function marshal(profiles) {
+    var o = {};
+
+    for (var i = 0; i < profiles.length; i++) {
+      var p = profiles[i];
+      o[p.name] = p.variablePairs;
+    }
+
+    return o;
+  }
+
+  function unmarshal(jsonProfiles) {
+    var a = [];
+
+    for (var name in jsonProfiles) {
+      var variablePairs = jsonProfiles[name];
+      var p = new Profile(name, variablePairs);
+      a.push(p);
+    }
+
+    return a;
+  }
 
   $scope.saveDashboard = function() {
     $scope.saving = true;
@@ -80,38 +109,41 @@ angular.module("Prometheus.controllers")
   };
 
   $scope.addProfile = function() {
-    var n = Object.keys($scope.globalConfig.profiles).length;
+    var n = $scope.parsedProfiles.length;
     var p = "Profile" + n;
-    $scope.globalConfig.profiles[p] = [];
+    var newProfile = new Profile(p, [])
+    $scope.parsedProfiles.push(newProfile);
 
     if (n > 0) {
-      // We have to copy each object in turn. Copying the a different profile
+      // We have to copy each object in turn. Copying a different profile
       // creates a new array, but the objects in that array are shared with the
       // default profile.
       // Select the first profile and copy its keys to the new profile.
-      k = Object.keys($scope.globalConfig.profiles)[0];
-      $scope.globalConfig.profiles[k].forEach(function(varObj) {
-        $scope.globalConfig.profiles[p].push($.extend({}, varObj));
+      var profile = $scope.parsedProfiles[0];
+
+      profile.variablePairs.forEach(function(varObj) {
+        newProfile.variablePairs.push($.extend({}, varObj));
       });
     }
 
-    $scope.setActiveProfile(p);
+    $scope.setActiveProfile(n);
   };
 
-  $scope.removeProfile = function(name) {
-    delete $scope.globalConfig.profiles[name];
-    $scope.setActiveProfile(Object.keys($scope.globalConfig.profiles)[0]);
+  $scope.removeProfile = function(idx) {
+    $scope.parsedProfiles.splice(idx, 1);
+    $scope.setActiveProfile(0);
   };
 
-  $scope.editProfileName = function(name) {
-    $scope.editName = $scope.activeProfile;
-    $scope.editProfile = true;
-  };
+  $scope.setActiveProfile = function(index) {
+    $scope.activeProfileIDX = index;
+    var profile = $scope.parsedProfiles[index];
 
-  $scope.setActiveProfile = function(name) {
-    $scope.activeProfile = name;
-    var profile = $scope.globalConfig.profiles[$scope.activeProfile];
-    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, profile);
+    $scope.activeProfileName = "";
+    if (profile) {
+      $scope.activeProfileName = profile.name;
+    }
+
+    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, profile.variablePairs);
     var p = location.pathname.split("/", 2).pop();
 
     if (!profile) {
@@ -119,51 +151,49 @@ angular.module("Prometheus.controllers")
       return;
     }
 
-    $location.path([p, name].join("/"));
+    $location.path([p, profile.name].join("/"));
     $scope.refreshDashboard();
   };
 
-  $scope.updateProfileName = function(name) {
-    var oldProfileName = $scope.activeProfile;
-    var profile = $scope.globalConfig.profiles[oldProfileName].slice();
-    $scope.globalConfig.profiles[name] = profile;
-    delete $scope.globalConfig.profiles[oldProfileName];
-    $scope.setActiveProfile(name);
-    $scope.editProfile = false;
-  };
-
-  $scope.cancelProfileEdit = function() {
-    $scope.editName = "";
-    $scope.editProfile = false;
+  $scope.setProfileURL = function(index) {
+    var profile = $scope.parsedProfiles[index];
+    var p = location.pathname.split("/", 2).pop();
+    $location.path([p, profile.name].join("/"));
   };
 
   if (!$scope.globalConfig.profiles[window.profile]) {
     window.profile = Object.keys($scope.globalConfig.profiles)[0];
   }
 
-  $scope.setActiveProfile(window.profile);
+  for (var i = 0; i < $scope.parsedProfiles.length; i++) {
+    if ($scope.parsedProfiles[i].name === window.profile) {
+      $scope.setActiveProfile(i);
+      break
+    }
+  }
 
   $scope.$watch(function() {
-    return $scope.globalConfig.profiles[$scope.activeProfile];
+    return $scope.parsedProfiles[$scope.activeProfileIDX];
   }, function(newProfile, oldProfile) {
-    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.globalConfig.profiles[$scope.activeProfile]);
-    sync(null, $scope.activeProfile);
+    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.parsedProfiles[$scope.activeProfileIDX].variablePairs);
+    sync(null, $scope.activeProfileIDX);
   }, true);
 
-  $scope.isActiveProfile = function(name) {
-    return name === $scope.activeProfile;
+  $scope.isActiveProfile = function(idx) {
+    return idx === $scope.activeProfileIDX;
   };
 
   $scope.$on('syncProfileVariables', sync);
 
-  function sync(_, name) {
-    var profile = $scope.globalConfig.profiles[name];
-    for (var k in $scope.globalConfig.profiles) {
-      if (k === name) {
+  function sync(_, idx) {
+    var profile = $scope.parsedProfiles[idx];
+    for (var i = 0; i < $scope.parsedProfiles.length; i++) {
+      if (i === idx) {
         continue;
       }
-      var p = $scope.globalConfig.profiles[k];
-      $scope.globalConfig.profiles[k] = DashboardVariables.sync(profile, p);
+
+      var p = $scope.parsedProfiles[i];
+      $scope.parsedProfiles[i].variablePairs = DashboardVariables.sync(profile.variablePairs, p.variablePairs);
     }
   };
 
@@ -287,7 +317,7 @@ angular.module("Prometheus.controllers")
       vars[name] = value;
     }
     $scope.globalConfig.vars = vars;
-    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.globalConfig.profiles[$scope.activeProfile]);
+    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.parsedProfiles[$scope.activeProfileIDX].variablePairs);
   }, true);
 
   $scope.$watch('globalConfig.tags', function() {
@@ -358,6 +388,8 @@ angular.module("Prometheus.controllers")
   };
 
   function buildDashboardJSON() {
+    $scope.globalConfig.profiles = marshal($scope.parsedProfiles);
+
     return {
       'dashboard': {
         'name': dashboardName,

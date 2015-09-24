@@ -23,9 +23,7 @@ feature "Dashboard Global Config", js: true do
     describe "profiles" do
       it "adds profiles" do
         click_tooltip('Add a new profile')
-        within '.profile_container' do
-          expect(page).to have_text 'Profile0'
-        end
+        expect(find('.profile_active').value).to eq 'Profile0'
       end
 
       it "removes profiles" do
@@ -34,34 +32,6 @@ feature "Dashboard Global Config", js: true do
 
         click_tooltip 'Delete'
         expect(page).to have_no_text 'Profile0'
-      end
-
-      describe "changing profiles names" do
-        before :each do
-          click_tooltip('Add a new profile')
-          find('.profile_container').hover
-
-          click_tooltip 'Edit'
-          model_element('editName').set 'myProfile'
-          model_element('editName').hover
-        end
-
-        it "changes profile names" do
-          profile_name = 'myProfile'
-          click_tooltip 'Confirm change'
-          within '.profile_container' do
-            expect(page).to have_text profile_name
-          end
-          uri = URI.parse(current_url)
-          expect(uri.path).to eq("/#{@dashboard.slug}/#{profile_name}")
-        end
-
-        it "cancels name changes" do
-          click_tooltip 'Cancel'
-          within '.profile_container' do
-            expect(page).to have_text 'Profile0'
-          end
-        end
       end
 
       describe "multiple profiles" do
@@ -105,11 +75,11 @@ feature "Dashboard Global Config", js: true do
         end
 
         it "adds variables" do
-          name = model_element 'p.name'
+          name = model_element 'pr.name'
           name.set 'title'
 
           title = 'profile test'
-          name = model_element 'p.value'
+          name = model_element 'pr.value'
           name.set title
 
           within '.widget_title' do
@@ -118,16 +88,16 @@ feature "Dashboard Global Config", js: true do
         end
 
         it "updates when switching profiles" do
-          name = model_element 'p.name'
+          name = model_element 'pr.name'
           name.set 'title'
 
           title = 'profile test'
-          name = model_element 'p.value'
+          name = model_element 'pr.value'
           name.set title
 
           click_tooltip('Add a new profile')
           second_title = 'second title'
-          name = model_element 'p.value'
+          name = model_element 'pr.value'
           name.set second_title
 
           within '.widget_title' do
