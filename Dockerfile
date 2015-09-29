@@ -7,6 +7,7 @@ CMD        [ "./bin/thin", "start" ]
 ENV     RAILS_ENV production
 WORKDIR /usr/src/app
 COPY    . /usr/src/app
+VOLUME ["/data"]
 
 RUN apk add --update -t build-deps openssl ca-certificates make gcc musl-dev libgcc g++ mysql-dev postgresql-dev sqlite-dev \
     && apk add ruby ruby-dev nodejs tzdata \
