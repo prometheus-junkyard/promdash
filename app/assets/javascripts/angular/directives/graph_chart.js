@@ -6,6 +6,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
     "RickshawDataTransformer",
     "GraphiteDataTransformer",
     "YAxisUtilities",
+    "AnnotationRefresher",
     "HTMLEscaper",
     function(
       $location,
@@ -15,6 +16,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
       RickshawDataTransformer,
       GraphiteDataTransformer,
       YAxisUtilities,
+      AnnotationRefresher,
       HTMLEscaper) {
   return {
     scope: {
@@ -48,7 +50,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
         });
       }
 
-      function annotate() {
+      function annotate(annotationData) {
         if (!rsGraph || !annotationData.length) {
           return;
         }
@@ -311,6 +313,9 @@ angular.module("Prometheus.directives").directive('graphChart', [
         rsGraph.series.legend = legend;
         rsGraph.render();
 
+        AnnotationRefresher.refresh(scope.graphSettings.tags, scope.graphSettings.range, scope.graphSettings.endTime, scope.vars)
+          .result(scope.graphSettings.range, scope.graphSettings.endTime, annotate);
+
         new Rickshaw.Graph.DragZoom({
           graph: rsGraph,
           opacity: 0.5,
@@ -472,10 +477,6 @@ angular.module("Prometheus.directives").directive('graphChart', [
       scope.$watch('graphSettings.showLegend', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);
       scope.$watch('graphData', redrawGraph, true);
-      scope.$on('annotateGraph', function(e, data) {
-        annotationData = data;
-        annotate();
-      });
       scope.$on('redrawGraphs', function(e, data) {
         if (data !== undefined) {
           graphData = data;

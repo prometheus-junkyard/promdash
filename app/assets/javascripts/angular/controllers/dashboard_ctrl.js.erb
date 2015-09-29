@@ -10,6 +10,7 @@ angular.module("Prometheus.controllers")
             "InputHighlighter",
             "ModalService",
             "Palettes",
+            "AnnotationRefresher",
             function($scope,
                      $window,
                      $http,
@@ -20,7 +21,8 @@ angular.module("Prometheus.controllers")
                      SharedGraphBehavior,
                      InputHighlighter,
                      ModalService,
-                     Palettes) {
+                     Palettes,
+                     AnnotationRefresher) {
 
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
@@ -202,6 +204,7 @@ angular.module("Prometheus.controllers")
         w.tags = $scope.globalConfig.tags;
       }
     });
+    AnnotationRefresher.clearCache($scope.globalConfig.range, $scope.globalConfig.endTime);
   }, true);
 
   if ($scope.widgets.length === 0) {

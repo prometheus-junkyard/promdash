@@ -6,15 +6,13 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
                                                       "YAxisUtilities",
                                                       "SharedWidgetSetup",
                                                       "Palettes",
-                                                      "AnnotationRefresher",
                                                       function($scope,
                                                                $http,
                                                                $timeout,
                                                                GraphRefresher,
                                                                YAxisUtilities,
                                                                SharedWidgetSetup,
-                                                               Palettes,
-                                                               AnnotationRefresher) {
+                                                               Palettes) {
   SharedWidgetSetup($scope);
 
   // TODO: Set these on graph creation so we don't have to keep doing these
@@ -135,7 +133,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       debounce = $timeout(function() {
         refreshFn($scope.graph.endTime, $scope.graph.range, step).then(function(data) {
           scope.$broadcast('redrawGraphs', data);
-          AnnotationRefresher(scope.graph, scope);
         });
       }, timeout);
     };
@@ -154,8 +151,6 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.$watch('graph.resolution', function() {
     $scope.refreshGraph();
   });
-
-  $scope.refreshGraph();
 
   if (location.pathname.match(/^\/w\//)) { // On a widget page.
     $scope.widgetPage = true;

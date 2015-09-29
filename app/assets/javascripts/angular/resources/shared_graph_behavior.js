@@ -151,6 +151,8 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
       $scope.$broadcast('refreshDashboard');
     };
 
+    $scope.refreshDashboard();
+
     $scope.redrawGraphs = function() {
       $scope.$broadcast('redrawGraphs');
     };
