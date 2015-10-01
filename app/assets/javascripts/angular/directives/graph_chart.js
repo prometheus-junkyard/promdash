@@ -456,11 +456,14 @@ angular.module("Prometheus.directives").directive('graphChart', [
         if (!rsGraph) {
           return;
         }
-        scope.graphSettings.disabledSeries = {};
+
         rsGraph.series.forEach(function(s) {
           if (s.disabled) {
             scope.graphSettings.disabledSeries[s.uniqName] = true;
+            return;
           }
+
+          delete scope.graphSettings.disabledSeries[s.uniqName];
         });
       }
 
