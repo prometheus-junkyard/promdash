@@ -14,7 +14,7 @@
   </h1>
 
   <div id="global_controls">
-    <div ng-if="!globalConfig.showProfiles" class="global_grouping">
+    <div ng-if="!globalConfig.showProfiles && parsedProfiles.length" class="global_grouping">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span>{{activeProfileName}}</span>
         <span class="caret"></span>
