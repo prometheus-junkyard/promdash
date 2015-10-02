@@ -113,7 +113,7 @@ $light-secondary-background: #f0f0f0;
   }
 }
 
-.btn_active {
+.btn_active, .profile_active {
   color: #428bca;
 }
 
@@ -382,7 +382,7 @@ error-message {
           color: $dark-text;
         }
       }
-      .btn_active {
+      .btn_active, .profile_active {
         color: $dark-text;
       }
     }
@@ -772,3 +772,13 @@ hr {
  .until_container:hover .until_clear {
   display: block;
 }
+
+.profile_container .btn {
+  text-align: left;
+  width: 120px;
+}
+
+.profile_edit {
+  right: 30px;
+}
+

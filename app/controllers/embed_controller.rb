@@ -4,6 +4,7 @@ class EmbedController < ApplicationController
   def show
     response.headers['Access-Control-Allow-Origin'] = '*'
     @servers = Server.all
+    @dashboard_profile = params[:profile]
     render layout: 'single_widget'
   end
 end

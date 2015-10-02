@@ -4,6 +4,7 @@
   directoryName = "<%= @directoryName %>";
   dashboardURL = "<%= Rails.configuration.path_prefix %>";
   servers = <%= @servers.to_json.html_safe %>;
+  profile = "<%= @dashboard_profile %>";
 </script>
 
 <div id="dashboard" class="row" ng-controller="DashboardCtrl">
@@ -13,6 +14,17 @@
   </h1>
 
   <div id="global_controls">
+    <div ng-if="!globalConfig.showProfiles" class="global_grouping">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span>{{activeProfileName}}</span>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="p in parsedProfiles track by $index" ng-click="setActiveProfile($index)">
+          <span class="pointer">{{p.name}}</span>
+        </li>
+      </ul>
+    </div>
 
     <div class="input-group global_grouping global_time_input">
       <span class="input-group-btn">
@@ -165,6 +177,11 @@
               <input type="checkbox" ng-model="globalConfig.showVars"> Show template variables
             </label>
           </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="globalConfig.showProfiles"> Manage profiles
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -216,6 +233,9 @@
       <tr>
         <th colspan="4">Template Variables</th>
       </tr>
+      <tr>
+        <th ng-if="activeProfileName" colspan="4"><small>WARNING: Profile variables take precedence over template variables</small></th>
+      </tr>
 
       <tr ng-show="vars.length == 0">
         <td colspan="4">
@@ -247,6 +267,43 @@
     </table>
   </div>
 
+  <div ng-show="globalConfig.showProfiles" class="global_grouping col-lg-12">
+    <h4>Profiles</h4>
+    <span class="until_container" ng-repeat="p in parsedProfiles track by $index">
+      <span class="profile_container">
+        <input type="text" class="form-control" ng-model="p.name"
+          ng-keyup="setProfileURL($index)"
+          ng-class="{profile_active: activeProfileIDX === $index}"
+          ng-show="isActiveProfile($index)">
+        <button class="btn btn-default" type="button"
+          ng-hide="isActiveProfile($index)"
+          ng-click="setActiveProfile($index)"
+          tooltip-append-to-body="true" tooltip="Set {{p.name}} as active profile">
+          {{p.name}}
+        </button>
+        <span ng-show="isActiveProfile($index)">
+          <span class="until_clear pointer"
+            ng-click="removeProfile($index)"
+            tooltip-append-to-body="true" tooltip="Delete">
+            <i class="glyphicon glyphicon-remove"></i>
+          </span>
+        </span>
+      </span>
+    </span>
+
+    <button class="btn btn-primary" type="button" ng-click="addProfile()"
+      tooltip-append-to-body="true" tooltip="Add a new profile">
+      <i class="icon-plus"></i>
+    </button>
+  </div>
+  <div class="clearfix"></div>
+  <div class="global_grouping col-lg-12"
+    ng-show="globalConfig.showProfiles && isActiveProfile($index)"
+    ng-repeat="profile in parsedProfiles">
+    <profile name="profile.name" profile="profile.variablePairs" idx="$index"></profile>
+  </div>
+  <div class="clearfix"></div>
+
   <div ng-class="{fullscreen: fullscreen, fullscreen_title_bump: fullscreenTitle && fullscreen}">
     <ul ui-sortable="sortableOptions" ng-model="widgets" class="sortable-widgets">
       <li ng-repeat="widget in widgets" ng-class="[columnClass(), 'widget_column']">
@@ -257,7 +314,7 @@
               servers="servers"
               aspect-ratio="globalConfig.aspectRatio"
               index="$index"
-              vars="globalConfig.vars">
+              vars="mergedVars">
           </span>
           <span ng-switch-when="pie">
             <pie
@@ -265,7 +322,7 @@
               servers="servers"
               aspect-ratio="globalConfig.aspectRatio"
               index="$index"
-              vars="globalConfig.vars">
+              vars="mergedVars">
           </span>
           <span ng-switch-when="gauge">
             <gauge
@@ -273,14 +330,14 @@
               servers="servers"
               aspect-ratio="globalConfig.aspectRatio"
               index="$index"
-              vars="globalConfig.vars">
+              vars="mergedVars">
           </span>
           <span ng-switch-when="frame">
             <inline-frame
               frame-settings="widget"
               aspect-ratio="globalConfig.aspectRatio"
               index="$index"
-              vars="globalConfig.vars">
+              vars="mergedVars">
           </span>
         </span>
       </li>

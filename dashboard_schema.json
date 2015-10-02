@@ -61,6 +61,9 @@
         "showVars": {
           "type": "boolean"
         },
+        "showProfiles": {
+          "type": "boolean"
+        },
         "tags": {
           "type": "array",
           "items": {
@@ -78,6 +81,9 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "profiles": {
+          "type": "object"
         }
       }
     },
