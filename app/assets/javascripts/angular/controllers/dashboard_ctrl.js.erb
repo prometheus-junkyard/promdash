@@ -175,7 +175,8 @@ angular.module("Prometheus.controllers")
   $scope.$watch(function() {
     return $scope.parsedProfiles[$scope.activeProfileIDX];
   }, function(newProfile, oldProfile) {
-    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.parsedProfiles[$scope.activeProfileIDX].variablePairs);
+    var activeProfile = $scope.parsedProfiles[$scope.activeProfileIDX] || {};
+    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, activeProfile.variablePairs);
     sync(null, $scope.activeProfileIDX);
   }, true);
 
@@ -317,7 +318,8 @@ angular.module("Prometheus.controllers")
       vars[name] = value;
     }
     $scope.globalConfig.vars = vars;
-    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, $scope.parsedProfiles[$scope.activeProfileIDX].variablePairs);
+    var activeProfile = $scope.parsedProfiles[$scope.activeProfileIDX] || {};
+    $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, activeProfile.variablePairs);
   }, true);
 
   $scope.$watch('globalConfig.tags', function() {
