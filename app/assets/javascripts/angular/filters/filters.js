@@ -32,3 +32,15 @@ angular.module("Prometheus.filters").filter('regex', function() {
     return input.replace(new RegExp(regex, "g"), replace);
   };
 });
+
+angular.module("Prometheus.filters").filter('toLowerCase', function() {
+  return function(input) {
+    return input.toLowerCase();
+  };
+});
+
+angular.module("Prometheus.filters").filter('toUpperCase', function() {
+  return function(input) {
+    return input.toUpperCase();
+  };
+});
