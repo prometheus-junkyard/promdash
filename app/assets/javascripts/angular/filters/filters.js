@@ -33,13 +33,13 @@ angular.module("Prometheus.filters").filter('regex', function() {
   };
 });
 
-angular.module("Prometheus.filters").filter('toLowerCase', function() {
+angular.module("Prometheus.filters").filter('toLower', function() {
   return function(input) {
     return input.toLowerCase();
   };
 });
 
-angular.module("Prometheus.filters").filter('toUpperCase', function() {
+angular.module("Prometheus.filters").filter('toUpper', function() {
   return function(input) {
     return input.toUpperCase();
   };

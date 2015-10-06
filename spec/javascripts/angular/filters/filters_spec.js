@@ -59,13 +59,13 @@ describe('filters', function() {
     });
   });
 
-  it('toLowerCase', function() {
-    var lowercase = $filter('toLowerCase');
+  it('toLower', function() {
+    var lowercase = $filter('toLower');
     expect(lowercase("TEST")).toEqual("test");
   });
 
-  it('toUpperCase', function() {
-    var uppercase = $filter('toUpperCase');
+  it('toUpper', function() {
+    var uppercase = $filter('toUpper');
     expect(uppercase("test")).toEqual("TEST");
   });
 });
