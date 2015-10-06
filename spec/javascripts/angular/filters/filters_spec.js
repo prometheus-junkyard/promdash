@@ -58,4 +58,14 @@ describe('filters', function() {
       expect(regex('some_random_stuff_SPECIAL', 'some_random_stuff_', '')).toEqual('SPECIAL');
     });
   });
+
+  it('toLower', function() {
+    var lowercase = $filter('toLower');
+    expect(lowercase("TEST")).toEqual("test");
+  });
+
+  it('toUpper', function() {
+    var uppercase = $filter('toUpper');
+    expect(uppercase("test")).toEqual("TEST");
+  });
 });
