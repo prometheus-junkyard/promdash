@@ -8,6 +8,10 @@
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <base href="/">
+    <script type="text/javascript">
+      dashboardURL = "<%= Rails.configuration.path_prefix %>";
+    </script>
   </head>
   <body>
     <%= yield %>
