@@ -233,7 +233,7 @@ angular.module("Prometheus.services").factory("SharedGraphBehavior", ["$http", "
 
     function clearScreen() {
       $scope.$apply(function() {
-        $scope.closeCloneControls();
+        ($scope.closeCloneControls || function(){})();
         $scope.$broadcast('closeTabs');
         $scope.showDashboardSettings = false;
         $scope.showPermalink = false;

@@ -2,7 +2,6 @@
   dashboardData = <%= @dashboard.dashboard_json ? @dashboard.dashboard_json.html_safe : '{}' %>;
   dashboardName = "<%= @dashboard.name %>";
   directoryName = "<%= @directoryName %>";
-  dashboardURL = "<%= Rails.configuration.path_prefix %>";
   servers = <%= @servers.to_json.html_safe %>;
   profile = "<%= @dashboard_profile %>";
 </script>
