@@ -22,21 +22,18 @@
            tooltip-append-to-body="true" tooltip="Close"></i>
         </div>
         <div class="panel-body">
-          <form class="form-inline">
-            <div class="form-group col-xs-12">
-              <input type="text" class="form-control" ng-changed="generateFrameComponents()" ng-model="frame.url" placeholder="Enter URL" required>
-            </div>
+          <form class="form">
+          	<input type="text" class="form-control" ng-changed="generateFrameComponents()" ng-model="frame.url" placeholder="Enter URL" required></input>
+            <input type="text" class="form-control" ng-model="frame.title" placeholder="Enter Title" required></input>
           </form>
-          <div class="form-group col-xs-12">
-            <input type="text" class="form-control" ng-model="frame.title" placeholder="Enter Title" required>
-          </div>
-          <div class="col-xs-12"><b>Query String Key/Value Pairs</b></div>
-          <form class="form-inline">
-            <div class="form-group col-xs-12" ng-repeat="qs in frameComponents" ng-if="!skipComponent(qs.key)">
-              <div class="input-group">
-                <input class="input-group-addon frame_query_string_key" ng-model="qs.key">
-                <input class="form-control frame_query_string_value" ng-model="qs.value" placeholder="Enter value for {{qs.key}}" ng-disabled="qs.value === undefined">
-              </div>
+
+          <h5>Query String Key/Value Pairs</h5>
+          <form class="form">
+            <div ng-repeat="qs in frameComponents" ng-if="!skipComponent(qs.key)">
+			  <div class="input-group">
+		        <div class="input-group-addon frame_query_string_key" ng-model="qs.key">{{qs.key}}</div>
+		        <input class="form-control frame_query_string_value" ng-model="qs.value" placeholder="Enter value for {{qs.key}}" ng-disabled="qs.value === undefined"></input>
+		      </div>
             </div>
           </form>
         </div>
