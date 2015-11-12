@@ -12,6 +12,7 @@ angular.module("Prometheus.controllers")
             "Palettes",
             "AnnotationRefresher",
             "DashboardVariables",
+            "Profile",
             function($scope,
                      $window,
                      $http,
@@ -24,7 +25,8 @@ angular.module("Prometheus.controllers")
                      ModalService,
                      Palettes,
                      AnnotationRefresher,
-                     DashboardVariables) {
+                     DashboardVariables,
+                     Profile) {
 
   $window.onresize = function() {
     $scope.$broadcast('redrawGraphs');
@@ -69,35 +71,7 @@ angular.module("Prometheus.controllers")
   $scope.globalConfig.palette = $scope.globalConfig.palette || 'colorwheel';
   $scope.globalConfig.resolution = $scope.globalConfig.resolution || 4;
   $scope.globalConfig.profiles = $scope.globalConfig.profiles || {};
-  $scope.parsedProfiles = unmarshal($scope.globalConfig.profiles);
-
-  function Profile(name, variablePairs) {
-    this.name = name;
-    this.variablePairs = variablePairs;
-  }
-
-  function marshal(profiles) {
-    var o = {};
-
-    for (var i = 0; i < profiles.length; i++) {
-      var p = profiles[i];
-      o[p.name] = p.variablePairs;
-    }
-
-    return o;
-  }
-
-  function unmarshal(jsonProfiles) {
-    var a = [];
-
-    for (var name in jsonProfiles) {
-      var variablePairs = jsonProfiles[name];
-      var p = new Profile(name, variablePairs);
-      a.push(p);
-    }
-
-    return a;
-  }
+  $scope.parsedProfiles = Profile.unmarshal($scope.globalConfig.profiles);
 
   $scope.saveDashboard = function() {
     $scope.saving = true;
@@ -111,7 +85,7 @@ angular.module("Prometheus.controllers")
   $scope.addProfile = function() {
     var n = $scope.parsedProfiles.length;
     var p = "Profile" + n;
-    var newProfile = new Profile(p, [])
+    var newProfile = Profile.new(p, [])
     $scope.parsedProfiles.push(newProfile);
 
     if (n > 0) {
@@ -141,6 +115,7 @@ angular.module("Prometheus.controllers")
     $scope.activeProfileName = "";
     if (profile) {
       $scope.activeProfileName = profile.name;
+      window.activeProfileName = profile.name;
     }
 
     $scope.mergedVars = DashboardVariables.mergeToObject($scope.vars, profile.variablePairs);
@@ -391,7 +366,7 @@ angular.module("Prometheus.controllers")
   };
 
   function buildDashboardJSON() {
-    $scope.globalConfig.profiles = marshal($scope.parsedProfiles);
+    $scope.globalConfig.profiles = Profile.marshal($scope.parsedProfiles);
 
     return {
       'dashboard': {

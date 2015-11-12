@@ -24,6 +24,11 @@ return function($scope) {
     var graphBlob = {};
     graphBlob.widget = $scope.graph;
     graphBlob.globalConfig = dashboardData.globalConfig;
+
+    if (window.activeProfileName) {
+      graphBlob.activeProfileName = activeProfileName;
+    }
+
     WidgetLinkHelper
       .createLink({
          encoded_url: URLHashEncoder(graphBlob),
