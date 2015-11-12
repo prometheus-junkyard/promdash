@@ -152,6 +152,7 @@ angular.module("Prometheus.controllers")
     }
 
     $location.path([p, profile.name].join("/"));
+    AnnotationRefresher.clearCache($scope.globalConfig.range, $scope.globalConfig.endTime);
     $scope.refreshDashboard();
   };
 
