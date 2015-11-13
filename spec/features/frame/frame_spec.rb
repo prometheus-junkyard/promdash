@@ -26,10 +26,8 @@ feature "Dashboard#show", js: true do
         open_tab 'Frame Source'
         frame_element = model_element('frame.url')
         expect(frame_element.value).to eq(url)
-        frame_element.set "http://google.com"
-        within '.frame_container' do
-          expect(page).to have_no_content "Error"
-        end
+        frame_element.set ""
+        expect(frame_element.value).to eq("")
       end
 
       it "can still be deleted" do
