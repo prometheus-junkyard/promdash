@@ -21,5 +21,8 @@ angular.module("Prometheus",
   }
 }]).config(['$locationProvider', '$httpProvider', function($locationProvider, $httpProvider) {
   $httpProvider.useApplyAsync(true);
-  $locationProvider.html5Mode(true);
+  $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+  });
 }]);
