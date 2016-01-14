@@ -323,6 +323,10 @@ angular.module("Prometheus.controllers")
       $scope.dashboardForClone = payload.data.dashboards.filter(function(d) {
         return d.name == dashboardName;
       })[0] || payload.data.dashboards[0];
+      if (!$scope.dashboardForClone) {
+        $scope.dashboardForClone = {};
+        return;
+      }
       $scope.queryDashboard();
     });
   };
