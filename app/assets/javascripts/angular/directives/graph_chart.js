@@ -152,7 +152,9 @@ angular.module("Prometheus.directives").directive('graphChart', [
             return a.id === s.axisID;
           })[0] || axes[0];
 
-          s.color = palette.color();
+          /* jshint ignore:start */
+          s.color = eval(scope.graphSettings.colorFunc)(s.labels, palette);
+          /* jshint ignore:end */
 
           var bound = axesBounds[matchingAxis.id];
           var min = bound.min > 0 ? 0 : bound.min;
@@ -476,6 +478,7 @@ angular.module("Prometheus.directives").directive('graphChart', [
 
       scope.$watch('graphSettings.stacked', redrawGraph);
       scope.$watch('graphSettings.palette', redrawGraph);
+      scope.$watch('graphSettings.colorFunc', redrawGraph);
       scope.$watch('graphSettings.interpolationMethod', redrawGraph);
       scope.$watch('graphSettings.showLegend', redrawGraph);
       scope.$watch('graphSettings.axes', redrawGraph, true);

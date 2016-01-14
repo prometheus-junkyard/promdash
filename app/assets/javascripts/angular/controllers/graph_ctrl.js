@@ -1,3 +1,5 @@
+var DEFAULT_COLOR_FUNC = '(function (labels, palette) { return palette.color(); })';
+
 angular.module("Prometheus.controllers").controller('GraphCtrl',
                                                     ["$scope",
                                                       "$http",
@@ -20,6 +22,7 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
   $scope.graph.legendFormatStrings = $scope.graph.legendFormatStrings || [
     {id: 1, name: ""}
   ];
+  $scope.graph.colorFunc = $scope.graph.colorFunc || DEFAULT_COLOR_FUNC;
   $scope.graph.interpolationMethod = $scope.graph.interpolationMethod || "linear";
   $scope.graph.disabledSeries = $scope.graph.disabledSeries || {};
   $scope.graph.axes = $scope.graph.axes || [];
@@ -112,6 +115,14 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
 
   $scope.removeLegendString = function(index) {
     $scope.graph.legendFormatStrings.splice(index, 1);
+  };
+
+  $scope.setColorFunc = function (text) {
+    $scope.graph.colorFunc = text;
+  };
+
+  $scope.getColorFunc = function (text) {
+    return $scope.graph.ColorFunc;
   };
 
   $scope.disableYMaxSibling = YAxisUtilities.disableYMaxSibling;

@@ -236,6 +236,9 @@
               "palette": {
                 "type": "string"
               },
+              "colorFunc": {
+                "type": "string"
+              },
               "range": {
                 "type": "string"
               },
