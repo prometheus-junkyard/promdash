@@ -208,6 +208,14 @@ $light-secondary-background: #f0f0f0;
       padding-right: 7px;
     }
   }
+
+  .detail_swatch {
+    display: inline-block;
+    height: 7px;
+    width: 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+  }
 }
 
 $light-background: #f5f5f5;

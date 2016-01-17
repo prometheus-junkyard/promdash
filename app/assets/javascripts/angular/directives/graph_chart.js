@@ -357,10 +357,16 @@ angular.module("Prometheus.directives").directive('graphChart', [
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
           graph: rsGraph,
           formatter: function(series, x, y) {
-            var name = series.nameIsFormatted? '<span class="name">' + series.name + '</span><br>' : '';
-            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>';
+            var name, content;
+            if (series.nameIsFormatted) {
+                name = swatch + '<span class="name">' + series.name + '</span><br>';
+                content = (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>';
+            } else {
+                name = '';
+                content = swatch + (series.labels.__name__ || 'value') + ": <strong>" + y + '</strong>';
+            }
+            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
             return name + date + '<br>' + content + '<br>' + renderLabels(series.labels);
           },
           onRender: function() {
