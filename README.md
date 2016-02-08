@@ -1,3 +1,8 @@
+**NOTE**: PromDash is **deprecated**. We recommend
+[**Grafana**](https://prometheus.io/docs/visualization/grafana/) for
+visualization of Prometheus metrics nowadays, as it has native Prometheus
+support and is widely adopted and powerful.
+
 # PromDash
 
 Dashboards for Prometheus.
