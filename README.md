@@ -118,8 +118,8 @@ You can pass parameters directly to the thin server with:
 ### Deploy behind a reverse proxy
 
 To deploy PromDash behind a reverse proxy you can set a global path prefix
-using the environment variable `PROMDASH_PATH_PREFIX`. Once set all URLs will
-start with the given prefix.
+using both environment variables `PROMDASH_PATH_PREFIX` and `RAILS_RELATIVE_URL_ROOT`.
+Once set all URLs will start with the given prefix.
 
 One simple way to secure your Prometheus deployment with authentication is
 running a reverse proxy, Prometheus, and PromDash on the same machine. The goal
@@ -154,6 +154,7 @@ Prometheus server with `http://dash.example.com/prom/` in the web UI at
     docker run -p 127.0.0.1:3000:3000 -v /tmp/prom:/tmp/prom \
            -e DATABASE_URL=sqlite3:/tmp/prom/file.sqlite3 \
            -e PROMDASH_PATH_PREFIX=/dash \
+           -e RAILS_RELATIVE_URL_ROOT=/dash \
            prom/promdash
 
 Finally check that your reverse proxy is working as expected by visiting
