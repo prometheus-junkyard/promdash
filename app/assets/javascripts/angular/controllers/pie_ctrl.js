@@ -19,24 +19,30 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
       return;
     }
     $scope.requestInFlight = true;
-    $http.get(URLGenerator(server.url, '/api/query', $scope.vars), {
+    $http.get(URLGenerator(server.url, '/api/v1/query', $scope.vars), {
       params: {
-        expr: VariableInterpolator(exp.expression, $scope.vars)
+        query: VariableInterpolator(exp.expression, $scope.vars)
       }
     }).then(function(payload) {
       var data = payload.data;
       var errMsg;
-      switch (data.type) {
+      switch (data.status) {
         case 'error':
           errMsg = "Expression " + exp.expression + ": " + data.value;
           $scope.errorMessages.push(errMsg);
           break;
-        case 'vector':
-          $scope.$broadcast('redrawGraphs', data.value);
+        case 'success':
+          data = data.data
+          if (data.resultType != "vector") {
+            errMsg = 'Expression ' + exp.expression + ': Result type "' + data.resultType + '" cannot be graphed."';
+            $scope.errorMessages.push(errMsg);
+            break;
+          }
+          $scope.$broadcast('redrawGraphs', data.result);
           $scope.errorMessages = [];
           break;
         default:
-          errMsg = 'Expression ' + exp.expression + ': Result type "' + data.type + '" cannot be graphed."';
+          errMsg = 'Expression ' + exp.expression + ': API error';
           $scope.errorMessages.push(errMsg);
       }
     }, function(data, status, b) {
