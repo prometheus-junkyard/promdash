@@ -2,12 +2,12 @@ require 'sinatra/base'
 
 class FauxMetheus < Sinatra::Base
 
-  get '/api/query_range' do
+  get '/api/v1/query_range' do
     json_response 200, 'prometheus_response_query_range.json'
   end
 
-  get '/api/query' do
-    if params[:expr] == 'scalar(rate(prometheus_local_storage_ingested_samples_total[5m]))'
+  get '/api/v1/query' do
+    if params[:query] == 'scalar(rate(prometheus_local_storage_ingested_samples_total[5m]))'
       return json_response 200, 'prometheus_response_scalar.json'
     end
     json_response 200, 'prometheus_response_query.json'
