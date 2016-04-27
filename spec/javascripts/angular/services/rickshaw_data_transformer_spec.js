@@ -10,14 +10,10 @@ describe('RickshawDataTransformer', function() {
     var data = {
       expID: 0,
       type: "prometheus",
-      data:{
-        resultType: "matrix",
-        result:[{
+      data: [{
           metric: {},
           values: values
-        }],
-        version: 1
-      }
+      }]
     };
     var axisIDObj = {0: 1, 1: 10, 2: 20};
 
