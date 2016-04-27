@@ -13,5 +13,5 @@ before_script:
   - bundle exec rake db:migrate
 script:
   - jshint app/assets/javascripts
-  - bundle exec rake spec
-  - bundle exec rake karma:run
+  - RAILS_ENV=test bundle exec rake spec
+  - RAILS_ENV=test bundle exec rake karma:run
