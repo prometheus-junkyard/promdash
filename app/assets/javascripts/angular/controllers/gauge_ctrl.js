@@ -49,7 +49,7 @@ angular.module("Prometheus.controllers").controller('GaugeCtrl',
             $scope.errorMessages.push(errMsg);
             return;
           }
-          var d = parseFloat(data.result[0]);
+          var d = parseFloat(data.result[1]);
 
           $scope.$broadcast('redrawGraphs', d);
           $scope.errorMessages = [];
