@@ -129,7 +129,12 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       // bigger denominator == smaller step == more data
       var step = Math.floor(Prometheus.Graph.parseDuration($scope.graph.range)/scalingFactor);
 
-      var endTime = $scope.graph.endTime || new Date();
+      var endTime;
+      if ($scope.graph.endTime) {
+        endTime = new Date($scope.graph.endTime);
+      } else {
+        endTime = new Date();
+      }
 
       // TODO: Default range is 60s, which seems fairly low.
       var range = Prometheus.Graph.parseDuration($scope.graph.range);
