@@ -11,8 +11,8 @@ describe('RickshawDataTransformer', function() {
       expID: 0,
       type: "prometheus",
       data:{
-        type: "matrix",
-        value:[{
+        resultType: "matrix",
+        result:[{
           metric: {},
           values: values
         }],
