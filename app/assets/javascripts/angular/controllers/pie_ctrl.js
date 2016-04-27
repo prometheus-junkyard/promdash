@@ -32,7 +32,7 @@ angular.module("Prometheus.controllers").controller('PieCtrl',
           $scope.errorMessages.push(errMsg);
           break;
         case 'success':
-          data = data.data
+          data = data.data;
           if (data.resultType != "vector") {
             errMsg = 'Expression ' + exp.expression + ': Result type "' + data.resultType + '" cannot be graphed."';
             $scope.errorMessages.push(errMsg);
