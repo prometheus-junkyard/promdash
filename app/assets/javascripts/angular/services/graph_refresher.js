@@ -52,8 +52,8 @@ angular.module("Prometheus.services").factory('GraphRefresher',
         $http.get(URLGenerator(server.url, 'render', $scope.vars), {
           params: {
             target: expression,
-            from: GraphiteTimeConverter.graphiteUntil(startTime),
-            until: GraphiteTimeConverter.graphiteUntil(endTime),
+            from: GraphiteTimeConverter.convert(startTime),
+            until: GraphiteTimeConverter.convert(endTime),
             format: 'json'
           },
         }).then(function(payload, status) {
