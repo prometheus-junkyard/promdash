@@ -10,7 +10,7 @@ feature "Graph legend", js: true do
 
     it "should show the legend" do
       within_graph do
-        expect(page).to have_content "cpu_idle"
+        expect(page).to have_content "pushgateway"
       end
     end
 
@@ -18,7 +18,7 @@ feature "Graph legend", js: true do
       open_tab 'Legend Settings'
       choose 'never'
       within_graph do
-        expect(page).to have_no_content "cpu_idle"
+        expect(page).to have_no_content "pushgateway"
       end
     end
 
@@ -49,9 +49,9 @@ feature "Graph legend", js: true do
 
       describe "regex interpolation" do
         it "acceptable string" do
-          legend_string.set '{{job | regex:"bazooka":"harpoon"}}'
+          legend_string.set '{{job | regex:"pushgateway":"harpoon"}}'
           within_graph do
-            expect(page).to have_content "harpoon-system"
+            expect(page).to have_content "harpoon"
           end
         end
 

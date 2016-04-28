@@ -12,7 +12,7 @@ feature "Graph legend", js: true do
       open_tab 'Legend Settings'
       all('.legend_string_container .icon-cross').each(&:click)
       within_graph do
-        expect(page).to have_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_content "prometheus_target_interval_length_seconds"
         expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
       end
     end
@@ -78,7 +78,7 @@ feature "Graph legend", js: true do
 
     it "should show the legend" do
       within_graph do
-        expect(page).to have_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_content "prometheus_target_interval_length_seconds"
       end
     end
 
@@ -86,7 +86,7 @@ feature "Graph legend", js: true do
       open_tab 'Legend Settings'
       choose 'never'
       within_graph do
-        expect(page).to have_no_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_no_content "prometheus_target_interval_length_seconds"
       end
     end
     describe "legend format string" do

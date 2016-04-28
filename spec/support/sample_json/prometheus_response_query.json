@@ -5,29 +5,13 @@
     "result": [
       {
         "metric": {
-          "job": "sse"
-        },
-        "value": [
-          1461786372.079,
-          "40"
-        ]
-      },
-      {
-        "metric": {
-          "job": "pushgateway"
+          "job": "pushgateway",
+          "owner": "iss",
+          "instance": "http://xen-10-20-2-193.int.s-cloud.net:7700/metrics"
         },
         "value": [
           1461786372.079,
           "10"
-        ]
-      },
-      {
-        "metric": {
-          "job": "publisher"
-        },
-        "value": [
-          1461786372.079,
-          "20"
         ]
       }
     ]
