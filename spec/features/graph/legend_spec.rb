@@ -12,8 +12,7 @@ feature "Graph legend", js: true do
       open_tab 'Legend Settings'
       all('.legend_string_container .icon-cross').each(&:click)
       within_graph do
-        expect(page).to have_content "prometheus_targetpool_duration_ms"
-        expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
+        expect(page).to have_content "prometheus_target_interval_length_seconds"
       end
     end
 
@@ -65,9 +64,9 @@ feature "Graph legend", js: true do
       input1 = legend_inputs[0]
       input2 = legend_inputs[1]
 
-      input1.set ''
-      input2.set ''
-      expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
+      input1.set '<script>alert("boo!")</script>'
+      input2.set '<script>alert("boo!")</script>'
+      expect(page).to have_content '<script>alert("boo!")</script>'
     end
   end
 
@@ -78,7 +77,7 @@ feature "Graph legend", js: true do
 
     it "should show the legend" do
       within_graph do
-        expect(page).to have_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_content "prometheus_target_interval_length_seconds"
       end
     end
 
@@ -86,7 +85,7 @@ feature "Graph legend", js: true do
       open_tab 'Legend Settings'
       choose 'never'
       within_graph do
-        expect(page).to have_no_content "prometheus_targetpool_duration_ms"
+        expect(page).to have_no_content "prometheus_target_interval_length_seconds"
       end
     end
     describe "legend format string" do
@@ -144,9 +143,9 @@ feature "Graph legend", js: true do
       end
 
       it "HTML escaping" do
-        legend_string.set '{{html_label}}'
+        legend_string.set '<div>hello</div>'
         within_graph do
-          expect(page).to have_content "<b>bold</b><script>alert(1);</script>"
+          expect(page).to have_content "<div>hello</div>"
         end
       end
     end

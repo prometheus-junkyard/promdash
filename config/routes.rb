@@ -10,7 +10,8 @@ PrometheusDashboard::Application.routes.draw do
 
     if Rails.env.test?
       require_relative '../spec/support/fauxmetheus/fauxmetheus'
-      get '/api/:path' => FauxMetheus
+      get '/api/v1/:path' => FauxMetheus
+      get '/api/metrics' => FauxMetheus
     end
 
     resources :dashboards, except: :index

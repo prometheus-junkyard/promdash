@@ -67,7 +67,7 @@ angular.module("Prometheus.directives").directive('inlineFrame', ["$sce",
         parser.setQueryParam('height', height);
         parser.setQueryParam('width', ((height / scope.aspectRatio) - FRAME_CONTAINER_PADDING));
         parser.setQueryParam('from', GraphiteTimeConverter.graphiteFrom(scope.frame.range, scope.frame.endTime));
-        parser.setQueryParam('until', GraphiteTimeConverter.graphiteUntil(scope.frame.endTime));
+        parser.setQueryParam('until', GraphiteTimeConverter.convert(scope.frame.endTime));
         parser.setQueryParam('bgcolor', FRAME_BACKGROUND_COLOR);
       }
     }

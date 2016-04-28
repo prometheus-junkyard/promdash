@@ -1,1 +1,10 @@
-{"type":"scalar","value":"699.8","version":1}
+{
+  "status": "success",
+  "data": {
+    "resultType": "scalar",
+    "result": [
+      1461786659.893,
+      "699.8"
+    ]
+  }
+}

@@ -128,10 +128,24 @@ angular.module("Prometheus.controllers").controller('GraphCtrl',
       var scalingFactor = $(".widget_wrapper").outerWidth() * r / 10;
       // bigger denominator == smaller step == more data
       var step = Math.floor(Prometheus.Graph.parseDuration($scope.graph.range)/scalingFactor);
+
+      var endTime;
+      if ($scope.graph.endTime) {
+        endTime = new Date($scope.graph.endTime);
+      } else {
+        endTime = new Date();
+      }
+
+      // TODO: Default range is 60s, which seems fairly low.
+      var range = Prometheus.Graph.parseDuration($scope.graph.range);
+      var MILLISECONDS_PER_SECOND = 1000;
+      var startTimeUNIX = endTime.getTime() - (range * MILLISECONDS_PER_SECOND);
+      var startTime = new Date(startTimeUNIX);
+
       // Cancels the reload request if it exists.
       $timeout.cancel(debounce);
       debounce = $timeout(function() {
-        refreshFn($scope.graph.endTime, $scope.graph.range, step).then(function(data) {
+        refreshFn(startTime, endTime, step).then(function(data) {
           scope.$broadcast('redrawGraphs', data);
         });
       }, timeout);

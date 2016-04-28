@@ -27,7 +27,7 @@ angular.module("Prometheus.services").factory('RickshawDataTransformer', [functi
       return;
     }
 
-    series = series.concat(data.data.value.map(function(ts) {
+    series = series.concat(data.data.map(function(ts) {
       var name = metricToTsName(ts.metric);
       return {
         name: name,

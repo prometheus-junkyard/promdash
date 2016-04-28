@@ -27,7 +27,7 @@ angular.module("Prometheus.directives").directive('pieChart', ["$location", "Wid
         }
 
         pieData.forEach(function(e) {
-          e.value = parseFloat(e.value);
+          e.value = parseFloat(e.value[1]);
 
           if (scope.graphSettings.legendFormatString) {
             e.ts = VariableInterpolator(scope.graphSettings.legendFormatString, e.metric);

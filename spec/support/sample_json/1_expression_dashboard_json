@@ -13,7 +13,7 @@
          "id":0,
          "legendID":1,
          "axisID":1,
-         "expression":"prometheus_targetpool_duration_ms"}
+         "expression":"prometheus_target_interval_length_seconds"}
       ],
       "type":"graph",
       "showLegend":"sometimes",

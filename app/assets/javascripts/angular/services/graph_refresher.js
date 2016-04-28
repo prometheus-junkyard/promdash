@@ -11,30 +11,30 @@ angular.module("Prometheus.services").factory('GraphRefresher',
                                                         GraphiteTimeConverter) {
   return function($scope) {
     var loadGraphData = {
-      prometheus: function(idx, expression, server, expressionID, endTime, range, step) {
-        var rangeSeconds = Prometheus.Graph.parseDuration($scope.graph.range);
+      prometheus: function(idx, expression, server, expressionID, startTime, endTime, step) {
         var endTime = Math.floor(endTime / 1000);
+        var startTime = Math.floor(startTime / 1000);
         var deferred = $q.defer();
-        $http.get(URLGenerator(server.url, '/api/query_range', $scope.vars), {
+        $http.get(URLGenerator(server.url, '/api/v1/query_range', $scope.vars), {
           params: {
-            expr: expression,
-            range: rangeSeconds,
+            query: expression,
+            start: startTime,
             end: endTime,
-            step: step >= 5 ? step : 5
+            step: (step >= 5 ? step : 5) + "s"
           },
           cache: false
         }).then(function(payload, status) {
           data = payload.data;
-          switch (data.type) {
+          switch (data.status) {
             case 'error':
-              var errMsg = "Expression " + (idx + 1) + ": " + data.value;
+              var errMsg = "Expression " + (idx + 1) + ": " + data.error;
               $scope.errorMessages.push(errMsg);
               break;
-            case 'matrix':
+            case 'success':
               deferred.resolve({
                 expID: expressionID,
                 type: server.server_type,
-                data: data
+                data: data.data.result
               });
               break;
             default:
@@ -47,13 +47,13 @@ angular.module("Prometheus.services").factory('GraphRefresher',
         });
         return deferred.promise;
       },
-      graphite: function(idx, expression, server, expressionID, endTime, range, step) {
+      graphite: function(idx, expression, server, expressionID, startTime, endTime, step) {
         var deferred = $q.defer();
         $http.get(URLGenerator(server.url, 'render', $scope.vars), {
           params: {
             target: expression,
-            from: GraphiteTimeConverter.graphiteFrom(range, endTime),
-            until: GraphiteTimeConverter.graphiteUntil(endTime),
+            from: GraphiteTimeConverter.convert(startTime),
+            until: GraphiteTimeConverter.convert(endTime),
             format: 'json'
           },
         }).then(function(payload, status) {
@@ -69,7 +69,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
       }
     };
 
-    return function(endTime, range, step) {
+    return function(startTime, endTime, step) {
       var deferred = $q.defer();
       $scope.errorMessages = [];
       var promises = $scope.graph.expressions.map(function(exp, i){
@@ -79,7 +79,7 @@ angular.module("Prometheus.services").factory('GraphRefresher',
         }
         var expression = VariableInterpolator(exp.expression, $scope.vars);
         $scope.requestsInFlight = true;
-        return loadGraphData[server.server_type](i, expression, server, exp.id, endTime, range, step);
+        return loadGraphData[server.server_type](i, expression, server, exp.id, startTime, endTime, step);
       });
       $q.all(promises).then(function(data) {
         $scope.requestsInFlight = false;

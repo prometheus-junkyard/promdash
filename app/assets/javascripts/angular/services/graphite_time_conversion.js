@@ -21,11 +21,11 @@ angular.module("Prometheus.services").factory('GraphiteTimeConverter', function(
       }
     },
 
-    graphiteUntil: function(endTime) {
-      if (endTime === null || endTime === undefined) {
+    convert: function(time) {
+      if (time === null || time === undefined) {
         return 'now';
       } else {
-        return timestampToGraphiteTime(endTime);
+        return timestampToGraphiteTime(time);
       }
     }
   };
