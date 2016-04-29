@@ -7,7 +7,7 @@ support and is widely adopted and powerful.
 
 Dashboards for Prometheus.
 
-![promdash](http://prometheus.io/assets/promdash_event_processor.png)
+![promdash](https://prometheus.io/assets/promdash_event_processor-cba2ecbeb64.png)
 
 ## Testing
 
