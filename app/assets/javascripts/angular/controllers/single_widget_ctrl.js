@@ -13,7 +13,10 @@ angular.module("Prometheus.controllers").controller('SingleWidgetCtrl', ["$windo
     var profile = $scope.globalConfig.profiles[graphBlob.activeProfileName];
     if (profile) {
       var parsedProfile = Profile.unmarshal([profile])[0];
-      $scope.globalConfig.vars = DashboardVariables.mergeToObject($scope.globalConfig.vars, parsedProfile.variablePairs);
+      var profileVariables = DashboardVariables.mergeToObject(parsedProfile.variablePairs);
+      for (var key in profileVariables) {
+        $scope.globalConfig.vars[key] = profileVariables[key];
+      }
     }
   }
 
