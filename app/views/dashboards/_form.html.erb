@@ -25,6 +25,21 @@
     </div>
   <% end %>
 
+  <div class="field form-group">
+    <%= f.label :link %><br>
+    <%= f.text_field :link, class: "form-control input-small" %>
+  </div>
+
+  <div class="form-group">
+      <%= f.label "Hard redirect"  %><br>
+    <div class="checkbox">
+      <%= f.label :hard_redirect do %>
+        <%= f.check_box :hard_redirect, class: "checkbox" %>
+        Redirect users to this link
+      <% end %>
+    </div>
+  </div>
+
   <div class="form-group">
     <%= f.label :directory %><br>
     <%= select_tag "dashboard[directory_id]",

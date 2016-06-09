@@ -14,6 +14,9 @@ class DashboardsController < ApplicationController
   # GET /dashboards/1
   # GET /dashboards/1.json
   def show
+    if @dashboard.hard_redirect && !@dashboard.link.blank?
+      redirect_to @dashboard.link
+    end
     respond_to do |format|
       format.html do
         @dashboard_profile = params[:profile]
@@ -128,6 +131,6 @@ class DashboardsController < ApplicationController
       ServerTransformer.transform(dashboard_json)
       params[:dashboard][:dashboard_json] = JSON.generate(dashboard_json)
     end
-    params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id)
+    params.require(:dashboard).permit(:name, :dashboard_json, :slug, :directory_id, :link, :hard_redirect)
   end
 end

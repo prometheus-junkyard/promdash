@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814142427) do
+ActiveRecord::Schema.define(version: 20160609130416) do
 
   create_table "dashboards", force: true do |t|
     t.string   "name"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20150814142427) do
     t.string   "slug"
     t.integer  "directory_id"
     t.boolean  "permalink",      default: false
+    t.string   "link",           default: "",    null: false
+    t.boolean  "hard_redirect",  default: false, null: false
   end
 
   add_index "dashboards", ["directory_id"], name: "index_dashboards_on_directory_id"
