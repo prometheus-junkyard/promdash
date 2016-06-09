@@ -123,7 +123,7 @@ feature "Dashboard", js: true do
 
     describe "the name" do
       scenario "valid" do
-        click_link('Rename')
+        click_link('Edit')
         find("#dashboard_name").set("some other name")
         click_button("Update Dashboard")
         expect(page).to have_content(/successfully updated/)
@@ -131,7 +131,7 @@ feature "Dashboard", js: true do
       end
 
       scenario "invalid" do
-        click_link('Rename')
+        click_link('Edit')
         find("#dashboard_name").set("")
         click_button("Update Dashboard")
         expect(page).to have_content(/error/)
@@ -141,7 +141,7 @@ feature "Dashboard", js: true do
 
     describe "the slug" do
       scenario "valid" do
-        click_link('Rename')
+        click_link('Edit')
         find("#dashboard_slug").set("valid-slug-name")
         click_button("Update Dashboard")
         expect(page).to have_content(/successfully updated/)
@@ -149,7 +149,7 @@ feature "Dashboard", js: true do
       end
 
       scenario "invalid" do
-        click_link('Rename')
+        click_link('Edit')
         find("#dashboard_slug").set("invalid slug name")
         click_button("Update Dashboard")
         expect(page).to have_content(/error/)
