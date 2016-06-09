@@ -19,7 +19,8 @@ angular.module("Prometheus",
   if ($location.hash()[0] === "?") {
     $location.url($location.path() + $location.hash());
   }
-}]).config(['$locationProvider', '$httpProvider', function($locationProvider, $httpProvider) {
+}]).config(['$locationProvider', '$httpProvider', '$compileProvider', function($locationProvider, $httpProvider, $compileProvider) {
+  $compileProvider.debugInfoEnabled(false);
   $httpProvider.useApplyAsync(true);
   $locationProvider.html5Mode({
       enabled: true,
