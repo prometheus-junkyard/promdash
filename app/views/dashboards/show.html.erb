@@ -7,6 +7,9 @@
 </script>
 
 <div id="dashboard" class="row" ng-controller="DashboardCtrl">
+  <% if !@dashboard.link.blank? %>
+    <div class="alert alert-info alert-spacing" role="alert"><strong>Heads up! This dashboard has been moved to <strong><%= link_to(@dashboard.link, @dashboard.link) %></div>
+  <% end %>
   <h1 class="col-lg-12" ng-non-bindable
     ng-class="{fullscreen_title: fullscreenTitle && fullscreen}">
     <%= page_title @dashboard.name %>
@@ -233,7 +236,7 @@
         <th colspan="4">Template Variables</th>
       </tr>
       <tr>
-        <th ng-if="activeProfileName" colspan="4"><small>WARNING: Profile variables take precedence over template variables</small></th>
+        <th ng-if="activeProfileName" colspan="4"><small class="small-text">WARNING: Profile variables take precedence over template variables</small></th>
       </tr>
 
       <tr ng-show="vars.length == 0">
