@@ -13,7 +13,7 @@ angular.module("Prometheus.services").factory('YAxisUtilities', [function() {
   }
   return {
     setLogScale: function(min, max) {
-      logScale = extendScale(d3.scale.log().domain([min, max]));
+      logScale = extendScale(d3.scale.log().domain([1, max]));
       return logScale;
     },
     setLinearScale: function(min, max) {
