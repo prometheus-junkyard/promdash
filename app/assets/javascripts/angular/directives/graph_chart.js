@@ -312,6 +312,9 @@ angular.module("Prometheus.directives").directive('graphChart', [
           height: calculateGraphHeight($legend)
         });
         rsGraph.series.legend = legend;
+        rsGraph.onUpdate(function () {
+          highlightFuture(rsGraph);
+        });
         rsGraph.render();
 
         AnnotationRefresher.refresh(scope.graphSettings.tags, scope.graphSettings.range, scope.graphSettings.endTime, scope.vars)
@@ -388,6 +391,27 @@ angular.module("Prometheus.directives").directive('graphChart', [
             }
           },
         });
+      }
+
+      function highlightFuture(rsGraph) {
+        var svg = d3.select(rsGraph.element).select('svg');
+        var left = rsGraph.x((new Date()).getTime() / 1000);
+        var width = rsGraph.x.range()[1];
+
+        svg.select('.highlight-future').remove();
+        if (left < 1) {
+          left = 0;
+        }
+        if (left < width) {
+          svg.append('rect')
+             .attr('class', 'highlight-future')
+             .attr('y', 0)
+             .attr('height', '100%')
+             .style('fill', 'yellow')
+             .style('opacity', '0.1')
+             .attr('x', left)
+             .attr('width', width - left);
+        }
       }
 
       function createYAxis2(graph, tickFormat, scale) {
