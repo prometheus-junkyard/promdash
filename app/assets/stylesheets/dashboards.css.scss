@@ -706,8 +706,13 @@ hr {
   margin-bottom: 10px;
 }
 
-.panel, .panel-heading, .btn, .form-control {
+.panel, .panel-heading, .btn, .form-control, textarea {
   border-radius: 0;
+}
+
+.panel textarea {
+    width: 100%;
+    resize: vertical;
 }
 
 .global_grouping .form-control {
