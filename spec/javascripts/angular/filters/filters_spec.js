@@ -49,7 +49,7 @@ describe('filters', function() {
     });
 
     it('exact match', function() {
-      expect(regex('important-data.generic-data', '\.generic-data', '')).toEqual('important-data');
+      expect(regex('important-data.generic-data', '.generic-data', '')).toEqual('important-data');
     });
 
     it('special characters', function() {
